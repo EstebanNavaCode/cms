@@ -5,6 +5,7 @@ import { dirname } from "path";
 import path from "path";
 import favicon from "serve-favicon";
 
+import router from "./sis/routes/routes.js"
 import config from "./sis/config/config.js";
 
 const app = express();
@@ -29,6 +30,8 @@ app.use(express.urlencoded({ extended: true }));
 // Static files
 app.use(express.static(path.join(__dirname, "assets")));
 app.use(favicon(path.join(__dirname, "assets", "img", "favicon.ico")));
+
+app.use("/", router);
 
 // Routes
 app.get("/", (req, res) => {
