@@ -4,62 +4,7 @@
 
 
 
-<nav>
-    <div class="logo-name">
-        <div class="logo-image">
-            <img src="/img/library.png" alt="">
-        </div>
-
-        <span class="logo_name">bookstore</span>
-    </div>
-
-    <div class="menu-items">
-        <ul class="nav-links">
-            <li><a href="#">
-                    <i class="uil uil-presentation-line"></i>
-                    <span class="link-name">Dahsboard</span>
-                </a></li>
-            <li><a href="#">
-                    <i class="uil uil-users-alt"></i>
-                    <span class="link-name">Usuarios</span>
-                </a></li>
-            <li><a href="#">
-                    <i class="uil uil-books"></i>
-                    <span class="link-name">Productos</span>
-                </a></li>
-            <li><a href="#">
-                    <i class="uil uil-package"></i>
-                    <span class="link-name">Solicitudes</span>
-                </a></li>
-            <li><a href="#">
-                    <i class="uil uil-newspaper"></i>
-                    <span class="link-name">Noticias</span>
-                </a></li>
-            <li><a href="#">
-                    <i class="uil uil-globe"></i>
-                    <span class="link-name">Sitio</span>
-                </a></li>
-        </ul>
-
-        <ul class="logout-mode">
-            <li><a href="#">
-                    <i class="uil uil-signout"></i>
-                    <span class="link-name">Logout</span>
-                </a></li>
-
-            <li class="mode">
-                <a href="#">
-                    <i class="uil uil-moon"></i>
-                    <span class="link-name">Dark Mode</span>
-                </a>
-
-                <div class="mode-toggle">
-                    <span class="switch"></span>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
+{{> navbar}}
 
 <section class="dashboard">
     <div class="top">
@@ -70,7 +15,7 @@
             <input type="text" placeholder="Search here...">
         </div>
 
-        <img src="images/profile.jpg" alt="">
+        <img src="img/profile.png" alt="" class="profile-img">
     </div>
 
     <div class="dash-content">
@@ -161,4 +106,4 @@
     </div>
 </section>
 
-<script src="/js/miau.js"></script>
+<script src="/js/toggleSidebar.js"></script>
