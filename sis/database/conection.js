@@ -7,12 +7,12 @@ export const dbSettings = {
     server: config.dbServer, // Updated to match config.js
     port: parseInt(config.dbPort, 10), // Ensure port is parsed as a number
     database: config.dbDatabase, // Updated to match config.js
-    // options: {
+    options: {
+        trustServerCertificate: true, 
     // Use for Azure SQL or if encryption is required
     //     encrypt: true,
     // Required for self-signed certificates
-    //     trustServerCertificate: true, 
-    // },
+    },
 };
 
 export async function getConnection() {
