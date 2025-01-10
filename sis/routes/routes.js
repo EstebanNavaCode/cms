@@ -1,8 +1,8 @@
-import  { Router } from "express";
+import { Router } from "express";
+import { renderHomeWithUsers } from "../../src/controllers/user.controller.js"; // Adjusted path to the controller
 
 const router = Router();
 
-//get,post,put,delete methods
-
+router.get("/", renderHomeWithUsers);
 
 export default router;
