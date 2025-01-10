@@ -35,6 +35,10 @@ app.get("/", (req, res) => {
     res.render("home/home");
 });
 
+app.get("/dashboard", (req, res) => {
+    res.render("dashboard/dashboard");
+});
+
 // Start the server
 const PORT = config.PORT || 3000;
 app.listen(PORT, () => {
