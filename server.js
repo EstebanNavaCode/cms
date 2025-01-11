@@ -28,7 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Static files
-app.use(express.static(path.join(__dirname, "assets")));
+app.use("/assets", express.static(path.join(__dirname, "assets")));
+
 app.use(favicon(path.join(__dirname, "assets", "img", "favicon.ico")));
 
 app.use("/", router);
