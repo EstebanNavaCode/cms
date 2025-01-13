@@ -23,8 +23,10 @@ section {
     background: transparent;
     border: none;
     border-radius: 20px;
-    -webkit-backdrop-filter: blur(15px) brightness(80%); /* Para Safari y navegadores con prefijo webkit */
-    backdrop-filter: blur(15px) brightness(80%); /* Para navegadores modernos */
+    -webkit-backdrop-filter: blur(15px) brightness(80%);
+    /* Para Safari y navegadores con prefijo webkit */
+    backdrop-filter: blur(15px) brightness(80%);
+    /* Para navegadores modernos */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,7 +54,8 @@ h2 {
     border: none;
     outline: none;
     font-size: 1em;
-    padding: 0 35px 0 5px; /* Deja espacio para el ícono */
+    padding: 0 35px 0 5px;
+    /* Deja espacio para el ícono */
     color: #fff;
 }
 
@@ -68,16 +71,17 @@ h2 {
 }
 
 /* Mantén el label elevado si hay texto o si el campo está enfocado */
-.inputbox input:not(:placeholder-shown) ~ label,
-.inputbox input:focus ~ label {
+.inputbox input:not(:placeholder-shown)~label,
+.inputbox input:focus~label {
     top: -5px;
-    font-size: 0.8em; /* Reduce el tamaño para claridad */
+    font-size: 0.8em;
+    /* Reduce el tamaño para claridad */
 }
 
 /* Eliminar el ícono nativo de mostrar/ocultar contraseña */
-input[type="password"]::-ms-reveal, 
-input[type="password"]::-ms-clear, 
-input[type="password"]::-webkit-clear-button, 
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-clear-button,
 input[type="password"]::-webkit-inner-spin-button {
     display: none;
     appearance: none;
@@ -86,16 +90,19 @@ input[type="password"]::-webkit-inner-spin-button {
 
 .inputbox ion-icon {
     position: absolute;
-    right: 10px; /* Coloca el ícono al final del campo */
+    right: 10px;
+    /* Coloca el ícono al final del campo */
     top: 50%;
     transform: translateY(-50%);
     font-size: 1.5em;
-    color: #fff; /* Cambia el color del ícono */
+    color: #fff;
+    /* Cambia el color del ícono */
     cursor: pointer;
 }
 
 .inputbox ion-icon:hover {
-    color: #ddd; /* Cambia el color al pasar el mouse */
+    color: #ddd;
+    /* Cambia el color al pasar el mouse */
 }
 
 
