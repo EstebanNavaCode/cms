@@ -114,8 +114,8 @@ select.input option {
 
 
 select.input:not(:invalid) {
-  color: #000; 
-  border-color: green; 
+  color: #000;
+  border-color: green;
 }
 
 .form-container select.input:focus,
@@ -130,14 +130,14 @@ select.input:not(:invalid) {
 
 
 input[type="email"]:valid {
-  border-color: green; 
+  border-color: green;
 }
 
 
 
 label span {
   position: absolute;
-  top: 5px; 
+  top: 5px;
   left: 10px;
   font-size: 0.8em;
   font-weight: 600;
@@ -146,9 +146,9 @@ label span {
   transition: 0.3s ease;
 }
 
-input:focus + span,
-input:valid + span {
-  color: green; 
+input:focus+span,
+input:valid+span {
+  color: green;
 }
 
 .submit {
@@ -176,6 +176,7 @@ input:valid + span {
     transform: scale(0.9);
     opacity: 1;
   }
+
   to {
     transform: scale(1.8);
     opacity: 0;
@@ -297,6 +298,7 @@ label.custum-file-upload input {
     flex-direction: column;
     align-items: center;
   }
+
   .form,
   .image-preview {
     max-width: 90%;

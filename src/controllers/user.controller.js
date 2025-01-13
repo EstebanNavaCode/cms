@@ -1,8 +1,11 @@
 import { getConnection } from "../../sis/database/conection.js";
+
+import path from "path";
+import fs from "fs";
 import sql from "mssql";
 
 export const renderLogin = (req, res) => {
-    res.render("home/home"); // Renderiza la vista del formulario de inicio de sesión
+  res.render("home/home");
 };
 
 export const login = async (req, res) => {
@@ -16,7 +19,7 @@ export const login = async (req, res) => {
       .query(
         "SELECT * FROM USR_T WHERE CORREO_USR = @email AND CONTRASENA_USR = @password"
       );
-      
+
     if (result.recordset.length > 0) {
       res.redirect("/dashboard");
     } else {
@@ -31,4 +34,52 @@ export const login = async (req, res) => {
   }
 };
 
+export const registerUser = async (req, res) => {
+  try {
+    const {
+      TIPO_USR,
+      NOMBRE_USR,
+      APELLIDO_USR,
+      CORREO_USR,
+      CONTRASENA_USR,
+      IMG_USR,
+    } = req.body;
+    console.log("Datos recibidos en el backend:", req.body);
+    console.log("Archivo recibido:", req.file);
+    if (
+      !TIPO_USR ||
+      !NOMBRE_USR ||
+      !APELLIDO_USR ||
+      !CORREO_USR ||
+      !CONTRASENA_USR
+    ) {
+      return res.status(400).json({
+        message: "Todos los campos obligatorios deben ser proporcionados.",
+      });
+    }
 
+    const pool = await getConnection();
+
+    await pool
+      .request()
+      .input("TIPO_USR", sql.Int, TIPO_USR)
+      .input("NOMBRE_USR", sql.NVarChar(300), NOMBRE_USR)
+      .input("APELLIDO_USR", sql.NVarChar(300), APELLIDO_USR)
+      .input("CORREO_USR", sql.NVarChar(300), CORREO_USR)
+      .input("CONTRASENA_USR", sql.NVarChar(300), CONTRASENA_USR)
+      .input("FECHA_ALTA_USR", sql.Date, new Date())
+      .input("ACTIVO_USR", sql.Bit, true)
+      .input("IMG_USR", sql.NVarChar(300), IMG_USR || null).query(`
+        INSERT INTO dbo.USR_T
+        (TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, CONTRASENA_USR, FECHA_ALTA_USR, ACTIVO_USR, IMG_USR)
+        VALUES (@TIPO_USR, @NOMBRE_USR, @APELLIDO_USR, @CORREO_USR, @CONTRASENA_USR, @FECHA_ALTA_USR, @ACTIVO_USR, @IMG_USR)
+      `);
+
+    res.status(201).json({ message: "Usuario registrado exitosamente." });
+  } catch (error) {
+    console.error("Error al registrar usuario:", error);
+    res
+      .status(500)
+      .json({ message: "Ocurrió un error al registrar el usuario." });
+  }
+};

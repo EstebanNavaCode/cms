@@ -5,7 +5,7 @@ import { dirname } from "path";
 import path from "path";
 import favicon from "serve-favicon";
 
-import router from "./sis/routes/routes.js"
+import router from "./sis/routes/routes.js";
 import config from "./sis/config/config.js";
 
 const app = express();
@@ -14,8 +14,8 @@ const __dirname = dirname(__filename);
 
 // Set up handlebars engine
 const hbs = create({
-    extname: ".hbs",
-    defaultLayout: "main",
+  extname: ".hbs",
+  defaultLayout: "main",
 });
 
 // Set handlebars as the view engine
@@ -36,21 +36,21 @@ app.use("/", router);
 
 // Routes
 app.get("/", (req, res) => {
-    res.render("home/home");
+  res.render("home/home");
 });
 
 app.get("/dashboard", (req, res) => {
-    res.render("dashboard/dashboard");
+  res.render("dashboard/dashboard");
 });
 
 app.get("/users", (req, res) => {
-    res.render("users/users");
+  res.render("users/users");
 });
 
 // Start the server
 const PORT = config.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on: \nhttp://localhost:${PORT}`);
+  console.log(`Server is running on: \nhttp://localhost:${PORT}`);
 });
 
 export default app;

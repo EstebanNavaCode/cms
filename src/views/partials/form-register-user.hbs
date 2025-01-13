@@ -3,6 +3,7 @@
 
 <section class="dashboard">
     <div class="top">
+
         <i class="uil uil-bars sidebar-toggle"></i>
 
         <div class="search-box">
@@ -11,6 +12,7 @@
         </div>
 
         <img src="/assets/img/profile.png" alt="" class="profile-img">
+
     </div>
 
     <div class="dash-content">
@@ -18,65 +20,67 @@
             <div class="title">
                 <i class="uil uil-user-plus"></i>
                 <span class="text">Nuevo usuario</span>
+
             </div>
 
             <div class="form-container">
-                <form class="form">
+
+                <form id="form-register-user" method="POST" class="form" action="/users">
+
                     <p class="title2">Formulario de registro</p>
                     <p class="message"></p>
 
-                    <!-- Fila de Nombres, Apellidos y Tipo de Usuario -->
                     <div class="flex">
+
                         <label>
-                            <input class="input" type="text" placeholder="" required="">
+                            <input id="name" name="NOMBRE_USR" class="input" type="text" placeholder="" required>
                             <span>Nombres</span>
                         </label>
+
                         <label>
-                            <input class="input" type="text" placeholder="" required="">
+                            <input id="lastname" name="APELLIDO_USR" class="input" type="text" placeholder="" required>
                             <span>Apellidos</span>
                         </label>
 
-
-                        <select id="options" class="input" name="options" required>
-                            <option style="color:#b5b5b5;" value="" disabled selected hidden>Tipo de Usuario</option>
+                        <select id="type" id="options" name="TIPO_USR" class="input" required>
+                            <option value="" disabled selected hidden>Tipo de Usuario</option>
                             <option value="1">Admin</option>
                             <option value="2">Gerente</option>
                             <option value="3">Colaborador</option>
                         </select>
 
-
                     </div>
 
-                    <!-- Fila de Correo, Contraseña y Upload -->
                     <div class="flex">
                         <div class="left-fields">
                             <label>
-                                <input class="input" type="email" placeholder="" required="">
+                                <input class="input" name="CORREO_USR" type="email" placeholder="" required="">
                                 <span>Correo Electrónico</span>
                             </label>
+
                             <label>
-                                <input class="input" type="password" placeholder="" required="">
+                                <input class="input" name="CONTRASENA_USR" type="password" placeholder="" required="">
                                 <span>Contraseña</span>
                             </label>
+
                         </div>
+
                         <label class="upload-button" for="file">
                             <i class="uil uil-cloud-upload"></i>
                             <div class="text">Click aquí para subir una imagen</div>
                             <input type="file" id="file" accept="image/*" onchange="previewImage(event)">
                         </label>
+
                     </div>
 
-                    <button class="submit">Registrar usuario</button>
+                    <button class="submit" type="submit">Registrar usuario</button>
                 </form>
 
                 <div class="image-preview">
                     <i id="icon-placeholder" class="uil uil-image-search placeholder-icon"></i>
                     <img id="preview" src="" alt="Vista previa de la imagen">
                 </div>
-
             </div>
-
-
         </div>
     </div>
 </section>

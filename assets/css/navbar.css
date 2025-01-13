@@ -27,10 +27,14 @@ body {
 }
 
 body.dark {
-    --toggle-color: #333; /* Fondo del switch en modo oscuro */
-    --panel-color: #242526; /* Fondo general */
-    --text-color: #FFF; /* Texto en modo oscuro */
-    --black-light-color: #CCC; /* Iconos en modo oscuro */
+    --toggle-color: #333;
+    /* Fondo del switch en modo oscuro */
+    --panel-color: #242526;
+    /* Fondo general */
+    --text-color: #FFF;
+    /* Texto en modo oscuro */
+    --black-light-color: #CCC;
+    /* Iconos en modo oscuro */
 }
 
 /* ===== Sidebar ===== */
@@ -174,20 +178,24 @@ nav.close li a .link-name {
 .switch:before {
     content: "";
     position: absolute;
-    left: 5px; /* Posición inicial del círculo */
+    left: 5px;
+    /* Posición inicial del círculo */
     top: 50%;
     transform: translateY(-50%);
     height: 15px;
     width: 15px;
     background-color: var(--panel-color);
     border-radius: 50%;
-    transition: left 0.3s ease, background-color 0.3s ease; /* Animación para el movimiento y el color */
+    transition: left 0.3s ease, background-color 0.3s ease;
+    /* Animación para el movimiento y el color */
 }
 
 /* Cuando el modo oscuro está activo */
 .switch.active:before {
-    left: 20px; /* Nueva posición del círculo */
-    background-color: black; /* Círculo interno en blanco */
+    left: 20px;
+    /* Nueva posición del círculo */
+    background-color: black;
+    /* Círculo interno en blanco */
 }
 
 /* ===== Media Queries ===== */
