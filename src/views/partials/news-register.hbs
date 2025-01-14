@@ -1,0 +1,113 @@
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/products.css">
+
+<section class="dashboard">
+    <div class="top">
+        <i class="uil uil-bars sidebar-toggle"></i>
+        <div class="search-box">
+            <i class="uil uil-search"></i>
+            <input type="text" placeholder="Search here...">
+        </div>
+        <img src="/assets/img/profile.png" alt="" class="profile-img">
+    </div>
+
+    <div class="dash-content">
+        <div class="overview">
+            <div class="title">
+                <ion-icon name="paper-plane-outline"></ion-icon>
+                <span class="text">Nueva noticia</span>
+            </div>
+
+            <div class="form-container">
+                <form id="form-register-news" method="POST" class="form" action="/news">
+                    <p class="title2">Formulario de registro</p>
+                    <p class="message"></p>
+
+                    <label>
+                        <input id="name" name="TITULO_NOT" class="input" type="text" placeholder="" required>
+                        <span>Título</span>
+                    </label>
+
+                    <label>
+                        <input id="autor" name="TEXTO_NOT" class="input" type="text" placeholder="" required>
+                        <span>Texto</span>
+                    </label>
+
+                    <div class="category-container">
+                        <select id="categoryNEWS" name="CATEGORIA_NOT" class="input" required>
+                            <option value="" disabled selected hidden>Categoría</option>
+                        </select>
+
+                        <select id="labelNEWS" name="ETIQUETA_NOT" class="input" required>
+                            <option value="" disabled selected hidden>Etiqueta</option>
+                        </select>
+                    </div>
+
+                    <div class="flex">
+                        <div class="left-fields">
+                            <label>
+                                <input id="isbn" class="input" name="FECHA_PUBLICAR_NOT" type="date" placeholder=""
+                                    required="">
+                                <span>Fecha de publicación</span>
+                            </label>
+                        </div>
+
+                        <label class="custum-file-upload">
+                            <ion-icon name="cloud-upload-outline"></ion-icon>
+                            <div class="text">Click aquí para subir una imagen</div>
+                            <input type="file" id="file" accept="image/*" onchange="previewImage(event)">
+                        </label>
+                    </div>
+
+                    <button class="submit" type="submit">Registrar usuario</button>
+                </form>
+
+                <div class="image-preview">
+                    <i id="icon-placeholder" class="uil uil-image-search placeholder-icon"></i>
+                    <img id="preview" src="" alt="Vista previa de la imagen">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Cargar las categorías al cargar la página
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('/categoriesNEWS') // Endpoint correcto para obtener categorías
+            .then(response => response.json())
+            .then(categories => {
+                const categorySelect = document.getElementById('categoryNEWS'); // ID corregido
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.ID_CAT; // El ID de la categoría desde el backend
+                    option.textContent = category.NOMBRE_CAT;
+                    categorySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error al cargar las categorías:', error));
+    });
+
+    // Cargar etiquetas cuando el usuario selecciona una categoría
+    document.getElementById('categoryNEWS').addEventListener('change', function () {
+        const categoryId = this.value; // Obtener el ID de la categoría seleccionada
+
+        // Llamada al servidor para obtener las etiquetas relacionadas
+        fetch(`/subcategoriesNEWS/${categoryId}`) // Endpoint correcto para etiquetas
+            .then(response => response.json())
+            .then(labels => {
+                const labelSelect = document.getElementById('labelNEWS'); // ID actualizado
+                labelSelect.innerHTML = '<option value="" disabled selected hidden>Etiqueta</option>'; // Limpiar opciones anteriores
+                labels.forEach(label => {
+                    const option = document.createElement('option');
+                    option.value = label.ID_ETQ; // ID de la etiqueta desde el backend
+                    option.textContent = label.NOMBRE_ETQ;
+                    labelSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error al cargar las etiquetas:', error));
+    });
+</script>
+
+<script src="/assets/js/registerNews.js"></script>
+<script src="/assets/js/imgPreview.js"></script>

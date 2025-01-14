@@ -104,7 +104,7 @@ nav.close~.dashboard .top {
 
 .dashboard .top .sidebar-toggle {
     font-size: 26px;
-    color: var(--text-color);
+    color:var(--text-color);
     cursor: pointer;
 }
 

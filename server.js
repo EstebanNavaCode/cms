@@ -51,6 +51,10 @@ app.get("/products", (req, res) => {
   res.render("products/products");
 });
 
+app.get("/news", (req, res) => {
+  res.render("news/news");
+});
+
 // Start the server
 const PORT = config.PORT || 3000;
 app.listen(PORT, () => {
