@@ -47,6 +47,10 @@ app.get("/users", (req, res) => {
   res.render("users/users");
 });
 
+app.get("/products", (req, res) => {
+  res.render("products/products");
+});
+
 // Start the server
 const PORT = config.PORT || 3000;
 app.listen(PORT, () => {

@@ -75,7 +75,7 @@ export const registerUser = async (req, res) => {
         VALUES (@TIPO_USR, @NOMBRE_USR, @APELLIDO_USR, @CORREO_USR, @CONTRASENA_USR, @FECHA_ALTA_USR, @ACTIVO_USR, @IMG_USR)
       `);
 
-    res.status(201).json({ message: "Usuario registrado exitosamente." });
+    res.redirect("/users");
   } catch (error) {
     console.error("Error al registrar usuario:", error);
     res

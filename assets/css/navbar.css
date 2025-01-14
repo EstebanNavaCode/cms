@@ -28,13 +28,9 @@ body {
 
 body.dark {
     --toggle-color: #333;
-    /* Fondo del switch en modo oscuro */
     --panel-color: #242526;
-    /* Fondo general */
     --text-color: #FFF;
-    /* Texto en modo oscuro */
     --black-light-color: #CCC;
-    /* Iconos en modo oscuro */
 }
 
 /* ===== Sidebar ===== */
@@ -114,14 +110,17 @@ nav .menu-items {
     background-color: var(--primary-color);
 }
 
-.menu-items li a i {
+.menu-items li a ion-icon {
     font-size: 24px;
-    min-width: 45px;
+    min-width: 22px;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--black-light-color);
+    transition: var(--tran-05);
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .menu-items li a .link-name {
@@ -136,7 +135,7 @@ nav.close li a .link-name {
     pointer-events: none;
 }
 
-.nav-links li a:hover i,
+.nav-links li a:hover ion-icon,
 .nav-links li a:hover .link-name {
     color: var(--primary-color);
 }
@@ -179,7 +178,6 @@ nav.close li a .link-name {
     content: "";
     position: absolute;
     left: 5px;
-    /* Posición inicial del círculo */
     top: 50%;
     transform: translateY(-50%);
     height: 15px;
@@ -187,15 +185,11 @@ nav.close li a .link-name {
     background-color: var(--panel-color);
     border-radius: 50%;
     transition: left 0.3s ease, background-color 0.3s ease;
-    /* Animación para el movimiento y el color */
 }
 
-/* Cuando el modo oscuro está activo */
 .switch.active:before {
     left: 20px;
-    /* Nueva posición del círculo */
     background-color: black;
-    /* Círculo interno en blanco */
 }
 
 /* ===== Media Queries ===== */
