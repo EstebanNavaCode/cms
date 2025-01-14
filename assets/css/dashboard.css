@@ -19,7 +19,7 @@
     --box1-color: #4DA3FF;
     --box2-color: #FFE6AC;
     --box3-color: #E7D1FC;
-    --title-icon-color: #fff;
+    --title-icon-color: #000; /* Color predeterminado para íconos */
 
     /* ====== Transition ====== */
     --tran-05: all 0.5s ease;
@@ -41,7 +41,7 @@ body.dark {
     --box1-color: #3A3B3C;
     --box2-color: #3A3B3C;
     --box3-color: #3A3B3C;
-    --title-icon-color: #CCC;
+    --title-icon-color: #CCC; /* Color de íconos en modo oscuro */
 }
 
 /* === Custom Scroll Bar CSS === */
@@ -63,8 +63,7 @@ body.dark {
     background: #0b3cc1;
 }
 
-body.dark::-webkit-scrollbar-thumb:hover,
-body.dark .activity-data::-webkit-scrollbar-thumb:hover {
+body.dark::-webkit-scrollbar-thumb:hover {
     background: #3A3B3C;
 }
 
@@ -131,7 +130,7 @@ nav.close~.dashboard .top {
     outline: none;
 }
 
-.top .search-box i {
+.top .search-box ion-icon {
     position: absolute;
     left: 15px;
     font-size: 22px;
@@ -156,19 +155,14 @@ nav.close~.dashboard .top {
     margin: 60px 0 30px 0;
 }
 
-.dash-content .title i {
-    position: relative;
-    height: 35px;
-    width: 35px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
+.dash-content .title ion-icon {
+    font-size: 35px; /* Tamaño del icono */
+    color: var(--title-icon-color); /* Color adaptativo */
+    margin-right: 10px; /* Espacio entre el icono y el texto */
 }
 
-body.dark .dash-content .title i {
-    color: #cccccc;
+body.dark .dash-content .title ion-icon {
+    color: var(--title-icon-color); /* Color en modo oscuro */
 }
 
 .dash-content .title .text {
@@ -196,7 +190,7 @@ body.dark .dash-content .title i {
     transition: var(--tran-05);
 }
 
-.boxes .box i {
+.boxes .box ion-icon {
     font-size: 35px;
     color: var(--text-color);
 }
