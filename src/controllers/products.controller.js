@@ -90,3 +90,31 @@ export const getSubcategories = async (req, res) => {
     res.status(500).send("Error al obtener subcategorías.");
   }
 };
+
+export const getProducts = async (req, res) => {
+  try {
+    const pool = await getConnection();
+    const result = await pool.request().query(`
+      SELECT 
+        LIB_T_.ID_LIB,
+        LIB_T_.NOMBRE_LIB,
+        LIB_T_.AUTOR_LIB,
+        LIB_T_.EDITORIAL_LIB,
+        LIB_T_.ISBN_LIB,
+        LIB_T_.STOCK_LIB,
+        LIB_T_.ACTIVO_LIB,
+        CATEGORIA_LIB_T.NOMBRE_LCAT AS CATEGORIA,
+        SUBCATEGORIA_LCAT_T.NOMBRE_SBC AS SUBCATEGORIA
+      FROM LIB_T_
+      LEFT JOIN CATEGORIA_LIB_T ON LIB_T_.CATEGORIA_LIB = CATEGORIA_LIB_T.ID_LCAT
+      LEFT JOIN SUBCATEGORIA_LCAT_T ON LIB_T_.SUBCATEGORIA_LIB = SUBCATEGORIA_LCAT_T.ID_SBC
+    `);
+
+    res.render("products/products", { products: result.recordset });
+  } catch (error) {
+    console.error("Error al obtener productos:", error);
+    res.status(500).json({ message: "Error al obtener la lista de productos." });
+  }
+};
+
+
