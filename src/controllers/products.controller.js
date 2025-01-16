@@ -1,7 +1,6 @@
 import { getConnection } from "../../sis/database/conection.js";
 import sql from "mssql";
 
-// Registro de producto
 export const registerProduct = async (req, res) => {
   try {
     const {
@@ -14,12 +13,11 @@ export const registerProduct = async (req, res) => {
       STOCK_LIB,
     } = req.body;
 
-    const IMG_LIB = req.file ? req.file.filename : null; // Manejar el archivo subido
+    const IMG_LIB = req.file ? req.file.filename : null;
 
     console.log("Datos recibidos en el backend:", req.body);
     console.log("Archivo recibido:", req.file);
 
-    // Validación de campos obligatorios
     if (
       !NOMBRE_LIB ||
       !AUTOR_LIB ||
@@ -34,7 +32,6 @@ export const registerProduct = async (req, res) => {
       });
     }
 
-    // Conexión a la base de datos
     const pool = await getConnection();
 
     await pool
@@ -62,7 +59,6 @@ export const registerProduct = async (req, res) => {
   }
 };
 
-// Obtener categorías
 export const getCategories = async (req, res) => {
   try {
     const pool = await getConnection();
@@ -70,26 +66,25 @@ export const getCategories = async (req, res) => {
       .request()
       .query("SELECT ID_LCAT, NOMBRE_LCAT FROM CATEGORIA_LIB_T WHERE ACTIVO_LCAT = 1");
 
-    res.json(result.recordset); // Devolver las categorías como JSON
+    res.json(result.recordset); 
   } catch (error) {
     console.error("Error al obtener categorías:", error);
     res.status(500).send("Error al obtener categorías.");
   }
 };
 
-// Obtener subcategorías
 export const getSubcategories = async (req, res) => {
-  const { categoryId } = req.params; // Obtener el ID de la categoría desde los parámetros
+  const { categoryId } = req.params; 
   try {
     const pool = await getConnection();
     const result = await pool
       .request()
-      .input("categoryId", sql.Int, categoryId) // Usar el ID de la categoría como parámetro
+      .input("categoryId", sql.Int, categoryId) 
       .query(
         "SELECT ID_SBC, NOMBRE_SBC FROM SUBCATEGORIA_LCAT_T WHERE ACTIVO_SBC = 1 AND ID_LCAT = @categoryId"
       );
 
-    res.json(result.recordset); // Devolver las subcategorías como JSON
+    res.json(result.recordset); 
   } catch (error) {
     console.error("Error al obtener subcategorías:", error);
     res.status(500).send("Error al obtener subcategorías.");

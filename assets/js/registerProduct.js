@@ -1,6 +1,5 @@
-// Evento para manejar el envío del formulario de registro de producto
 document
-  .getElementById("form-register-product") // Cambié el ID del formulario al correcto
+  .getElementById("form-register-product")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -14,7 +13,6 @@ document
     const fileInput = document.getElementById("file");
     const IMG_LIB = fileInput.files.length ? fileInput.files[0].name : "";
 
-    // Validación de campos requeridos
     if (
       !CATEGORIA_LIB ||
       !SUBCATEGORIA_LIB ||
@@ -29,7 +27,6 @@ document
     }
 
     try {
-      // Petición POST para registrar el producto
       const response = await fetch("/products", {
         method: "POST",
         headers: {
@@ -50,7 +47,6 @@ document
       if (response.ok) {
         const result = await response.json();
         alert(result.message || "Producto registrado exitosamente.");
-        // Limpiar el formulario tras éxito
         document.getElementById("form-register-product").reset();
       } else {
         const error = await response.json();
@@ -62,7 +58,6 @@ document
     }
   });
 
-// Función para cargar categorías dinámicamente
 const loadCategories = async () => {
   try {
     const response = await fetch("/categories");
@@ -83,7 +78,6 @@ const loadCategories = async () => {
   }
 };
 
-// Función para cargar subcategorías según la categoría seleccionada
 const loadSubcategories = async (categoryId) => {
   try {
     const response = await fetch(`/subcategories/${categoryId}`);
@@ -106,11 +100,9 @@ const loadSubcategories = async (categoryId) => {
   }
 };
 
-// Evento para cargar subcategorías dinámicamente cuando cambia la categoría
 document.getElementById("category").addEventListener("change", (e) => {
   const categoryId = e.target.value;
   loadSubcategories(categoryId);
 });
 
-// Cargar categorías automáticamente al cargar la página
 document.addEventListener("DOMContentLoaded", loadCategories);

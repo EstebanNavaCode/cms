@@ -145,7 +145,6 @@ nav.close li a .link-name {
     border-top: 1px solid var(--border-color);
 }
 
-/* ===== Mode Toggle Switch ===== */
 .menu-items .mode {
     display: flex;
     align-items: center;
@@ -192,7 +191,6 @@ nav.close li a .link-name {
     background-color: black;
 }
 
-/* ===== Media Queries ===== */
 @media (max-width: 1000px) {
     nav {
         width: 73px;

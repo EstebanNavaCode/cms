@@ -1,17 +1,15 @@
-// Evento para manejar el envío del formulario de registro de producto
 document
   .getElementById("form-register-news")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
-    console.log("Formulario enviado"); // Confirmación del disparo del evento
+    console.log("Formulario enviado");
 
     const TITULO_NOT = document.getElementById("name").value;
     const TEXTO_NOT = document.getElementById("autor").value;
     const CATEGORIA_NOT = document.getElementById("categoryNEWS").value;
-    const ETIQUETA_NOT = document.getElementById("subcategoryNEWS").value;
+    const ETIQUETA_NOT = document.getElementById("labelNEWS").value;
     const FECHA_PUBLICAR_NOT = document.getElementById("isbn").value;
 
-    // Validación de campos requeridos
     if (
       !TITULO_NOT || !TEXTO_NOT || !CATEGORIA_NOT || !FECHA_PUBLICAR_NOT || !ETIQUETA_NOT
     ) {
@@ -20,25 +18,24 @@ document
     }
 
     try {
-      // Petición POST para registrar el producto
       const response = await fetch("/news", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          TITULO_NOT,
-          TEXTO_NOT,
-          CATEGORIA_NOT,
-          ETIQUETA_NOT,
-          FECHA_PUBLICAR_NOT,
+            TITULO_NOT,
+            TEXTO_NOT,
+            CATEGORIA_NOT,
+            ETIQUETA_NOT,
+            FECHA_PUBLICAR_NOT,
         }),
-      });
+    });
+    
 
       if (response.ok) {
         const result = await response.json();
         alert(result.message || "Producto registrado exitosamente.");
-        // Limpiar el formulario tras éxito
         document.getElementById("form-register-news").reset();
       } else {
         const error = await response.json();
@@ -49,15 +46,12 @@ document
       alert("Ocurrió un error al procesar el registro del producto.");
     }
   });
-
-
   
   const loadCategoriesNEWS = async () => {
     try {
       const response = await fetch("/categoriesNEWS");
       if (response.ok) {
         const categoriesNEWS = await response.json();
-        console.log("Categorías recibidas:", categoriesNEWS); // <-- Agregar aquí
         const categorySelect = document.getElementById("categoryNEWS");
         categorySelect.innerHTML = '<option value="" disabled selected hidden>Categoría</option>';
   
@@ -75,8 +69,6 @@ document
     }
   };
   
-  
-  // Cargar categorías automáticamente al cargar la página
   document.addEventListener("DOMContentLoaded", loadCategoriesNEWS);
   
   const loadSubcategoriesNEWS = async (categoryId) => {
@@ -84,7 +76,6 @@ document
       const response = await fetch(`/subcategoriesNEWS/${categoryId}`);
       if (response.ok) {
         const subcategories = await response.json();
-        console.log("Subcategorías recibidas:", subcategories); // <-- Agregar aquí
         const subcategorySelect = document.getElementById("subcategoryNEWS");
         subcategorySelect.innerHTML =
           '<option value="" disabled selected hidden>Subcategoría</option>';
@@ -103,7 +94,6 @@ document
     }
   };
   
-  // Vincular evento al cambio en el select de categorías
   document.getElementById("categoryNEWS").addEventListener("change", (e) => {
     const categoryId = e.target.value;
     loadSubcategoriesNEWS(categoryId);

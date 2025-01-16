@@ -26,7 +26,6 @@
             <div class="form-container">
 
                 <form id="form-register-product" method="POST" class="form" action="/products">
-
                     <p class="title2">Formulario de registro</p>
                     <p class="message"></p>
 
@@ -58,7 +57,6 @@
 
                         </div>
 
-
                     </div>
 
                     <div class="flex">
@@ -75,8 +73,6 @@
                                 <span>Cantidad</span>
                             </label>
 
-
-
                         </div>
 
                         <label class="custum-file-upload">
@@ -87,7 +83,7 @@
 
                     </div>
 
-                    <button class="submit" type="submit">Registrar usuario</button>
+                    <button class="submit" type="submit">Registrar producto</button>
                 </form>
 
                 <div class="image-preview">
@@ -100,15 +96,14 @@
 </section>
 
 <script>
-    // Cargar las categorías al cargar la página
     document.addEventListener("DOMContentLoaded", function () {
-        fetch('/categories') // Endpoint para obtener las categorías desde la base de datos
+        fetch('/categories') 
             .then(response => response.json())
             .then(categories => {
                 const categorySelect = document.getElementById('category');
                 categories.forEach(category => {
                     const option = document.createElement('option');
-                    option.value = category.ID_LCAT; // El ID de la categoría de la base de datos
+                    option.value = category.ID_LCAT; 
                     option.textContent = category.NOMBRE_LCAT;
                     categorySelect.appendChild(option);
                 });
@@ -116,19 +111,17 @@
             .catch(error => console.error('Error al cargar las categorías:', error));
     });
 
-    // Cargar subcategorías cuando el usuario selecciona una categoría
     document.getElementById('category').addEventListener('change', function () {
-        const categoryId = this.value; // Obtener el ID de la categoría seleccionada
+        const categoryId = this.value; 
 
-        // Llamada al servidor para obtener las subcategorías relacionadas
-        fetch(`/subcategories/${categoryId}`) // Endpoint para subcategorías con el ID de la categoría
+        fetch(`/subcategories/${categoryId}`)
             .then(response => response.json())
             .then(subcategories => {
                 const subcategorySelect = document.getElementById('subcategory');
-                subcategorySelect.innerHTML = '<option value="" disabled selected hidden>Subcategoría</option>'; // Limpiar opciones anteriores
+                subcategorySelect.innerHTML = '<option value="" disabled selected hidden>Subcategoría</option>';
                 subcategories.forEach(subcategory => {
                     const option = document.createElement('option');
-                    option.value = subcategory.ID_SBC; // ID de la subcategoría
+                    option.value = subcategory.ID_SBC;
                     option.textContent = subcategory.NOMBRE_SBC;
                     subcategorySelect.appendChild(option);
                 });
