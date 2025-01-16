@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { login, registerUser,getUsers } from "../../src/controllers/user.controller.js"; 
-import { registerProduct ,getCategories, getSubcategories} from "../../src/controllers/products.controller.js";
+import { registerProduct ,getCategories, getSubcategories, getProducts} from "../../src/controllers/products.controller.js";
 import { getCategoriesNEWS, getSubcategoriesNEWS, registerNews } from "../../src/controllers/news.controller.js";
 
 const router = Router();
@@ -10,6 +10,7 @@ router.post("/users", registerUser);
 router.get("/users", getUsers);
 
 router.post("/products", registerProduct);
+router.get('/products', getProducts);
 router.get('/categories', getCategories); 
 router.get('/subcategories/:categoryId', getSubcategories);
 
