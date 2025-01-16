@@ -17,13 +17,12 @@ export const registerNews = async (req, res) => {
       }
       
     const pool = await getConnection();
-
     await pool
     .request()
-    .input("CATEGORIA_NOt", sql.Int, CATEGORIA_NOT)
+    .input("CATEGORIA_NOT", sql.Int, CATEGORIA_NOT)
     .input("ETIQUETA_NOT", sql.Int, ETIQUETA_NOT)
     .input("TITULO_NOT", sql.NVarChar(300), TITULO_NOT)
-    .input("TEXTO_NOT", sql.NVarChar(300), TEXTO_NOT)
+    .input("TEXTO_NOT", sql.NVarChar(sql.MAX), TEXTO_NOT)
     .input("FECHA_PUBLICAR_NOT", sql.Date, FECHA_PUBLICAR_NOT)
     .input("IMG_NOT", sql.NVarChar(300), IMG_NOT)
     .input("FECHA_ALTA_NOT", sql.Date, new Date())
@@ -33,9 +32,9 @@ export const registerNews = async (req, res) => {
       (CATEGORIA_NOT, ETIQUETA_NOT, TITULO_NOT, TEXTO_NOT, FECHA_PUBLICAR_NOT, ACTIVO_NOT, IMG_NOT, FECHA_ALTA_NOT)
       VALUES (@CATEGORIA_NOT, @ETIQUETA_NOT, @TITULO_NOT, @TEXTO_NOT, @FECHA_PUBLICAR_NOT, @ACTIVO_NOT, @IMG_NOT, @FECHA_ALTA_NOT)
     `);
-  
 
       res.status(200).json({ message: "Noticia registrada exitosamente." });
+
     } catch (error) {
         console.error("Error al registrar noticia:", error);
         res.status(500).json({ message: "Ocurrió un error al registrar la noticia." });
