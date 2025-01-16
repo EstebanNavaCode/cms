@@ -83,3 +83,32 @@ export const registerUser = async (req, res) => {
       .json({ message: "Ocurrió un error al registrar el usuario." });
   }
 };
+
+export const getUsers = async (req, res) => {
+  try {
+    const pool = await getConnection();
+    const result = await pool.request().query(`
+      SELECT 
+        ID_USR, 
+        NOMBRE_USR, 
+        APELLIDO_USR, 
+        CORREO_USR, 
+        CASE 
+          WHEN TIPO_USR = 1 THEN 'ADMIN'
+          WHEN TIPO_USR = 2 THEN 'GERENTE'
+          WHEN TIPO_USR = 3 THEN 'COLABORADOR'
+          ELSE 'DESCONOCIDO'
+        END AS TIPO_USR,
+        CONVERT(VARCHAR, FECHA_ALTA_USR, 23) AS FECHA_ALTA_USR,
+        ACTIVO_USR
+      FROM USR_T;
+    `);
+
+    res.render("users/users", { users: result.recordset });
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error);
+    res.status(500).json({ message: "Error al obtener la lista de usuarios." });
+  }
+};
+
+
