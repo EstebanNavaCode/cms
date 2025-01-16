@@ -238,3 +238,10 @@ label.custum-file-upload input[type="file"] {
   margin-right: 10px;
   vertical-align: middle;
 }
+
+.dataTables_wrapper{
+  margin-top: 5rem;
+  margin-left: 11rem;
+  margin-bottom: 12rem;
+  width: 75%;
+}
