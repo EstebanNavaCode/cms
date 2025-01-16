@@ -156,13 +156,13 @@ nav.close~.dashboard .top {
 }
 
 .dash-content .title ion-icon {
-    font-size: 35px; /* Tamaño del icono */
-    color: var(--title-icon-color); /* Color adaptativo */
-    margin-right: 10px; /* Espacio entre el icono y el texto */
+    font-size: 35px; 
+    color: var(--title-icon-color);
+    margin-right: 10px; 
 }
 
 body.dark .dash-content .title ion-icon {
-    color: var(--title-icon-color); /* Color en modo oscuro */
+    color: var(--title-icon-color); 
 }
 
 .dash-content .title .text {

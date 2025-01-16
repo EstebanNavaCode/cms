@@ -187,7 +187,7 @@ label.custum-file-upload:hover {
 }
 
 label.custum-file-upload input[type="file"] {
-  display: none; /* Oculta el input de tipo file */
+  display: none; 
 }
 
 .image-preview {
