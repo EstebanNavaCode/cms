@@ -81,5 +81,30 @@ export const getSubcategoriesNEWS = async (req, res) => {
       res.status(500).json({ message: "Error al obtener subcategorías." });
     }
   };
+
+  export const getNews = async (req, res) => {
+    try {
+      const pool = await getConnection();
+      const result = await pool.request().query(`
+        SELECT 
+          N.ID_NOT,
+          N.TITULO_NOT,
+          N.TEXTO_NOT,
+          N.FECHA_PUBLICAR_NOT,
+          C.NOMBRE_CAT AS CATEGORIA,
+          E.NOMBRE_ETQ AS ETIQUETA,
+          N.ACTIVO_NOT
+        FROM NOT_T N
+        LEFT JOIN CATEGORIA_NOT_T C ON N.CATEGORIA_NOT = C.ID_CAT
+        LEFT JOIN ETIQUETA_NOT_T E ON N.ETIQUETA_NOT = E.ID_ETQ
+      `);
+  
+      res.render("news/news", { news: result.recordset });
+    } catch (error) {
+      console.error("Error al obtener noticias:", error);
+      res.status(500).json({ message: "Error al obtener la lista de noticias." });
+    }
+  };
+  
   
   

@@ -1,6 +1,14 @@
 <link rel="stylesheet" href="/assets/css/dashboard.css">
 <link rel="stylesheet" href="/assets/css/news.css">
 
+<!-- Estilos de DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<!-- Scripts de DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+
 <section class="dashboard">
     <div class="top">
         <i class="uil uil-bars sidebar-toggle"></i>
@@ -71,17 +79,49 @@
             </div>
         </div>
     </div>
+
+    <div class="news-list">
+        <table id="newsTable" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Texto</th>
+                    <th>Fecha de Publicación</th>
+                    <th>Categoría</th>
+                    <th>Etiqueta</th>
+
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each news}}
+                <tr>
+                    <td>{{ID_NOT}}</td>
+                    <td>{{TITULO_NOT}}</td>
+                    <td>{{TEXTO_NOT}}</td>
+                    <td>{{FECHA_PUBLICAR_NOT}}</td>
+                    <td>{{CATEGORIA}}</td>
+                    <td>{{ETIQUETA}}</td>
+
+                    <td>{{#if ACTIVO_NOT}}<span style="color:green;">Activo</span>{{else}}<span
+                            style="color:red;">Inactivo</span>{{/if}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
 </section>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        fetch('/categoriesNEWS') 
+        fetch('/categoriesNEWS')
             .then(response => response.json())
             .then(categories => {
-                const categorySelect = document.getElementById('categoryNEWS'); 
+                const categorySelect = document.getElementById('categoryNEWS');
                 categories.forEach(category => {
                     const option = document.createElement('option');
-                    option.value = category.ID_CAT; 
+                    option.value = category.ID_CAT;
                     option.textContent = category.NOMBRE_CAT;
                     categorySelect.appendChild(option);
                 });
@@ -92,19 +132,60 @@
     document.getElementById('categoryNEWS').addEventListener('change', function () {
         const categoryId = this.value;
 
-        fetch(`/subcategoriesNEWS/${categoryId}`) 
+        fetch(`/subcategoriesNEWS/${categoryId}`)
             .then(response => response.json())
             .then(labels => {
-                const labelSelect = document.getElementById('labelNEWS'); 
-                labelSelect.innerHTML = '<option value="" disabled selected hidden>Etiqueta</option>'; 
+                const labelSelect = document.getElementById('labelNEWS');
+                labelSelect.innerHTML = '<option value="" disabled selected hidden>Etiqueta</option>';
                 labels.forEach(label => {
                     const option = document.createElement('option');
-                    option.value = label.ID_ETQ; 
+                    option.value = label.ID_ETQ;
                     option.textContent = label.NOMBRE_ETQ;
                     labelSelect.appendChild(option);
                 });
             })
             .catch(error => console.error('Error al cargar las etiquetas:', error));
+    });
+
+    $(document).ready(function () {
+        $('#newsTable').DataTable({
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron noticias",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ noticias",
+                "infoEmpty": "No hay noticias disponibles",
+                "infoFiltered": "(filtrado de _MAX_ noticias en total)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+            "columnDefs": [
+                {
+                    "targets": 2, 
+                    "render": function (data, type, row) {
+                        if (!data) return "";
+                        let words = data.split(" "); 
+                        let shortText = words.slice(0, 30).join(" "); 
+                        return shortText + (words.length > 30 ? "..." : ""); 
+                    }
+                },
+                {
+                    "targets": 3, 
+                    "render": function (data) {
+                        if (!data) return "";
+                        let date = new Date(data);
+                        let day = date.getDate().toString().padStart(2, '0');
+                        let month = (date.getMonth() + 1).toString().padStart(2, '0');
+                        let year = date.getFullYear();
+                        return `${day}/${month}/${year}`;
+                    }
+                }
+            ]
+        });
     });
 </script>
 

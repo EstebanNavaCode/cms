@@ -282,3 +282,11 @@ textarea.textarea::-webkit-scrollbar-thumb {
 textarea.textarea::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+.dataTables_wrapper{
+    margin-top: 5rem;
+    margin-left: 11rem;
+    margin-bottom: 12rem;
+    width: 75%;
+  }
+  
