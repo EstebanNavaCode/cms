@@ -257,3 +257,11 @@ label.custum-file-upload input[type="file"] {
   width: 75%;
 }
 
+
+#productsTable tbody tr:nth-child(odd) {
+  background-color: #FFF2D7; 
+}
+
+#productsTable tbody tr:nth-child(even) {
+  background-color: #ffffff;  
+}

@@ -245,3 +245,12 @@ label.custum-file-upload input[type="file"] {
   margin-bottom: 12rem;
   width: 75%;
 }
+
+#usersTable tbody tr:nth-child(odd) {
+  background-color: #FFF2D7; 
+}
+
+#usersTable tbody tr:nth-child(even) {
+  background-color: #ffffff;  
+}
+

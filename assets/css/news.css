@@ -290,3 +290,11 @@ textarea.textarea::-webkit-scrollbar-thumb:hover {
     width: 75%;
   }
   
+  
+#newsTable tbody tr:nth-child(odd) {
+    background-color: #FFF2D7; 
+  }
+  
+  #newsTable tbody tr:nth-child(even) {
+    background-color: #ffffff;  
+  }
