@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $("#usersTable").DataTable({
+  let table = $("#usersTable").DataTable({
     language: {
       lengthMenu: "Mostrar _MENU_ registros por página",
       zeroRecords: "No se encontraron resultados",
@@ -16,7 +16,7 @@ $(document).ready(function () {
     },
     columnDefs: [
       {
-        targets: 5, // Formato de fecha
+        targets: 5,
         render: function (data, type, row) {
           if (!data) return "";
           let date = new Date(data);
@@ -27,5 +27,18 @@ $(document).ready(function () {
         },
       },
     ],
+  });
+
+  $("#usersTable tbody").on("click", "tr", function () {
+    let rowData = table.row(this).data();
+
+    if (rowData) {
+      $("#modal-name").val(rowData[1]); // Nombre
+      $("#modal-lastname").val(rowData[2]); // Apellido
+      $("#modal-correo").val(rowData[3]); // Correo
+      $("#modal-type").val(rowData[4]);
+
+      $("#modal-register-user").modal("show");
+    }
   });
 });

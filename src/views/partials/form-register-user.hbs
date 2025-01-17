@@ -121,11 +121,69 @@
             </tbody>
         </table>
     </div>
-
-
-
-
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-register-user" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content form">
+            <div class="modal-header">
+                <h5 class="modal-title title2">Editar Usuario</h5>
+                <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-flex-container">
+                    
+                    <form id="form-register-user-modal" class="modal-register" method="POST" action="/users">
+                        <div class="flex">
+                            <label>
+                                <input id="modal-name" name="NOMBRE_USR" class="input" type="text" required>
+                                <span>Nombres</span>
+                            </label>
+
+                            <label>
+                                <input id="modal-lastname" name="APELLIDO_USR" class="input" type="text" required>
+                                <span>Apellidos</span>
+                            </label>
+                        </div>
+
+                        <div class="flex">
+                            
+                                <label>
+                                    <input id="modal-correo" name="CORREO_USR" class="input" type="email" required>
+                                    <span>Correo Electrónico</span>
+                                </label>
+
+                                <select id="type" id="options" name="TIPO_USR" class="input" required>
+                                    <option value="" disabled selected hidden>Tipo de Usuario</option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Gerente</option>
+                                    <option value="3">Colaborador</option>
+                                </select>
+                         
+
+                            <label class="custum-file-upload">
+                                <ion-icon name="cloud-upload-outline"></ion-icon>
+                                <div class="text">Click aquí para subir una imagen</div>
+                                <input type="file" id="modal-file" accept="image/*" onchange="previewImage(event)">
+                            </label>
+                        </div>
+
+                        <button class="submit" type="submit">Guardar cambios</button>
+                    </form>
+
+                    <div class="image-preview">
+                        <i id="icon-placeholder" class="uil uil-image-search placeholder-icon"></i>
+                        <img id="modal-preview" src="" alt="Vista previa de la imagen">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="/assets/js/imgPreview.js"></script>
 <script src="/assets/js/UserTableFormat.js"></script>
