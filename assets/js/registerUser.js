@@ -38,3 +38,45 @@ document
       alert("Ocurrió un error al procesar el registro.");
     }
   });
+
+
+  document
+  .getElementById("form-register-user-modal")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const ID_USR = document.getElementById("modal-id").value.trim();
+    const TIPO_USR = document.getElementById("type-modal").value.trim();
+    const NOMBRE_USR = document.getElementById("modal-name").value.trim();
+    const APELLIDO_USR = document.getElementById("modal-lastname").value.trim();
+    const CORREO_USR = document.getElementById("modal-correo").value.trim();
+    const ACTIVO_USR = document.getElementById("modal-active").checked;
+
+    try {
+      const response = await fetch(`/users/${ID_USR}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          TIPO_USR,
+          NOMBRE_USR,
+          APELLIDO_USR,
+          CORREO_USR,
+          ACTIVO_USR, 
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message); 
+        location.reload();
+      } else {
+        const error = await response.json();
+        alert(error.message || "Error al actualizar usuario.");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Ocurrió un error al procesar la actualización.");
+    }
+  });
