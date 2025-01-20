@@ -19,7 +19,7 @@
             <input type="text" placeholder="Search here...">
         </div>
 
-        <img src="/assets/img/profile.png" alt="" class="profile-img">
+        <img src="/assets/uploads/pics/profile.png" alt="" class="profile-img">
 
     </div>
 
@@ -134,10 +134,13 @@
             </div>
 
             <div class="modal-body">
-                <div class="modal-flex-container">
-                    
-                    <form id="form-register-user-modal" class="modal-register" method="POST" action="/users">
+                <div class="modal-flex-container" class="form">
+
+                    <form id="form-register-user-modal" class="modal-register" method="PUT" action="/users/:id">
+
                         <div class="flex">
+                            <input type="hidden" id="modal-id" name="ID_USR">
+
                             <label>
                                 <input id="modal-name" name="NOMBRE_USR" class="input" type="text" required>
                                 <span>Nombres</span>
@@ -150,19 +153,20 @@
                         </div>
 
                         <div class="flex">
-                            
-                                <label>
-                                    <input id="modal-correo" name="CORREO_USR" class="input" type="email" required>
-                                    <span>Correo Electrónico</span>
-                                </label>
 
-                                <select id="type" id="options" name="TIPO_USR" class="input" required>
-                                    <option value="" disabled selected hidden>Tipo de Usuario</option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">Gerente</option>
-                                    <option value="3">Colaborador</option>
-                                </select>
-                         
+                            <label>
+                                <input id="modal-correo" name="CORREO_USR" class="input" type="email" required>
+                                <span>Correo Electrónico</span>
+                            </label>
+
+
+                            <select id="type-modal" id="options" name="TIPO_USR" class="input" required>
+                                <option value="" disabled selected hidden>Tipo de Usuario</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Gerente</option>
+                                <option value="3">Colaborador</option>
+                            </select>
+
 
                             <label class="custum-file-upload">
                                 <ion-icon name="cloud-upload-outline"></ion-icon>
@@ -171,8 +175,19 @@
                             </label>
                         </div>
 
-                        <button class="submit" type="submit">Guardar cambios</button>
+                        <div class="flex">
+                            <div class="checkbox-wrapper-10">
+                                <input id="modal-active" name="ACTIVO_USR" type="checkbox" hidden>
+                                <input type="checkbox" id="cb5" class="tgl tgl-flip" onchange="updateCheckboxState()">
+                                <label for="cb5" data-tg-on="Activo" data-tg-off="Inactivo" class="tgl-btn"></label>
+                            </div>
+
+                            <button class="submit" type="submit">Guardar cambios</button>
+                        </div>
                     </form>
+
+
+
 
                     <div class="image-preview">
                         <i id="icon-placeholder" class="uil uil-image-search placeholder-icon"></i>
@@ -184,6 +199,6 @@
     </div>
 </div>
 
-
 <script src="/assets/js/imgPreview.js"></script>
 <script src="/assets/js/UserTableFormat.js"></script>
+<script src="/assets/js/registerUser.js"></script>

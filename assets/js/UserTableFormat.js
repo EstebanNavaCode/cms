@@ -31,14 +31,34 @@ $(document).ready(function () {
 
   $("#usersTable tbody").on("click", "tr", function () {
     let rowData = table.row(this).data();
-
+  
     if (rowData) {
-      $("#modal-name").val(rowData[1]); // Nombre
-      $("#modal-lastname").val(rowData[2]); // Apellido
-      $("#modal-correo").val(rowData[3]); // Correo
-      $("#modal-type").val(rowData[4]);
-
+      $("#modal-id").val(rowData[0]); 
+      $("#modal-name").val(rowData[1]); 
+      $("#modal-lastname").val(rowData[2]); 
+      $("#modal-correo").val(rowData[3]);
+      
+      const tipoUsuarioMap = {
+        "ADMIN": 1,
+        "GERENTE": 2,
+        "COLABORADOR": 3
+      };
+  
+      const tipoUsuarioValue = tipoUsuarioMap[rowData[4]];
+      $("#type-modal").val(tipoUsuarioValue);
+  
+      const isActive = rowData[6].includes("Activo");
+      $("#modal-active").prop("checked", isActive);
+      $("#cb5").prop("checked", isActive);
+  
       $("#modal-register-user").modal("show");
     }
   });
 });
+
+function updateCheckboxState() {
+  const visualCheckbox = document.getElementById("cb5");
+  const hiddenCheckbox = document.getElementById("modal-active");
+
+  hiddenCheckbox.checked = visualCheckbox.checked;
+}
