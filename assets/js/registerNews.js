@@ -11,7 +11,11 @@ document
     const FECHA_PUBLICAR_NOT = document.getElementById("isbn").value;
 
     if (
-      !TITULO_NOT || !TEXTO_NOT || !CATEGORIA_NOT || !FECHA_PUBLICAR_NOT || !ETIQUETA_NOT
+      !TITULO_NOT ||
+      !TEXTO_NOT ||
+      !CATEGORIA_NOT ||
+      !FECHA_PUBLICAR_NOT ||
+      !ETIQUETA_NOT
     ) {
       alert("Por favor, completa todos los campos obligatorios.");
       return;
@@ -21,17 +25,16 @@ document
       const response = await fetch("/news", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            TITULO_NOT,
-            TEXTO_NOT,
-            CATEGORIA_NOT,
-            ETIQUETA_NOT,
-            FECHA_PUBLICAR_NOT,
+          TITULO_NOT,
+          TEXTO_NOT,
+          CATEGORIA_NOT,
+          ETIQUETA_NOT,
+          FECHA_PUBLICAR_NOT,
         }),
-    });
-    
+      });
 
       if (response.ok) {
         const result = await response.json();
@@ -46,59 +49,56 @@ document
       alert("Ocurrió un error al procesar el registro del producto.");
     }
   });
-  
-  const loadCategoriesNEWS = async () => {
-    try {
-      const response = await fetch("/categoriesNEWS");
-      if (response.ok) {
-        const categoriesNEWS = await response.json();
-        const categorySelect = document.getElementById("categoryNEWS");
-        categorySelect.innerHTML = '<option value="" disabled selected hidden>Categoría</option>';
-  
-        categoriesNEWS.forEach((category) => {
-          const option = document.createElement("option");
-          option.value = category.ID_CAT;
-          option.textContent = category.NOMBRE_CAT;
-          categorySelect.appendChild(option);
-        });
-      } else {
-        console.error("Error al cargar las categorías.");
-      }
-    } catch (error) {
-      console.error("Error al cargar categorías:", error);
-    }
-  };
-  
-  document.addEventListener("DOMContentLoaded", loadCategoriesNEWS);
-  
-  const loadSubcategoriesNEWS = async (categoryId) => {
-    try {
-      const response = await fetch(`/subcategoriesNEWS/${categoryId}`);
-      if (response.ok) {
-        const subcategories = await response.json();
-        const subcategorySelect = document.getElementById("subcategoryNEWS");
-        subcategorySelect.innerHTML =
-          '<option value="" disabled selected hidden>Subcategoría</option>';
-  
-        subcategories.forEach((subcategory) => {
-          const option = document.createElement("option");
-          option.value = subcategory.ID_ETQ;
-          option.textContent = subcategory.NOMBRE_ETQ;
-          subcategorySelect.appendChild(option);
-        });
-      } else {
-        console.error("Error al cargar subcategorías.");
-      }
-    } catch (error) {
-      console.error("Error al cargar subcategorías:", error);
-    }
-  };
-  
-  document.getElementById("categoryNEWS").addEventListener("change", (e) => {
-    const categoryId = e.target.value;
-    loadSubcategoriesNEWS(categoryId);
-  });
-  
-  
-  
 
+const loadCategoriesNEWS = async () => {
+  try {
+    const response = await fetch("/categoriesNEWS");
+    if (response.ok) {
+      const categoriesNEWS = await response.json();
+      const categorySelect = document.getElementById("categoryNEWS");
+      categorySelect.innerHTML =
+        '<option value="" disabled selected hidden>Categoría</option>';
+
+      categoriesNEWS.forEach((category) => {
+        const option = document.createElement("option");
+        option.value = category.ID_CAT;
+        option.textContent = category.NOMBRE_CAT;
+        categorySelect.appendChild(option);
+      });
+    } else {
+      console.error("Error al cargar las categorías.");
+    }
+  } catch (error) {
+    console.error("Error al cargar categorías:", error);
+  }
+};
+
+document.addEventListener("DOMContentLoaded", loadCategoriesNEWS);
+
+const loadSubcategoriesNEWS = async (categoryId) => {
+  try {
+    const response = await fetch(`/subcategoriesNEWS/${categoryId}`);
+    if (response.ok) {
+      const subcategories = await response.json();
+      const subcategorySelect = document.getElementById("subcategoryNEWS");
+      subcategorySelect.innerHTML =
+        '<option value="" disabled selected hidden>Subcategoría</option>';
+
+      subcategories.forEach((subcategory) => {
+        const option = document.createElement("option");
+        option.value = subcategory.ID_ETQ;
+        option.textContent = subcategory.NOMBRE_ETQ;
+        subcategorySelect.appendChild(option);
+      });
+    } else {
+      console.error("Error al cargar subcategorías.");
+    }
+  } catch (error) {
+    console.error("Error al cargar subcategorías:", error);
+  }
+};
+
+document.getElementById("categoryNEWS").addEventListener("change", (e) => {
+  const categoryId = e.target.value;
+  loadSubcategoriesNEWS(categoryId);
+});

@@ -119,8 +119,8 @@ label span {
   transition: 0.3s ease;
 }
 
-input:focus + span,
-input:valid + span {
+input:focus+span,
+input:valid+span {
   color: green;
 }
 
@@ -148,6 +148,7 @@ input:valid + span {
     transform: scale(0.9);
     opacity: 1;
   }
+
   to {
     transform: scale(1.8);
     opacity: 0;
@@ -240,17 +241,17 @@ label.custum-file-upload input[type="file"] {
 }
 
 
-  .category-container {
-    display: flex;
-    gap: 1rem;
-    width: 100%;
+.category-container {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
 }
 
 .category-container select.input {
-    flex: 1;
+  flex: 1;
 }
 
-.dataTables_wrapper{
+.dataTables_wrapper {
   margin-top: 5rem;
   margin-left: 11rem;
   margin-bottom: 12rem;
@@ -259,9 +260,9 @@ label.custum-file-upload input[type="file"] {
 
 
 #productsTable tbody tr:nth-child(odd) {
-  background-color: #FFF2D7; 
+  background-color: #FFF2D7;
 }
 
 #productsTable tbody tr:nth-child(even) {
-  background-color: #ffffff;  
+  background-color: #ffffff;
 }

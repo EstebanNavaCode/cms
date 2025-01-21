@@ -100,42 +100,39 @@
             </div>
         </div>
     </div>
-<table id="productsTable" class="display">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Autor</th>
-            <th>Editorial</th>
-            <th>ISBN</th>
-            <th>Stock</th>
-            <th>Categoría</th>
-            <th>Subcategoría</th>
-            <th>Estado</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each products}}
-        <tr>
-            <td>{{ID_LIB}}</td>
-            <td>{{NOMBRE_LIB}}</td>
-            <td>{{AUTOR_LIB}}</td>
-            <td>{{EDITORIAL_LIB}}</td>
-            <td>{{ISBN_LIB}}</td>
-            <td>{{STOCK_LIB}}</td>
-            <td>{{CATEGORIA}}</td>
-            <td>{{SUBCATEGORIA}}</td>
-            <td>{{#if ACTIVO_LIB}}<span style="color:green;">Disponible</span>{{else}}<span style="color:red;">Agotado</span>{{/if}}</td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
+    <table id="productsTable" class="display">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Autor</th>
+                <th>Editorial</th>
+                <th>ISBN</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th>Subcategoría</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <td>{{ID_LIB}}</td>
+                <td>{{NOMBRE_LIB}}</td>
+                <td>{{AUTOR_LIB}}</td>
+                <td>{{EDITORIAL_LIB}}</td>
+                <td>{{ISBN_LIB}}</td>
+                <td>{{STOCK_LIB}}</td>
+                <td>{{CATEGORIA}}</td>
+                <td>{{SUBCATEGORIA}}</td>
+                <td>{{#if ACTIVO_LIB}}<span style="color:green;">Disponible</span>{{else}}<span
+                        style="color:red;">Agotado</span>{{/if}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 
 </section>
-
-
-
-
 
 <script src="/assets/js/productsTableFormat.js"></script>
 <script src="/assets/js/imgPreview.js"></script>

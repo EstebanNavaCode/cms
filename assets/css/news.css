@@ -253,8 +253,8 @@ label.custum-file-upload input[type="file"] {
 
 textarea.textarea {
     width: 100%;
-    height: 200px; 
-    resize: none; 
+    height: 200px;
+    resize: none;
     padding: 15px 10px;
     outline: none;
     border: 1px solid rgba(105, 105, 105, 0.4);
@@ -262,11 +262,11 @@ textarea.textarea {
     font-size: 16px;
     background-color: #fff;
     text-align: left;
-    overflow-y: auto; 
+    overflow-y: auto;
 }
 
 textarea.textarea::-webkit-scrollbar {
-    width: 8px; 
+    width: 8px;
 }
 
 textarea.textarea::-webkit-scrollbar-track {
@@ -283,18 +283,18 @@ textarea.textarea::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
 
-.dataTables_wrapper{
+.dataTables_wrapper {
     margin-top: 5rem;
     margin-left: 11rem;
     margin-bottom: 12rem;
     width: 75%;
-  }
-  
-  
+}
+
+
 #newsTable tbody tr:nth-child(odd) {
-    background-color: #FFF2D7; 
-  }
-  
-  #newsTable tbody tr:nth-child(even) {
-    background-color: #ffffff;  
-  }
+    background-color: #FFF2D7;
+}
+
+#newsTable tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}

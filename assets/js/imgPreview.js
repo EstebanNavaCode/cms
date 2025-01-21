@@ -25,19 +25,23 @@ function previewImage(event) {
   }
 }
 
-document.getElementById("modal-register-user").addEventListener("hidden.bs.modal", function () {
-  const modalPreview = document.getElementById("modal-preview");
-  const modalIconPlaceholder = document.getElementById("icon-placeholder-modal");
-  const modalFileInput = document.getElementById("modal-file");
+document
+  .getElementById("modal-register-user")
+  .addEventListener("hidden.bs.modal", function () {
+    const modalPreview = document.getElementById("modal-preview");
+    const modalIconPlaceholder = document.getElementById(
+      "icon-placeholder-modal"
+    );
+    const modalFileInput = document.getElementById("modal-file");
 
-  if (modalPreview) {
-    modalPreview.src = "";
-    modalPreview.style.display = "none";
-  }
-  if (modalIconPlaceholder) {
-    modalIconPlaceholder.style.display = "block";
-  }
-  if (modalFileInput) {
-    modalFileInput.value = ""; 
-  }
-});
+    if (modalPreview) {
+      modalPreview.src = "";
+      modalPreview.style.display = "none";
+    }
+    if (modalIconPlaceholder) {
+      modalIconPlaceholder.style.display = "block";
+    }
+    if (modalFileInput) {
+      modalFileInput.value = "";
+    }
+  });

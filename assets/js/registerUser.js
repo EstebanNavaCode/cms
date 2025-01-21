@@ -39,8 +39,7 @@ document
     }
   });
 
-
-  document
+document
   .getElementById("form-register-user-modal")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -63,13 +62,13 @@ document
           NOMBRE_USR,
           APELLIDO_USR,
           CORREO_USR,
-          ACTIVO_USR, 
+          ACTIVO_USR,
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
-        alert(result.message); 
+        alert(result.message);
         location.reload();
       } else {
         const error = await response.json();

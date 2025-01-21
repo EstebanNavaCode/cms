@@ -31,26 +31,26 @@ $(document).ready(function () {
 
   $("#usersTable tbody").on("click", "tr", function () {
     let rowData = table.row(this).data();
-  
+
     if (rowData) {
-      $("#modal-id").val(rowData[0]); 
-      $("#modal-name").val(rowData[1]); 
-      $("#modal-lastname").val(rowData[2]); 
+      $("#modal-id").val(rowData[0]);
+      $("#modal-name").val(rowData[1]);
+      $("#modal-lastname").val(rowData[2]);
       $("#modal-correo").val(rowData[3]);
-      
+
       const tipoUsuarioMap = {
-        "ADMIN": 1,
-        "GERENTE": 2,
-        "COLABORADOR": 3
+        ADMIN: 1,
+        GERENTE: 2,
+        COLABORADOR: 3,
       };
-  
+
       const tipoUsuarioValue = tipoUsuarioMap[rowData[4]];
       $("#type-modal").val(tipoUsuarioValue);
-  
+
       const isActive = rowData[6].includes("Activo");
       $("#modal-active").prop("checked", isActive);
       $("#cb5").prop("checked", isActive);
-  
+
       $("#modal-register-user").modal("show");
     }
   });
