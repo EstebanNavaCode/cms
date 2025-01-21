@@ -134,5 +134,95 @@
 
 </section>
 
+<!-- Modal -->
+<div class="modal fade" id="modal-register-product" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content form">
+            <div class="modal-header">
+                <h5 class="modal-title title2">Editar Producto</h5>
+                <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-flex-container" class="form">
+
+                    <form id="form-update-product" class="modal-register" method="PUT" action="/users/:id">
+
+            <div class="flex">
+
+                        <label>
+                            <input id="modal-name" name="NOMBRE_LIB" class="input" type="text" placeholder="" required>
+                            <span>Titulo</span>
+                        </label>
+
+                        <label>
+                            <input id="modal-autor" name="AUTOR_LIB" class="input" type="text" placeholder="" required>
+                            <span>Autor</span>
+                        </label>
+
+                        <label>
+                            <input id="modal-editorial" name="EDITORIAL_LIB" class="input" type="text" placeholder="" required>
+                            <span>Editorial</span>
+                        </label>
+
+                         <div class="category-container">
+                            <select id="modal-category" name="CATEGORIA_LIB" class="input" required>
+                                <option value="" disabled selected hidden>Categoría</option>
+                            </select>
+
+                            <select id="modal-subcategory" name="SUBCATEGORIA_LIB" class="input" required>
+                                <option value="" disabled selected hidden>Subcategoría</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+               
+                    <div class="flex">
+                        <div class="left-fields">
+
+                            <label>
+                                <input id="modal-isbn" class="input" name="ISBN_LIB" type="input" placeholder="" required="">
+                                <span>ISBN</span>
+                            </label>
+
+                            <label>
+                                <input id="modal-stock" class="input" name="STOCK_LIB" type="input" placeholder=""
+                                    required="">
+                                <span>Cantidad</span>
+                            </label>
+
+                        </div>
+
+                        <label class="custum-file-upload">
+                            <ion-icon name="cloud-upload-outline"></ion-icon>
+                            <div class="text">Click aquí para subir una imagen</div>
+                            <input type="file" id="file" accept="image/*" onchange="previewImage(event)">
+                        </label>
+
+                    </div>
+
+                        <div class="flex">
+                            <div class="checkbox-wrapper-10">
+                                <input id="modal-active" name="ACTIVO_LIB" type="checkbox" hidden>
+                                <input type="checkbox" id="cb5" class="tgl tgl-flip" onchange="updateCheckboxState()">
+                                <label for="cb5" data-tg-on="Disponible" data-tg-off="No Disponible" class="tgl-btn"></label>
+                            </div>
+
+                            <button class="submit" type="submit">Guardar cambios</button>
+                        </div>
+                    </form>
+
+                    <div class="image-preview">
+                        <i id="icon-placeholder" class="uil uil-image-search placeholder-icon"></i>
+                        <img id="modal-preview" src="" alt="Vista previa de la imagen">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="/assets/js/productsTableFormat.js"></script>
 <script src="/assets/js/imgPreview.js"></script>
