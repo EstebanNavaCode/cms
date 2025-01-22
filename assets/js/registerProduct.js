@@ -10,8 +10,6 @@ document
     const AUTOR_LIB = document.getElementById("autor").value;
     const EDITORIAL_LIB = document.getElementById("lastname").value;
     const STOCK_LIB = document.getElementById("stock").value;
-    const fileInput = document.getElementById("file");
-    const IMG_LIB = fileInput.files.length ? fileInput.files[0].name : "";
 
     if (
       !CATEGORIA_LIB ||
@@ -40,17 +38,22 @@ document
           STOCK_LIB,
           CATEGORIA_LIB,
           SUBCATEGORIA_LIB,
-          IMG_LIB,
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
         alert(result.message || "Producto registrado exitosamente.");
+        
+        window.location.href = "/products";
+        
         document.getElementById("form-register-product").reset();
       } else {
-        const error = await response.json();
-        alert(error.message || "Error al registrar producto.");
+      
+        const errorResult = await response.json();
+        alert(
+          errorResult.message || "Ocurrió un error al registrar el producto."
+        );
       }
     } catch (err) {
       console.error("Error:", err);
@@ -115,12 +118,18 @@ document
     const ID_LIB = document.getElementById("modal-id").value.trim();
     const NOMBRE_LIB = document.getElementById("modal-name").value.trim();
     const AUTOR_LIB = document.getElementById("modal-autor").value.trim();
-    const EDITORIAL_LIB = document.getElementById("modal-editorial").value.trim();
+    const EDITORIAL_LIB = document
+      .getElementById("modal-editorial")
+      .value.trim();
     const ISBN_LIB = document.getElementById("modal-isbn").value.trim();
     const STOCK_LIB = document.getElementById("modal-stock").value.trim();
-    const CATEGORIA_LIB = document.getElementById("modal-category").value.trim();
-    const SUBCATEGORIA_LIB = document.getElementById("modal-subcategory").value.trim();
-    const ACTIVO_LIB = document.getElementById("modal-active").checked; 
+    const CATEGORIA_LIB = document
+      .getElementById("modal-category")
+      .value.trim();
+    const SUBCATEGORIA_LIB = document
+      .getElementById("modal-subcategory")
+      .value.trim();
+    const ACTIVO_LIB = document.getElementById("modal-active").checked;
 
     console.log("Datos enviados al backend:", {
       ID_LIB,
@@ -155,7 +164,7 @@ document
       if (response.ok) {
         const result = await response.json();
         alert(result.message || "Producto actualizado exitosamente.");
-        location.reload(); 
+        location.reload();
       } else {
         const error = await response.json();
         console.error("Error del servidor:", error);

@@ -62,12 +62,14 @@
                     <div class="flex">
                         <div class="left-fields">
                             <label>
-                                <input class="input" name="CORREO_USR" type="email" placeholder="" required="">
+                                <input id="correo_usr" class="input" name="CORREO_USR" type="email" placeholder=""
+                                    required="">
                                 <span>Correo Electrónico</span>
                             </label>
 
                             <label>
-                                <input class="input" name="CONTRASENA_USR" type="password" placeholder="" required="">
+                                <input id="contrasena_usr" class="input" name="CONTRASENA_USR" type="password"
+                                    placeholder="" required="">
                                 <span>Contraseña</span>
                             </label>
 
@@ -76,7 +78,7 @@
                         <label class="custum-file-upload">
                             <ion-icon name="cloud-upload-outline"></ion-icon>
                             <div class="text">Click aquí para subir una imagen</div>
-                            <input type="file" id="file" accept="image/*" onchange="previewImage(event)">
+                            <input id="img_usr" type="file" id="file" accept="image/*" onchange="previewImage(event)">
                         </label>
 
                     </div>

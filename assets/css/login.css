@@ -1,155 +1,152 @@
 * {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
 }
 
 section {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    min-height: 100vh;
-    width: 100%;
-    background: url("/assets/img/login/fondo-login.jpg") no-repeat;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background: url("/assets/img/login/fondo-login.jpg") no-repeat;
 
-    background-position: center;
-    background-size: cover;
+  background-position: center;
+  background-size: cover;
 }
 
 .form-box {
-    position: relative;
-    width: 400px;
-    height: 450px;
-    background: transparent;
-    border: none;
-    border-radius: 20px;
-    -webkit-backdrop-filter: blur(15px) brightness(80%);
-    backdrop-filter: blur(15px) brightness(80%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 8rem;
+  position: relative;
+  width: 400px;
+  height: 450px;
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  -webkit-backdrop-filter: blur(15px) brightness(80%);
+  backdrop-filter: blur(15px) brightness(80%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8rem;
 }
 
-
 h2 {
-    font-size: 2em;
-    color: #fff;
-    text-align: center;
+  font-size: 2em;
+  color: #fff;
+  text-align: center;
 }
 
 .inputbox {
-    position: relative;
-    margin: 30px 0;
-    width: 310px;
-    border-bottom: 2px solid #fff;
+  position: relative;
+  margin: 30px 0;
+  width: 310px;
+  border-bottom: 2px solid #fff;
 }
 
 .inputbox input {
-    width: 100%;
-    height: 50px;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-size: 1em;
-    padding: 0 35px 0 5px;
-    color: #fff;
+  width: 100%;
+  height: 50px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  padding: 0 35px 0 5px;
+  color: #fff;
 }
 
 .inputbox label {
-    position: absolute;
-    top: 50%;
-    left: 5px;
-    transform: translateY(-50%);
-    color: #fff;
-    font-size: 1em;
-    pointer-events: none;
-    transition: 0.5s;
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 1em;
+  pointer-events: none;
+  transition: 0.5s;
 }
 
-.inputbox input:not(:placeholder-shown)~label,
-.inputbox input:focus~label {
-    top: -5px;
-    font-size: 0.8em;
+.inputbox input:not(:placeholder-shown) ~ label,
+.inputbox input:focus ~ label {
+  top: -5px;
+  font-size: 0.8em;
 }
 
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear,
 input[type="password"]::-webkit-clear-button,
 input[type="password"]::-webkit-inner-spin-button {
-    display: none;
-    appearance: none;
+  display: none;
+  appearance: none;
 }
 
-
 .inputbox ion-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.5em;
-    color: #fff;
-    cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5em;
+  color: #fff;
+  cursor: pointer;
 }
 
 .inputbox ion-icon:hover {
-    color: #ddd;
+  color: #ddd;
 }
 
-
 .forget {
-    margin: -10px 0 17px;
-    font-size: 0.9em;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
+  margin: -10px 0 17px;
+  font-size: 0.9em;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
 }
 
 .forget label input {
-    margin-right: 3px;
+  margin-right: 3px;
 }
 
 .forget a {
-    color: #fff;
-    text-decoration: none;
+  color: #fff;
+  text-decoration: none;
 }
 
 .forget a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 button {
-    width: 100%;
-    height: 40px;
-    border-radius: 40px;
-    background-color: #fff;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
+  width: 100%;
+  height: 40px;
+  border-radius: 40px;
+  background-color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
 }
 
 .register {
-    font-size: 0.9em;
-    color: #fff;
-    text-align: center;
-    margin: 25px 0 10px;
+  font-size: 0.9em;
+  color: #fff;
+  text-align: center;
+  margin: 25px 0 10px;
 }
 
 .register p a {
-    text-decoration: none;
-    color: #fff;
-    font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
 }
 
 .register p a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 480px) {
-    .form-box {
-        width: 100%;
-        border-radius: 0px;
-    }
+  .form-box {
+    width: 100%;
+    border-radius: 0px;
+  }
 }

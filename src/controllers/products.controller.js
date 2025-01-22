@@ -13,10 +13,7 @@ export const registerProduct = async (req, res) => {
       STOCK_LIB,
     } = req.body;
 
-    const IMG_LIB = req.file ? req.file.filename : null;
-
     console.log("Datos recibidos en el backend:", req.body);
-    console.log("Archivo recibido:", req.file);
 
     if (
       !NOMBRE_LIB ||
@@ -42,17 +39,20 @@ export const registerProduct = async (req, res) => {
       .input("NOMBRE_LIB", sql.NVarChar(300), NOMBRE_LIB)
       .input("AUTOR_LIB", sql.NVarChar(300), AUTOR_LIB)
       .input("EDITORIAL_LIB", sql.NVarChar(300), EDITORIAL_LIB)
-      .input("IMG_LIB", sql.NVarChar(300), IMG_LIB)
       .input("STOCK_LIB", sql.Int, STOCK_LIB)
       .input("ACTIVO_LIB", sql.Bit, 1).query(`
         INSERT INTO dbo.LIB_T_
-        (CATEGORIA_LIB, SUBCATEGORIA_LIB, ISBN_LIB, NOMBRE_LIB, AUTOR_LIB, EDITORIAL_LIB, IMG_LIB, STOCK_LIB, ACTIVO_LIB)
-        VALUES (@CATEGORIA_LIB, @SUBCATEGORIA_LIB, @ISBN_LIB, @NOMBRE_LIB, @AUTOR_LIB, @EDITORIAL_LIB, @IMG_LIB, @STOCK_LIB, @ACTIVO_LIB)
+        (CATEGORIA_LIB, SUBCATEGORIA_LIB, ISBN_LIB, NOMBRE_LIB, AUTOR_LIB, EDITORIAL_LIB, STOCK_LIB, ACTIVO_LIB)
+        VALUES (@CATEGORIA_LIB, @SUBCATEGORIA_LIB, @ISBN_LIB, @NOMBRE_LIB, @AUTOR_LIB, @EDITORIAL_LIB, @STOCK_LIB, @ACTIVO_LIB)
       `);
 
-    res.redirect("/products");
+    res.status(201).json({ message: "Producto registrado exitosamente." });
   } catch (error) {
-    console.error("Error al registrar libro:", error.message, error.stack);
+    console.error("Error al registrar libro:");
+    console.error("Mensaje:", error.message);
+    console.error("Stack Trace:", error.stack);
+    console.error("Detalles completos:", error);
+
     res
       .status(500)
       .json({ message: "Ocurrió un error al registrar el libro." });
@@ -93,7 +93,7 @@ export const getSubcategories = async (req, res) => {
         "SELECT ID_SBC, NOMBRE_SBC FROM SUBCATEGORIA_LCAT_T WHERE ACTIVO_SBC = 1 AND ID_LCAT = @categoryId"
       );
 
-    res.json(result.recordset); 
+    res.json(result.recordset);
   } catch (error) {
     console.error("Error al obtener subcategorías:", error);
     res.status(500).send("Error al obtener subcategorías.");
@@ -117,7 +117,6 @@ SELECT
 FROM LIB_T_
 LEFT JOIN CATEGORIA_LIB_T ON LIB_T_.CATEGORIA_LIB = CATEGORIA_LIB_T.ID_LCAT
 LEFT JOIN SUBCATEGORIA_LCAT_T ON LIB_T_.SUBCATEGORIA_LIB = SUBCATEGORIA_LCAT_T.ID_SBC;
-
 
     `);
 
@@ -143,7 +142,7 @@ export const editProduct = async (req, res) => {
     ACTIVO_LIB,
   } = req.body;
 
-  console.log("Datos recibidos:", req.body); 
+  console.log("Datos recibidos:", req.body);
 
   try {
     const pool = await getConnection();
@@ -157,8 +156,7 @@ export const editProduct = async (req, res) => {
       .input("STOCK_LIB", sql.Int, STOCK_LIB)
       .input("CATEGORIA_LIB", sql.Int, CATEGORIA_LIB)
       .input("SUBCATEGORIA_LIB", sql.Int, SUBCATEGORIA_LIB)
-      .input("ACTIVO_LIB", sql.Bit, ACTIVO_LIB) 
-      .query(`
+      .input("ACTIVO_LIB", sql.Bit, ACTIVO_LIB).query(`
         UPDATE LIB_T_
         SET 
           NOMBRE_LIB = @NOMBRE_LIB,

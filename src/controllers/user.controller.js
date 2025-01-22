@@ -71,11 +71,13 @@ export const registerUser = async (req, res) => {
       .input("ACTIVO_USR", sql.Bit, true)
       .input("IMG_USR", sql.NVarChar(300), IMG_USR || null).query(`
         INSERT INTO dbo.USR_T
-        (TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, CONTRASENA_USR, FECHA_ALTA_USR, ACTIVO_USR, IMG_USR)
-        VALUES (@TIPO_USR, @NOMBRE_USR, @APELLIDO_USR, @CORREO_USR, @CONTRASENA_USR, @FECHA_ALTA_USR, @ACTIVO_USR, @IMG_USR)
+        (TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, 
+        CONTRASENA_USR, FECHA_ALTA_USR, ACTIVO_USR, IMG_USR)
+        VALUES (@TIPO_USR, @NOMBRE_USR, @APELLIDO_USR, @CORREO_USR,
+         @CONTRASENA_USR, @FECHA_ALTA_USR, @ACTIVO_USR, @IMG_USR)
       `);
 
-    res.redirect("/users");
+    res.status(201).json({ message: "Usuario registrado exitosamente." });
   } catch (error) {
     console.error("Error al registrar usuario:", error);
     res
@@ -114,16 +116,13 @@ export const getUsers = async (req, res) => {
 export const editUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      TIPO_USR,
-      NOMBRE_USR,
-      APELLIDO_USR,
-      CORREO_USR,
-      ACTIVO_USR,
-    } = req.body;
+    const { TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, ACTIVO_USR } =
+      req.body;
 
     if (!id || !TIPO_USR || !NOMBRE_USR || !APELLIDO_USR || !CORREO_USR) {
-      return res.status(400).json({ message: "Todos los campos obligatorios deben ser proporcionados." });
+      return res.status(400).json({
+        message: "Todos los campos obligatorios deben ser proporcionados.",
+      });
     }
 
     const pool = await getConnection();
@@ -134,8 +133,7 @@ export const editUser = async (req, res) => {
       .input("NOMBRE_USR", sql.NVarChar(300), NOMBRE_USR)
       .input("APELLIDO_USR", sql.NVarChar(300), APELLIDO_USR)
       .input("CORREO_USR", sql.NVarChar(300), CORREO_USR)
-      .input("ACTIVO_USR", sql.Bit, ACTIVO_USR)
-      .query(`
+      .input("ACTIVO_USR", sql.Bit, ACTIVO_USR).query(`
         UPDATE dbo.USR_T 
         SET 
           TIPO_USR = @TIPO_USR, 
@@ -147,16 +145,16 @@ export const editUser = async (req, res) => {
       `);
 
     if (result.rowsAffected[0] === 0) {
-      return res.status(404).json({ message: "Usuario no encontrado o no se realizó ninguna modificación." });
+      return res.status(404).json({
+        message: "Usuario no encontrado o no se realizó ninguna modificación.",
+      });
     }
 
     res.json({ message: "Usuario actualizado correctamente." });
   } catch (error) {
     console.error("Error al actualizar usuario:", error);
-    res.status(500).json({ message: "Ocurrió un error al actualizar el usuario." });
+    res
+      .status(500)
+      .json({ message: "Ocurrió un error al actualizar el usuario." });
   }
 };
-
-
-
-

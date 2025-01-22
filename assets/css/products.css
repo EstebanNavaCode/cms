@@ -125,8 +125,8 @@ label span {
   transition: 0.3s ease;
 }
 
-input:focus+span,
-input:valid+span {
+input:focus + span,
+input:valid + span {
   color: green;
 }
 
@@ -176,8 +176,6 @@ label.custum-file-upload {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
-
-
 
 label.custum-file-upload ion-icon {
   font-size: 50px;
@@ -249,7 +247,6 @@ label.custum-file-upload input[type="file"] {
   vertical-align: middle;
 }
 
-
 .category-container-modal {
   display: flex;
   gap: 1rem;
@@ -260,7 +257,7 @@ label.custum-file-upload input[type="file"] {
 .category-container {
   display: flex;
   gap: 1rem;
-  width: 100%;;
+  width: 100%;
 }
 
 .category-container select.input {
@@ -274,9 +271,8 @@ label.custum-file-upload input[type="file"] {
   width: 75%;
 }
 
-
 #productsTable tbody tr:nth-child(odd) {
-  background-color: #FFF2D7;
+  background-color: #fff2d7;
 }
 
 #productsTable tbody tr:nth-child(even) {
@@ -361,7 +357,6 @@ label.custum-file-upload {
   font-weight: bold;
   transition: 0.3s ease;
   display: block;
- 
 }
 
 .modal-footer .submit:hover {
@@ -417,7 +412,7 @@ label.custum-file-upload {
 .checkbox-wrapper-10 .tgl *,
 .checkbox-wrapper-10 .tgl *:after,
 .checkbox-wrapper-10 .tgl *:before,
-.checkbox-wrapper-10 .tgl+.tgl-btn {
+.checkbox-wrapper-10 .tgl + .tgl-btn {
   box-sizing: border-box;
 }
 
@@ -427,18 +422,18 @@ label.custum-file-upload {
 .checkbox-wrapper-10 .tgl *::-moz-selection,
 .checkbox-wrapper-10 .tgl *:after::-moz-selection,
 .checkbox-wrapper-10 .tgl *:before::-moz-selection,
-.checkbox-wrapper-10 .tgl+.tgl-btn::-moz-selection,
+.checkbox-wrapper-10 .tgl + .tgl-btn::-moz-selection,
 .checkbox-wrapper-10 .tgl::selection,
 .checkbox-wrapper-10 .tgl:after::selection,
 .checkbox-wrapper-10 .tgl:before::selection,
 .checkbox-wrapper-10 .tgl *::selection,
 .checkbox-wrapper-10 .tgl *:after::selection,
 .checkbox-wrapper-10 .tgl *:before::selection,
-.checkbox-wrapper-10 .tgl+.tgl-btn::selection {
+.checkbox-wrapper-10 .tgl + .tgl-btn::selection {
   background: none;
 }
 
-.checkbox-wrapper-10 .tgl+.tgl-btn {
+.checkbox-wrapper-10 .tgl + .tgl-btn {
   outline: 0;
   display: block;
   width: 8em;
@@ -451,8 +446,8 @@ label.custum-file-upload {
   user-select: none;
 }
 
-.checkbox-wrapper-10 .tgl+.tgl-btn:after,
-.checkbox-wrapper-10 .tgl+.tgl-btn:before {
+.checkbox-wrapper-10 .tgl + .tgl-btn:after,
+.checkbox-wrapper-10 .tgl + .tgl-btn:before {
   position: relative;
   display: block;
   content: "";
@@ -460,27 +455,27 @@ label.custum-file-upload {
   height: 100%;
 }
 
-.checkbox-wrapper-10 .tgl+.tgl-btn:after {
+.checkbox-wrapper-10 .tgl + .tgl-btn:after {
   left: 0;
 }
 
-.checkbox-wrapper-10 .tgl+.tgl-btn:before {
+.checkbox-wrapper-10 .tgl + .tgl-btn:before {
   display: none;
 }
 
-.checkbox-wrapper-10 .tgl:checked+.tgl-btn:after {
+.checkbox-wrapper-10 .tgl:checked + .tgl-btn:after {
   left: 50%;
 }
 
-.checkbox-wrapper-10 .tgl-flip+.tgl-btn {
+.checkbox-wrapper-10 .tgl-flip + .tgl-btn {
   padding: 2px;
   transition: all 0.2s ease;
   font-family: sans-serif;
   perspective: 100px;
 }
 
-.checkbox-wrapper-10 .tgl-flip+.tgl-btn:after,
-.checkbox-wrapper-10 .tgl-flip+.tgl-btn:before {
+.checkbox-wrapper-10 .tgl-flip + .tgl-btn:after,
+.checkbox-wrapper-10 .tgl-flip + .tgl-btn:before {
   display: inline-block;
   transition: all 0.4s ease;
   width: 100%;
@@ -497,31 +492,31 @@ label.custum-file-upload {
   border-radius: 4px;
 }
 
-.checkbox-wrapper-10 .tgl-flip+.tgl-btn:after {
+.checkbox-wrapper-10 .tgl-flip + .tgl-btn:after {
   content: attr(data-tg-on);
-  background: #02C66F;
+  background: #02c66f;
   transform: rotateY(-180deg);
 }
 
-.checkbox-wrapper-10 .tgl-flip+.tgl-btn:before {
-  background: #FF3A19;
+.checkbox-wrapper-10 .tgl-flip + .tgl-btn:before {
+  background: #ff3a19;
   content: attr(data-tg-off);
 }
 
-.checkbox-wrapper-10 .tgl-flip+.tgl-btn:active:before {
+.checkbox-wrapper-10 .tgl-flip + .tgl-btn:active:before {
   transform: rotateY(-20deg);
 }
 
-.checkbox-wrapper-10 .tgl-flip:checked+.tgl-btn:before {
+.checkbox-wrapper-10 .tgl-flip:checked + .tgl-btn:before {
   transform: rotateY(180deg);
 }
 
-.checkbox-wrapper-10 .tgl-flip:checked+.tgl-btn:after {
+.checkbox-wrapper-10 .tgl-flip:checked + .tgl-btn:after {
   transform: rotateY(0);
   left: 0;
-  background: #7FC6A6;
+  background: #7fc6a6;
 }
 
-.checkbox-wrapper-10 .tgl-flip:checked+.tgl-btn:active:after {
+.checkbox-wrapper-10 .tgl-flip:checked + .tgl-btn:active:after {
   transform: rotateY(20deg);
 }
