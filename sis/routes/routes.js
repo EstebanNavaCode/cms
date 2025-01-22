@@ -5,12 +5,15 @@ import {
   getUsers,
   editUser,
 } from "../../src/controllers/user.controller.js";
+
 import {
   registerProduct,
   getCategories,
   getSubcategories,
   getProducts,
+  editProduct,
 } from "../../src/controllers/products.controller.js";
+
 import {
   getCategoriesNEWS,
   getSubcategoriesNEWS,
@@ -27,6 +30,10 @@ router.get("/users", getUsers);
 
 router.post("/products", registerProduct);
 router.get("/products", getProducts);
+router.put("/products/:id", editProduct);
+
+
+
 router.get("/categories", getCategories);
 router.get("/subcategories/:categoryId", getSubcategories);
 

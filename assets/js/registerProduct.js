@@ -106,3 +106,63 @@ document.getElementById("category").addEventListener("change", (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", loadCategories);
+
+document
+  .getElementById("form-update-product")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const ID_LIB = document.getElementById("modal-id").value.trim();
+    const NOMBRE_LIB = document.getElementById("modal-name").value.trim();
+    const AUTOR_LIB = document.getElementById("modal-autor").value.trim();
+    const EDITORIAL_LIB = document.getElementById("modal-editorial").value.trim();
+    const ISBN_LIB = document.getElementById("modal-isbn").value.trim();
+    const STOCK_LIB = document.getElementById("modal-stock").value.trim();
+    const CATEGORIA_LIB = document.getElementById("modal-category").value.trim();
+    const SUBCATEGORIA_LIB = document.getElementById("modal-subcategory").value.trim();
+    const ACTIVO_LIB = document.getElementById("modal-active").checked; 
+
+    console.log("Datos enviados al backend:", {
+      ID_LIB,
+      NOMBRE_LIB,
+      AUTOR_LIB,
+      EDITORIAL_LIB,
+      ISBN_LIB,
+      STOCK_LIB,
+      CATEGORIA_LIB,
+      SUBCATEGORIA_LIB,
+      ACTIVO_LIB,
+    });
+
+    try {
+      const response = await fetch(`/products/${ID_LIB}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          NOMBRE_LIB,
+          AUTOR_LIB,
+          EDITORIAL_LIB,
+          ISBN_LIB,
+          STOCK_LIB,
+          CATEGORIA_LIB,
+          SUBCATEGORIA_LIB,
+          ACTIVO_LIB,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message || "Producto actualizado exitosamente.");
+        location.reload(); 
+      } else {
+        const error = await response.json();
+        console.error("Error del servidor:", error);
+        alert(error.message || "Error al actualizar producto.");
+      }
+    } catch (err) {
+      console.error("Error en la solicitud:", err);
+      alert("Ocurrió un error inesperado.");
+    }
+  });
