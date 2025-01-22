@@ -55,6 +55,13 @@ app.get("/news", (req, res) => {
   res.render("news/news");
 });
 
+//Ver solicitudes
+app.use((req, res, next) => {
+  console.log(`Solicitud ${req.method} en ${req.url}`);
+  console.log("Cuerpo de la solicitud:", req.body);
+  next();
+});
+
 // Start the server
 const PORT = config.PORT || 3000;
 app.listen(PORT, () => {

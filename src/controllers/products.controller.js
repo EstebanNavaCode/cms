@@ -76,9 +76,8 @@ export const getCategories = async (req, res) => {
 };
 
 export const getSubcategories = async (req, res) => {
-  const { categoryId } = req.params; // Obtener parámetro de la URL
+  const { categoryId } = req.params;
 
-  // Validar que categoryId es un número
   if (!categoryId || isNaN(categoryId)) {
     return res
       .status(400)
@@ -89,12 +88,12 @@ export const getSubcategories = async (req, res) => {
     const pool = await getConnection();
     const result = await pool
       .request()
-      .input("categoryId", sql.Int, parseInt(categoryId)) // Convertir a entero explícitamente
+      .input("categoryId", sql.Int, parseInt(categoryId))
       .query(
         "SELECT ID_SBC, NOMBRE_SBC FROM SUBCATEGORIA_LCAT_T WHERE ACTIVO_SBC = 1 AND ID_LCAT = @categoryId"
       );
 
-    res.json(result.recordset); // Devolver las subcategorías
+    res.json(result.recordset); 
   } catch (error) {
     console.error("Error al obtener subcategorías:", error);
     res.status(500).send("Error al obtener subcategorías.");
@@ -128,5 +127,54 @@ LEFT JOIN SUBCATEGORIA_LCAT_T ON LIB_T_.SUBCATEGORIA_LIB = SUBCATEGORIA_LCAT_T.I
     res
       .status(500)
       .json({ message: "Error al obtener la lista de productos." });
+  }
+};
+
+export const editProduct = async (req, res) => {
+  const { id } = req.params;
+  const {
+    NOMBRE_LIB,
+    AUTOR_LIB,
+    EDITORIAL_LIB,
+    ISBN_LIB,
+    STOCK_LIB,
+    CATEGORIA_LIB,
+    SUBCATEGORIA_LIB,
+    ACTIVO_LIB,
+  } = req.body;
+
+  console.log("Datos recibidos:", req.body); 
+
+  try {
+    const pool = await getConnection();
+    await pool
+      .request()
+      .input("ID_LIB", sql.Int, id)
+      .input("NOMBRE_LIB", sql.NVarChar(300), NOMBRE_LIB)
+      .input("AUTOR_LIB", sql.NVarChar(300), AUTOR_LIB)
+      .input("EDITORIAL_LIB", sql.NVarChar(300), EDITORIAL_LIB)
+      .input("ISBN_LIB", sql.NVarChar(300), ISBN_LIB)
+      .input("STOCK_LIB", sql.Int, STOCK_LIB)
+      .input("CATEGORIA_LIB", sql.Int, CATEGORIA_LIB)
+      .input("SUBCATEGORIA_LIB", sql.Int, SUBCATEGORIA_LIB)
+      .input("ACTIVO_LIB", sql.Bit, ACTIVO_LIB) 
+      .query(`
+        UPDATE LIB_T_
+        SET 
+          NOMBRE_LIB = @NOMBRE_LIB,
+          AUTOR_LIB = @AUTOR_LIB,
+          EDITORIAL_LIB = @EDITORIAL_LIB,
+          ISBN_LIB = @ISBN_LIB,
+          STOCK_LIB = @STOCK_LIB,
+          CATEGORIA_LIB = @CATEGORIA_LIB,
+          SUBCATEGORIA_LIB = @SUBCATEGORIA_LIB,
+          ACTIVO_LIB = @ACTIVO_LIB
+        WHERE ID_LIB = @ID_LIB
+      `);
+
+    res.json({ message: "Producto actualizado exitosamente." });
+  } catch (error) {
+    console.error("Error al actualizar producto:", error);
+    res.status(500).json({ message: "Error al actualizar producto." });
   }
 };
