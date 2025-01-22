@@ -148,68 +148,74 @@
                 <div class="modal-flex-container" class="form">
 
                     <form id="form-update-product" class="modal-register">
-                    <input type="hidden" id="modal-id" name="ID_LIB" />
+                        <input type="hidden" id="modal-id" name="ID_LIB" />
 
 
-            <div class="flex">
-
-                        <label>
-                            <input id="modal-name" name="NOMBRE_LIB" class="input" type="text" placeholder="" required>
-                            <span>Titulo</span>
-                        </label>
-
-                        <label>
-                            <input id="modal-autor" name="AUTOR_LIB" class="input" type="text" placeholder="" required>
-                            <span>Autor</span>
-                        </label>
-
-                        <label>
-                            <input id="modal-editorial" name="EDITORIAL_LIB" class="input" type="text" placeholder="" required>
-                            <span>Editorial</span>
-                        </label>
-
-                         <div class="category-container">
-                            <select id="modal-category" name="CATEGORIA_LIB" class="input" required>
-                                <option value="" disabled selected hidden>Categoría</option>
-                            </select>
-
-                            <select id="modal-subcategory" name="SUBCATEGORIA_LIB" class="input" required>
-                                <option value="" disabled selected hidden>Subcategoría</option>
-                            </select>
-
-                        </div>
-
-                    </div>
-               
-                    <div class="flex">
-                        <div class="left-fields">
+                        <div class="flex">
 
                             <label>
-                                <input id="modal-isbn" class="input" name="ISBN_LIB" type="input" placeholder="" required="">
-                                <span>ISBN</span>
+                                <input id="modal-name" name="NOMBRE_LIB" class="input" type="text" placeholder=""
+                                    required>
+                                <span>Titulo</span>
                             </label>
 
                             <label>
-                                <input id="modal-stock" class="input" name="STOCK_LIB" type="input" placeholder=""
-                                    required="">
-                                <span>Cantidad</span>
+                                <input id="modal-autor" name="AUTOR_LIB" class="input" type="text" placeholder=""
+                                    required>
+                                <span>Autor</span>
                             </label>
+
+                            <label>
+                                <input id="modal-editorial" name="EDITORIAL_LIB" class="input" type="text"
+                                    placeholder="" required>
+                                <span>Editorial</span>
+                            </label>
+
+                            <div class="category-container-modal">
+                                <select id="modal-category" name="CATEGORIA_LIB" class="input" required>
+                                    <option value="" disabled selected hidden>Categoría</option>
+                                </select>
+
+                                <select id="modal-subcategory" name="SUBCATEGORIA_LIB" class="input" required>
+                                    <option value="" disabled selected hidden>Subcategoría</option>
+                                </select>
+
+                            </div>
 
                         </div>
 
-                        <label class="custum-file-upload">
-                            <ion-icon name="cloud-upload-outline"></ion-icon>
-                            <div class="text">Click aquí para subir una imagen</div>
-                            <input type="file" id="file" accept="image/*" onchange="previewImage(event)">
-                        </label>
+                        <div class="flex">
+                            <div class="left-fields-modal">
 
-                    </div>
+                                <label>
+                                    <input id="modal-isbn" class="input" name="ISBN_LIB" type="input" placeholder=""
+                                        required="">
+                                    <span>ISBN</span>
+                                </label>
+
+                                <label>
+                                    <input id="modal-stock" class="input" name="STOCK_LIB" type="input" placeholder=""
+                                        required="">
+                                    <span>Cantidad</span>
+                                </label>
+
+                            </div>
+
+                            <label class="custum-file-upload" style="padding: 0.6rem;">
+                                <ion-icon name="cloud-upload-outline"></ion-icon>
+                                <div class="text">Click aquí para subir una imagen</div>
+                                <input type="file" id="modal-file" accept="image/*" onchange="previewImage(event)">
+                            </label>
+
+
+                        </div>
 
                         <div class="flex">
                             <div class="checkbox-wrapper-10">
                                 <input id="modal-active" name="ACTIVO_LIB" type="checkbox" hidden>
                                 <input type="checkbox" id="cb5" class="tgl tgl-flip" onchange="updateCheckboxState()">
-                                <label for="cb5" data-tg-on="Disponible" data-tg-off="No Disponible" class="tgl-btn"></label>
+                                <label for="cb5" data-tg-on="Disponible" data-tg-off="No Disponible"
+                                    class="tgl-btn"></label>
                             </div>
 
                             <button class="submit" type="submit">Guardar cambios</button>
@@ -217,7 +223,7 @@
                     </form>
 
                     <div class="image-preview">
-                        <i id="icon-placeholder" class="uil uil-image-search placeholder-icon"></i>
+                        <i id="icon-placeholder-modal" class="uil uil-image-search placeholder-icon"></i>
                         <img id="modal-preview" src="" alt="Vista previa de la imagen">
                     </div>
                 </div>

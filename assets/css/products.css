@@ -64,6 +64,12 @@
   flex: 2;
 }
 
+.left-fields-modal {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+}
+
 .form label {
   position: relative;
   flex: 1;
@@ -136,6 +142,7 @@ input:valid+span {
   font-weight: bold;
   transition: 0.3s ease;
   display: block;
+  margin-top: 5px;
 }
 
 .submit:hover {
@@ -161,7 +168,7 @@ label.custum-file-upload {
   align-items: center;
   justify-content: center;
   border: 1px solid #ccc;
-  padding: 1rem;
+  padding: rem;
   text-align: center;
   cursor: pointer;
   border-radius: 10px;
@@ -169,6 +176,8 @@ label.custum-file-upload {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
+
+
 
 label.custum-file-upload ion-icon {
   font-size: 50px;
@@ -241,10 +250,17 @@ label.custum-file-upload input[type="file"] {
 }
 
 
-.category-container {
+.category-container-modal {
   display: flex;
   gap: 1rem;
   width: 100%;
+  margin-top: -15px;
+}
+
+.category-container {
+  display: flex;
+  gap: 1rem;
+  width: 100%;;
 }
 
 .category-container select.input {
@@ -345,6 +361,7 @@ label.custum-file-upload {
   font-weight: bold;
   transition: 0.3s ease;
   display: block;
+ 
 }
 
 .modal-footer .submit:hover {
