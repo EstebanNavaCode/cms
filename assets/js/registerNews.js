@@ -40,6 +40,7 @@ document
         const result = await response.json();
         alert(result.message || "Producto registrado exitosamente.");
         document.getElementById("form-register-news").reset();
+        window.location.reload();
       } else {
         const error = await response.json();
         alert(error.message || "Error al registrar producto.");
