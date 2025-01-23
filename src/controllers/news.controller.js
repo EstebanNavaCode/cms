@@ -70,22 +70,30 @@ export const getCategoriesNEWS = async (req, res) => {
 
 export const getSubcategoriesNEWS = async (req, res) => {
   const { categoryId } = req.params;
+  if (isNaN(categoryId)) {
+    return res
+      .status(400)
+      .json({ message: "El parámetro categoryId debe ser un número válido." });
+  }
+
   try {
     const pool = await getConnection();
-    const result = await pool.request().input("categoryId", sql.Int, categoryId)
+    const result = await pool
+      .request()
+      .input("categoryId", sql.Int, categoryId)
       .query(`
-          SELECT ID_ETQ, NOMBRE_ETQ
-          FROM ETIQUETA_NOT_T
-          WHERE ACTIVO_ETQ = 1 AND ID_CAT = @categoryId
-        `);
+        SELECT ID_ETQ, NOMBRE_ETQ
+        FROM ETIQUETA_NOT_T
+        WHERE ACTIVO_ETQ = 1 AND ID_CAT = @categoryId
+      `);
 
-    console.log("Subcategorías enviadas:", result.recordset);
     res.json(result.recordset);
   } catch (error) {
     console.error("Error al obtener subcategorías:", error.message);
     res.status(500).json({ message: "Error al obtener subcategorías." });
   }
 };
+
 
 export const getNews = async (req, res) => {
   try {
@@ -96,7 +104,9 @@ export const getNews = async (req, res) => {
           N.TITULO_NOT,
           N.TEXTO_NOT,
           N.FECHA_PUBLICAR_NOT,
+          N.CATEGORIA_NOT AS ID_CATEGORIA,
           C.NOMBRE_CAT AS CATEGORIA,
+          N.ETIQUETA_NOT AS ID_ETIQUETA,
           E.NOMBRE_ETQ AS ETIQUETA,
           N.ACTIVO_NOT
         FROM NOT_T N
