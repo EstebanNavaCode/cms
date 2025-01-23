@@ -371,7 +371,6 @@ label.custum-file-upload {
 .modal-body .image-preview {
   width: 150px;
   height: 150px;
-
   overflow: hidden;
   display: flex;
   align-items: center;

@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("/categories")
     .then((response) => response.json())
     .then((categories) => {
-      console.log("Categorías obtenidas:", categories);
+      //console.log("Categorías obtenidas:", categories);
       categorySelect.innerHTML =
         '<option value="" disabled selected hidden>Seleccione categoría</option>';
       categories.forEach((category) => {
@@ -26,12 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   categorySelect.addEventListener("change", function () {
     const categoryId = this.value;
-    console.log("Categoría seleccionada:", categoryId);
+    //console.log("Categoría seleccionada:", categoryId);
 
     fetch(`/subcategories/${categoryId}`)
       .then((response) => response.json())
       .then((subcategories) => {
-        console.log("Subcategorías obtenidas:", subcategories);
+        //console.log("Subcategorías obtenidas:", subcategories);
         subcategorySelect.innerHTML =
           '<option value="" disabled selected hidden>Seleccione subcategoría</option>';
         subcategories.forEach((subcategory) => {
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   $("#productsTable tbody").on("click", "tr", async function () {
     const rowData = table.row(this).data();
-
+  
     if (rowData) {
       $("#modal-id").val(rowData[0]);
       $("#modal-name").val(rowData[1]);
@@ -77,24 +77,33 @@ document.addEventListener("DOMContentLoaded", function () {
       $("#modal-editorial").val(rowData[3]);
       $("#modal-isbn").val(rowData[4]);
       $("#modal-stock").val(rowData[5]);
-
+  
       const categoryName = rowData[6];
       const subcategoryName = rowData[7];
-
-      const estado = rowData[8];
-      if (estado.includes("Disponible")) {
+  
+      const estadoHtml = rowData[8]?.trim();
+      //console.log("Estado actual del producto (con etiquetas):", estadoHtml);
+  
+      const estado = estadoHtml.replace(/<[^>]+>/g, "").trim();
+      //console.log("Estado actual del producto (limpio):", estado);
+  
+      if (estado === "Disponible") {
         $("#modal-active").prop("checked", true);
         $("#cb5").prop("checked", true);
-      } else {
+        //console.log("El producto está marcado como 'Disponible'.");
+      } else if (estado === "No Disponible") {
         $("#modal-active").prop("checked", false);
         $("#cb5").prop("checked", false);
+        //console.log("El producto está marcado como 'No Disponible'.");
+      } else {
+        console.warn("Estado desconocido o inválido:", estado);
       }
-
       await selectCategoryAndSubcategory(categoryName, subcategoryName);
 
       $("#modal-register-product").modal("show");
     }
   });
+  
 
   const selectCategoryAndSubcategory = async (
     categoryName,
@@ -111,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const response = await fetch(`/subcategories/${categoryOption.value}`);
         if (response.ok) {
           const subcategories = await response.json();
-          console.log("Subcategorías obtenidas:", subcategories);
+          //console.log("Subcategorías obtenidas:", subcategories);
           subcategorySelect.innerHTML =
             '<option value="" disabled selected hidden>Seleccione subcategoría</option>';
           subcategories.forEach((subcategory) => {
