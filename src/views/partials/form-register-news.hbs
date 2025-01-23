@@ -99,22 +99,89 @@
             </thead>
             <tbody>
                 {{#each news}}
-                <tr>
+                <tr data-id="{{ID_NOT}}" data-category-id="{{ID_CATEGORIA}}" data-label-id="{{ID_ETIQUETA}}">
                     <td>{{ID_NOT}}</td>
                     <td>{{TITULO_NOT}}</td>
                     <td>{{TEXTO_NOT}}</td>
                     <td>{{FECHA_PUBLICAR_NOT}}</td>
                     <td>{{CATEGORIA}}</td>
                     <td>{{ETIQUETA}}</td>
-
                     <td>{{#if ACTIVO_NOT}}<span style="color:green;">Activo</span>{{else}}<span
                             style="color:red;">Inactivo</span>{{/if}}</td>
                 </tr>
                 {{/each}}
             </tbody>
+
+
         </table>
     </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-register-news" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content form">
+            <div class="modal-header">
+                <h5 class="modal-title title2">Editar Noticia</h5>
+                <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-flex-container">
+                    <div class="modal-register">
+                        <form id="form-edit-news" method="POST" class="-modal-form" action="/edit-news">
+                            <label>
+                                <input id="edit-title" name="TITULO_NOT" class="input" type="text" placeholder=""
+                                    required>
+                                <span>Título</span>
+                            </label>
+
+                            <label>
+                                <textarea id="edit-text" name="TEXTO_NOT" class="input textarea" placeholder="" rows="5"
+                                    required></textarea>
+                                <span>Texto</span>
+                            </label>
+
+                            <div class="flex">
+                                <div class="left-fields">
+                                    <div class="category-container">
+                                        <select id="edit-categoryNEWS" name="CATEGORIA_NOT" class="input" required>
+                                            <option value="" disabled selected hidden>Categoría</option>
+                                        </select>
+                                        <select id="edit-labelNEWS" name="ETIQUETA_NOT" class="input" required>
+                                            <option value="" disabled selected hidden>Etiqueta</option>
+                                        </select>
+                                    </div>
+
+                                    <label>
+                                        <input id="edit-date" class="input" name="FECHA_PUBLICAR_NOT" type="date"
+                                            placeholder="" required="">
+                                        <span>Fecha de publicación</span>
+                                    </label>
+                                </div>
+
+                                <label class="custum-file-upload">
+                                    <ion-icon name="cloud-upload-outline"></ion-icon>
+                                    <div class="text">Click aquí para subir una imagen</div>
+                                    <input type="file" id="edit-file" accept="image/*" onchange="previewImage(event)">
+                                </label>
+                            </div>
+
+                            <button class="submit" type="submit">Guardar cambios</button>
+                        </form>
+                    </div>
+
+                    <div class="image-preview">
+                        <i id="icon-placeholder-edit" class="uil uil-image-search placeholder-icon"></i>
+                        <img id="preview-edit" src="" alt="Vista previa de la imagen">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/assets/js/registerNews.js"></script>
 <script src="/assets/js/imgPreview.js"></script>
