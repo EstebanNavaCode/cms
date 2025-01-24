@@ -93,9 +93,10 @@
                 </form>
 
                 <div class="image-preview">
-                    <i id="icon-placeholder" class="uil uil-image-search placeholder-icon"></i>
-                    <img id="preview" src="" alt="Vista previa de la imagen">
+                    <i class="placeholder-icon uil uil-image-search"></i>
+                    <img src="" alt="Vista previa de la imagen">
                 </div>
+
             </div>
         </div>
     </div>
@@ -124,8 +125,8 @@
                 <td>{{STOCK_LIB}}</td>
                 <td>{{CATEGORIA}}</td>
                 <td>{{SUBCATEGORIA}}</td>
-                <td>{{#if ACTIVO_LIB}}<span style="color:green;">Disponible</span>{{else}}<span
-                        style="color:red;">No Disponible</span>{{/if}}</td>
+                <td>{{#if ACTIVO_LIB}}<span style="color:green;">Disponible</span>{{else}}<span style="color:red;">No
+                        Disponible</span>{{/if}}</td>
             </tr>
             {{/each}}
         </tbody>
@@ -175,7 +176,8 @@
                                     <option value="" disabled selected hidden>Categoría</option>
                                 </select>
 
-                                <select id="modal-subcategory" name="SUBCATEGORIA_LIB" class="input" required>
+                                <select id="modal-subcategory" name="SUBCATEGORIA_LIB" class="input" required
+                                    style="margin-bottom: 5px;">
                                     <option value="" disabled selected hidden>Subcategoría</option>
                                 </select>
 
@@ -200,12 +202,11 @@
 
                             </div>
 
-                            <label class="custum-file-upload" style="padding: 0.6rem;">
+                            <label class="custum-file-upload">
                                 <ion-icon name="cloud-upload-outline"></ion-icon>
                                 <div class="text">Click aquí para subir una imagen</div>
                                 <input type="file" id="modal-file" accept="image/*" onchange="previewImage(event)">
                             </label>
-
 
                         </div>
 
@@ -222,9 +223,10 @@
                     </form>
 
                     <div class="image-preview">
-                        <i id="icon-placeholder-modal" class="uil uil-image-search placeholder-icon"></i>
-                        <img id="modal-preview" src="" alt="Vista previa de la imagen">
+                        <i class="placeholder-icon uil uil-image-search"></i>
+                        <img src="" alt="Vista previa de la imagen">
                     </div>
+
                 </div>
             </div>
         </div>
