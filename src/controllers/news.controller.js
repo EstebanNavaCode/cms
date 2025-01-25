@@ -19,11 +19,9 @@ export const registerNews = async (req, res) => {
       !FECHA_PUBLICAR_NOT ||
       !ETIQUETA_NOT
     ) {
-      return res
-        .status(400)
-        .json({
-          message: "Todos los campos obligatorios deben ser proporcionados.",
-        });
+      return res.status(400).json({
+        message: "Todos los campos obligatorios deben ser proporcionados.",
+      });
     }
 
     const pool = await getConnection();
@@ -78,9 +76,7 @@ export const getSubcategoriesNEWS = async (req, res) => {
 
   try {
     const pool = await getConnection();
-    const result = await pool
-      .request()
-      .input("categoryId", sql.Int, categoryId)
+    const result = await pool.request().input("categoryId", sql.Int, categoryId)
       .query(`
         SELECT ID_ETQ, NOMBRE_ETQ
         FROM ETIQUETA_NOT_T
@@ -93,7 +89,6 @@ export const getSubcategoriesNEWS = async (req, res) => {
     res.status(500).json({ message: "Error al obtener subcategorías." });
   }
 };
-
 
 export const getNews = async (req, res) => {
   try {
@@ -118,5 +113,50 @@ export const getNews = async (req, res) => {
   } catch (error) {
     console.error("Error al obtener noticias:", error);
     res.status(500).json({ message: "Error al obtener la lista de noticias." });
+  }
+};
+
+export const editNews = async (req, res) => {
+  const { id } = req.params;
+  const {
+    TITULO_NOT,
+    TEXTO_NOT,
+    FECHA_PUBLICAR_NOT,
+    CATEGORIA_NOT,
+    ETIQUETA_NOT,
+    ACTIVO_NOT,
+  } = req.body;
+
+  // Validar y convertir ACTIVO_NOT
+  const ACTIVO_NOT_NUM = parseInt(ACTIVO_NOT, 10) || 0;
+
+  console.log("Valor de ACTIVO_NOT convertido:", ACTIVO_NOT_NUM);
+
+  try {
+    const pool = await getConnection();
+    await pool
+      .request()
+      .input("TITULO_NOT", sql.NVarChar(300), TITULO_NOT)
+      .input("TEXTO_NOT", sql.NVarChar(sql.MAX), TEXTO_NOT)
+      .input("FECHA_PUBLICAR_NOT", sql.Date, FECHA_PUBLICAR_NOT)
+      .input("CATEGORIA_NOT", sql.Int, CATEGORIA_NOT)
+      .input("ETIQUETA_NOT", sql.Int, ETIQUETA_NOT)
+      .input("ACTIVO_NOT", sql.Bit, ACTIVO_NOT_NUM) // Usar el valor convertido
+      .input("ID_NOT", sql.Int, id)
+      .query(`
+        UPDATE NOT_T
+        SET TITULO_NOT = @TITULO_NOT,
+            TEXTO_NOT = @TEXTO_NOT,
+            FECHA_PUBLICAR_NOT = @FECHA_PUBLICAR_NOT,
+            CATEGORIA_NOT = @CATEGORIA_NOT,
+            ETIQUETA_NOT = @ETIQUETA_NOT,
+            ACTIVO_NOT = @ACTIVO_NOT
+        WHERE ID_NOT = @ID_NOT
+      `);
+
+    res.status(200).json({ message: "Noticia actualizada exitosamente." });
+  } catch (error) {
+    console.error("Error al actualizar noticia:", error);
+    res.status(500).json({ message: "Error al actualizar noticia." });
   }
 };

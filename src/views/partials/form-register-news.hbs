@@ -42,10 +42,8 @@
                         <span>Texto</span>
                     </label>
 
-
                     <div class="flex">
                         <div class="left-fields">
-
 
                             <div class="category-container">
                                 <select id="categoryNEWS" name="CATEGORIA_NOT" class="input" required>
@@ -99,19 +97,25 @@
             </thead>
             <tbody>
                 {{#each news}}
-                <tr data-id="{{ID_NOT}}" data-category-id="{{ID_CATEGORIA}}" data-label-id="{{ID_ETIQUETA}}">
+                <tr data-id="{{ID_NOT}}" data-category-id="{{ID_CATEGORIA}}" data-label-id="{{ID_ETIQUETA}}"
+                    data-active="{{ACTIVO_NOT}}">
                     <td>{{ID_NOT}}</td>
                     <td>{{TITULO_NOT}}</td>
                     <td>{{TEXTO_NOT}}</td>
                     <td>{{FECHA_PUBLICAR_NOT}}</td>
                     <td>{{CATEGORIA}}</td>
                     <td>{{ETIQUETA}}</td>
-                    <td>{{#if ACTIVO_NOT}}<span style="color:green;">Activo</span>{{else}}<span
-                            style="color:red;">Inactivo</span>{{/if}}</td>
+                    <td>
+                        {{#if ACTIVO_NOT}}
+                        <span style="color:green;">Activo</span>
+                        {{else}}
+                        <span style="color:red;">Inactivo</span>
+                        {{/if}}
+                    </td>
                 </tr>
+
                 {{/each}}
             </tbody>
-
 
         </table>
     </div>
@@ -129,8 +133,9 @@
 
             <div class="modal-body">
                 <div class="modal-flex-container">
+                    <input type="hidden" id="edit-id" name="ID_NOT" />
                     <div class="modal-register">
-                        <form id="form-edit-news" method="POST" class="-modal-form" action="/edit-news">
+                        <form id="form-edit-news" method="POST" class="-modal-form" action="/news/:id">
                             <label>
                                 <input id="edit-title" name="TITULO_NOT" class="input" type="text" placeholder=""
                                     required>
@@ -145,40 +150,55 @@
 
                             <div class="flex">
                                 <div class="left-fields">
-                                    <div class="category-container">
+                                    <div class="category-container-modal">
                                         <select id="edit-categoryNEWS" name="CATEGORIA_NOT" class="input" required>
                                             <option value="" disabled selected hidden>Categoría</option>
                                         </select>
-                                        <select id="edit-labelNEWS" name="ETIQUETA_NOT" class="input" required>
-                                            <option value="" disabled selected hidden>Etiqueta</option>
-                                        </select>
+
                                     </div>
 
+                                    <select id="edit-labelNEWS" name="ETIQUETA_NOT" class="input" required>
+                                        <option value="" disabled selected hidden>Etiqueta</option>
+                                    </select>
+
                                     <label>
+
                                         <input id="edit-date" class="input" name="FECHA_PUBLICAR_NOT" type="date"
                                             placeholder="" required="">
                                         <span>Fecha de publicación</span>
                                     </label>
                                 </div>
 
-                                <label class="custum-file-upload">
-                                    <ion-icon name="cloud-upload-outline"></ion-icon>
-                                    <div class="text">Haz clic aquí para subir una imagen</div>
-                                    <input type="file" accept="image/*" onchange="previewImage(event)">
-                                </label>
-
-
                             </div>
 
-                            <button class="submit" type="submit">Guardar cambios</button>
+
+
+                        <div class="flex">
+                             <div class="checkbox-wrapper-10">
+                                <input id="modal-active" name="ACTIVO_NOT" type="hidden" />
+                                <input type="checkbox" id="cb5" class="tgl tgl-flip" onchange="updateCheckboxState()" />
+                                <label for="cb5" data-tg-on="Activo" data-tg-off="Inactivo" class="tgl-btn"></label>
+                            </div>
+                                <button class="submit" type="submit">Guardar cambios</button>
+
+                           
+                            
+                        </div>
                         </form>
                     </div>
 
-                    <div class="image-preview">
-                        <i class="uil uil-image-search placeholder-icon"></i>
-                        <img src="" alt="Vista previa de la imagen">
-                    </div>
+                    <div class="left-fields">
+                        <div class="image-preview">
+                            <i class="uil uil-image-search placeholder-icon"></i>
+                            <img src="" alt="Vista previa de la imagen">
+                        </div>
 
+                        <label class="custum-file-upload-modal">
+                            <ion-icon name="cloud-upload-outline"></ion-icon>
+                            <div class="text">Haz clic aquí para subir una imagen</div>
+                            <input type="file" accept="image/*" onchange="previewImage(event)">
+                        </label>
+                    </div>
                 </div>
 
             </div>

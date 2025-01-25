@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("/categoriesNEWS")
     .then((response) => response.json())
     .then((categories) => {
+      //console.log("Categorías cargadas:", categories);
       const categorySelect = document.getElementById("categoryNEWS");
       categories.forEach((category) => {
         const option = document.createElement("option");
@@ -15,10 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.getElementById("categoryNEWS").addEventListener("change", function () {
   const categoryId = this.value;
+  //console.log("Categoría seleccionada:", categoryId);
 
   fetch(`/subcategoriesNEWS/${categoryId}`)
     .then((response) => response.json())
     .then((labels) => {
+      //console.log("Etiquetas cargadas para la categoría:", categoryId, labels);
       const labelSelect = document.getElementById("labelNEWS");
       labelSelect.innerHTML =
         '<option value="" disabled selected hidden>Etiqueta</option>';
@@ -50,22 +53,22 @@ $(document).ready(function () {
     },
     columnDefs: [
       {
-        targets: 2,
-        render: function (data, type, row) {
+        targets: 2, 
+        render: function (data) {
           if (!data) return "";
-          let words = data.split(" ");
-          let shortText = words.slice(0, 30).join(" ");
+          const words = data.split(" ");
+          const shortText = words.slice(0, 30).join(" ");
           return shortText + (words.length > 30 ? "..." : "");
         },
       },
       {
-        targets: 3,
+        targets: 3, 
         render: function (data) {
           if (!data) return "";
-          let date = new Date(data);
-          let day = date.getDate().toString().padStart(2, "0");
-          let month = (date.getMonth() + 1).toString().padStart(2, "0");
-          let year = date.getFullYear();
+          const date = new Date(data);
+          const day = date.getDate().toString().padStart(2, "0");
+          const month = (date.getMonth() + 1).toString().padStart(2, "0");
+          const year = date.getFullYear();
           return `${day}/${month}/${year}`;
         },
       },
@@ -75,58 +78,97 @@ $(document).ready(function () {
   $("#newsTable tbody").on("click", "tr", async function () {
     try {
       const rowData = newsTable.row(this).data();
-      const categoryId = $(this).data("category-id"); 
-      const labelId = $(this).data("label-id"); 
-  
-      if (!categoryId || isNaN(Number(categoryId))) {
-        console.error("Categoría inválida o no encontrada:", categoryId);
+      const newsId = $(this).data("id");
+      const categoryId = $(this).data("category-id");
+      const labelId = $(this).data("label-id");
+      const isActiveRaw = $(this).data("active");
+      const isActive = isActiveRaw == 1 || isActiveRaw === true;
+
+      if (!newsId || isNaN(newsId)) {
+        console.error("ID de la noticia no es válido:", newsId);
+        alert("No se pudo cargar la noticia debido a un error en los datos.");
         return;
       }
-  
-      try {
-        const categoriesResponse = await fetch("/categoriesNEWS");
-        const categories = await categoriesResponse.json();
-        const categorySelect = document.getElementById("edit-categoryNEWS");
-        categorySelect.innerHTML =
-          '<option value="" disabled hidden>Categoría</option>';
-        categories.forEach((category) => {
-          const option = document.createElement("option");
-          option.value = category.ID_CAT;
-          option.textContent = category.NOMBRE_CAT;
-          categorySelect.appendChild(option);
-        });
-        categorySelect.value = categoryId;
-      } catch (error) {
-        console.error("Error al cargar categorías:", error);
-      }
-  
-      try {
-        const labelsResponse = await fetch(`/subcategoriesNEWS/${categoryId}`);
-        const labels = await labelsResponse.json();
-        const labelSelect = document.getElementById("edit-labelNEWS");
-        labelSelect.innerHTML =
-          '<option value="" disabled hidden>Etiqueta</option>';
-        labels.forEach((label) => {
-          const option = document.createElement("option");
-          option.value = label.ID_ETQ;
-          option.textContent = label.NOMBRE_ETQ;
-          labelSelect.appendChild(option);
-        });
-        labelSelect.value = labelId; 
-      } catch (error) {
-        console.error("Error al cargar etiquetas:", error);
-      }
-  
-      document.getElementById("edit-title").value = rowData[1]; 
-      document.getElementById("edit-text").value = rowData[2]; 
-      document.getElementById("edit-date").value = new Date(rowData[3])
-        .toISOString()
-        .split("T")[0]; 
 
-      $("#modal-register-news").modal("show");
+      const cleanTitle = typeof rowData[1] === "string" ? rowData[1].trim().substring(0, 300) : "";
+      const cleanText = typeof rowData[2] === "string" ? rowData[2].trim().substring(0, 1000) : "";
+
+      $("#edit-id").val(newsId);
+      $("#edit-title").val(cleanTitle);
+      $("#edit-text").val(cleanText);
+      $("#edit-date").val(new Date(rowData[3]).toISOString().split("T")[0]);
+
+      $("#cb5").prop("checked", isActive);
+      $("#modal-active").val(isActive ? 1 : 0);
+
+      await loadCategoriesAndLabels(categoryId, labelId);
+
+      $("#modal-register-news").css("min-height", "500px").modal("show");
     } catch (error) {
       console.error("Error al abrir el modal:", error);
+      alert("Ocurrió un error al abrir la noticia. Intenta nuevamente.");
     }
   });
-  
+
+  async function loadCategoriesAndLabels(categoryId, labelId) {
+    try {
+      const categorySelect = $("#edit-categoryNEWS");
+      const labelSelect = $("#edit-labelNEWS");
+
+      categorySelect
+        .empty()
+        .append('<option value="" disabled hidden>Categoría</option>');
+      labelSelect
+        .empty()
+        .append('<option value="" disabled hidden>Etiqueta</option>');
+
+      const categoriesResponse = await fetch("/categoriesNEWS");
+      const categories = await categoriesResponse.json();
+      categories.forEach((category) => {
+        categorySelect.append(
+          `<option value="${category.ID_CAT}">${category.NOMBRE_CAT}</option>`
+        );
+      });
+      categorySelect.val(categoryId);
+
+      await loadSubcategories(categoryId, labelId);
+    } catch (error) {
+      console.error("Error al cargar categorías o etiquetas:", error);
+    }
+  }
+
+  async function loadSubcategories(categoryId, labelId) {
+    try {
+      const labelSelect = $("#edit-labelNEWS");
+
+      labelSelect
+        .empty()
+        .append('<option value="" disabled hidden>Etiqueta</option>');
+
+      const labelsResponse = await fetch(`/subcategoriesNEWS/${categoryId}`);
+      const labels = await labelsResponse.json();
+      labels.forEach((label) => {
+        labelSelect.append(
+          `<option value="${label.ID_ETQ}">${label.NOMBRE_ETQ}</option>`
+        );
+      });
+      labelSelect.val(labelId);
+    } catch (error) {
+      console.error("Error al cargar las etiquetas:", error);
+    }
+  }
+
+  $("#edit-categoryNEWS").on("change", async function () {
+    const newCategoryId = $(this).val();
+    //console.log("Nueva categoría seleccionada:", newCategoryId);
+
+    if (newCategoryId) {
+      await loadSubcategories(newCategoryId, null);
+    }
+  });
+
+  $("#cb5").on("change", function () {
+    const isChecked = this.checked;
+    $("#modal-active").val(isChecked ? 1 : 0);
+  });
 });

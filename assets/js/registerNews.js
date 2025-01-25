@@ -103,3 +103,52 @@ document.getElementById("categoryNEWS").addEventListener("change", (e) => {
   const categoryId = e.target.value;
   loadSubcategoriesNEWS(categoryId);
 });
+
+document.getElementById("form-edit-news").addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const ID_NOT = document.getElementById("edit-id").value.trim();
+  const TITULO_NOT = document.getElementById("edit-title").value.trim();
+  const TEXTO_NOT = document.getElementById("edit-text").value.trim();
+  const FECHA_PUBLICAR_NOT = document.getElementById("edit-date").value.trim();
+  const CATEGORIA_NOT = document.getElementById("edit-categoryNEWS").value.trim();
+  const ETIQUETA_NOT = document.getElementById("edit-labelNEWS").value.trim();
+  const ACTIVO_NOT = document.getElementById("modal-active").value.trim(); 
+
+  try {
+    const response = await fetch(`/news/${ID_NOT}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        TITULO_NOT,
+        TEXTO_NOT,
+        FECHA_PUBLICAR_NOT,
+        CATEGORIA_NOT,
+        ETIQUETA_NOT,
+        ACTIVO_NOT,
+      }),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      alert(result.message || "Noticia editada exitosamente.");
+      location.reload();
+    } else {
+      const error = await response.json();
+      console.error("Error del servidor:", error);
+      alert(error.message || "Error al editar noticia.");
+    }
+  } catch (err) {
+    console.error("Error en la solicitud:", err);
+    alert("Ocurrió un error inesperado.");
+  }
+});
+
+
+function updateCheckboxState() {
+  const checkbox = document.getElementById("cb5");
+  const hiddenInput = document.getElementById("modal-active");
+  hiddenInput.value = checkbox.checked ? 1 : 0;
+}
