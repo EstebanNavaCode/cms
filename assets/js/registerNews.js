@@ -51,28 +51,33 @@ document
     }
   });
 
-const loadCategoriesNEWS = async () => {
-  try {
-    const response = await fetch("/categoriesNEWS");
-    if (response.ok) {
-      const categoriesNEWS = await response.json();
-      const categorySelect = document.getElementById("categoryNEWS");
-      categorySelect.innerHTML =
-        '<option value="" disabled selected hidden>Categoría</option>';
+  const loadCategoriesNEWS = async () => {
+    try {
+      const response = await fetch("/categoriesNEWS"); 
+      if (response.ok) {
+        const categoriesNEWS = await response.json(); 
+        const categorySelect = document.getElementById("categoryNEWS");
+  
+        categorySelect.innerHTML = '<option value="" disabled selected hidden>Categoría</option>';
+  
+        categoriesNEWS.forEach((category) => {
+          const option = document.createElement("option");
+          option.value = category.ID_CAT; 
+          option.textContent = category.NOMBRE_CAT; 
+          categorySelect.appendChild(option);
+        });
 
-      categoriesNEWS.forEach((category) => {
-        const option = document.createElement("option");
-        option.value = category.ID_CAT;
-        option.textContent = category.NOMBRE_CAT;
-        categorySelect.appendChild(option);
-      });
-    } else {
-      console.error("Error al cargar las categorías.");
+        categorySelect.innerHTML = '<option value="" disabled selected hidden>Categoría</option>';
+      } else {
+        console.error("Error al cargar las categorías:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error al cargar categorías:", error);
     }
-  } catch (error) {
-    console.error("Error al cargar categorías:", error);
-  }
-};
+  };
+  
+  
+  
 
 document.addEventListener("DOMContentLoaded", loadCategoriesNEWS);
 
