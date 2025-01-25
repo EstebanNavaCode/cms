@@ -60,7 +60,6 @@
 .left-fields {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   flex: 2;
 }
 
@@ -171,6 +170,22 @@ label.custum-file-upload {
   transition: all 0.3s ease;
 }
 
+label.custum-file-upload-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
 label.custum-file-upload ion-icon {
   font-size: 50px;
   color: #808080;
@@ -187,8 +202,28 @@ label.custum-file-upload:hover {
   border-color: #bbb;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+label.custum-file-upload-modal ion-icon {
+  font-size: 50px;
+  color: #808080;
+}
+
+label.custum-file-upload-modal .text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #808080;
+}
+
+label.custum-file-upload-modal:hover {
+  background-color: #f9f9f9;
+  border-color: #bbb;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
 
 label.custum-file-upload input[type="file"] {
+  display: none;
+}
+
+label.custum-file-upload-modal input[type="file"] {
   display: none;
 }
 
@@ -245,6 +280,14 @@ label.custum-file-upload input[type="file"] {
   display: flex;
   gap: 1rem;
   width: 100%;
+  margin-bottom: 14px;
+}
+
+.category-container-modal {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+ 
 }
 
 .category-container select.input {
@@ -317,12 +360,14 @@ textarea.textarea::-webkit-scrollbar-thumb:hover {
   align-items: center;
   justify-content: center;
   min-width: 60rem;
+  /* Ancho mínimo */
   background-color: #fff;
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: auto;
 }
+
 
 .modal-dialog {
   display: flex;
@@ -366,10 +411,11 @@ label.custum-file-upload {
   background-color: #fff;
   text-align: center;
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 .modal-body .image-preview {
-  width: 150px;
+  width: 400px;
   height: 150px;
   overflow: hidden;
   display: flex;
@@ -414,9 +460,10 @@ label.custum-file-upload {
 }
 
 .modal-body .image-preview {
-  width: 300px;
+  width: 400px;
   height: 300px;
   border: 1px solid #ccc;
+  margin-bottom: 5px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -434,6 +481,39 @@ label.custum-file-upload {
 
 .checkbox-wrapper-10 .tgl {
   display: none;
+}
+
+
+.modal-flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.modal-register {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-end;
+  flex: 2;
+  max-width: 65%;
+}
+
+.modal-register label {
+  width: 100%;
+}
+
+.modal-register textarea,
+.modal-register input {
+  width: 100%;
+}
+
+.modal-register .flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
 }
 
 .checkbox-wrapper-10 .tgl,
@@ -549,136 +629,4 @@ label.custum-file-upload {
 
 .checkbox-wrapper-10 .tgl-flip:checked+.tgl-btn:active:after {
   transform: rotateY(20deg);
-}
-
-
-.modal-flex-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
-}
-
-.modal-register {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: flex-end;
-  flex: 2;
-  max-width: 65%;
-}
-
-.modal-register label {
-  width: 100%;
-}
-
-.modal-register textarea,
-.modal-register input {
-  width: 100%;
-}
-
-.modal-register .flex {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: space-between;
-}
-
-label.custum-file-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #ccc;
-  padding: 1rem;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-label.custum-file-upload ion-icon {
-  font-size: 50px;
-  color: #808080;
-}
-
-label.custum-file-upload .text {
-  font-size: 14px;
-  font-weight: 500;
-  color: #808080;
-}
-
-label.custum-file-upload:hover {
-  background-color: #f9f9f9;
-  border-color: #bbb;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-label.custum-file-upload input[type="file"] {
-  display: none;
-}
-
-.image-preview {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 300px;
-  height: 300px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  position: relative;
-}
-
-.image-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: none;
-  border-radius: 20px;
-  z-index: 2;
-}
-
-.image-preview ion-icon {
-  font-size: 80px;
-  color: #ccc;
-  position: absolute;
-  z-index: 1;
-}
-
-.modal-footer .submit {
-  width: 100%;
-  background-color: gold;
-  padding: 10px;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  transition: 0.3s ease;
-  display: block;
-}
-
-.modal-footer .submit:hover {
-  background-color: goldenrod;
-  cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .modal-content {
-    width: 90%;
-  }
-
-  .modal-flex-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .modal-register,
-  .image-preview {
-    max-width: 90%;
-  }
 }

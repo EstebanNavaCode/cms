@@ -19,28 +19,30 @@ import {
   getSubcategoriesNEWS,
   registerNews,
   getNews,
+  editNews,
 } from "../../src/controllers/news.controller.js";
 
 const router = Router();
 
 router.post("/", login);
-router.post("/users", registerUser);
-router.put("/users/:id", editUser);
-router.get("/users", getUsers);
 
+//users routes
+router.post("/users", registerUser);
+router.get("/users", getUsers);
+router.put("/users/:id", editUser);
+
+//products routes
 router.post("/products", registerProduct);
 router.get("/products", getProducts);
-router.put("/products/:id", editProduct);
-
-
-
 router.get("/categories", getCategories);
 router.get("/subcategories/:categoryId", getSubcategories);
+router.put("/products/:id", editProduct);
 
+//news routes
 router.post("/news", registerNews);
 router.get("/news", getNews);
-
 router.get("/categoriesNEWS", getCategoriesNEWS);
 router.get("/subcategoriesNEWS/:categoryId", getSubcategoriesNEWS);
+router.put("/news/:id", editNews);
 
 export default router;
