@@ -18,7 +18,7 @@ function resetModalElements(modal) {
 document.querySelectorAll(".modal").forEach((modal) => {
   modal.addEventListener("hidden.bs.modal", function () {
     resetModalElements(modal);
-    console.log(`Modal ${modal.id} cerrado y reiniciado.`);
+    //console.log(`Modal ${modal.id} cerrado y reiniciado.`);
   });
 });
 
