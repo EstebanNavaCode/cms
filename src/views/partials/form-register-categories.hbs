@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/categories.css">
+
+<section class="dashboard">
+
+    <div class="dash-content">
+        <div class="overview">
+            <div class="title">
+                <ion-icon name="layers-outline"></ion-icon>
+                <span class="text">Nueva Categoría</span>
+            </div>
+
+            <div class="form-container">
+                <form id="form-register-news" method="POST" class="form" action="/news">
+                    <p class="title2">Formulario de registro</p>
+                    <p class="message"></p>
+
+                    <label>
+                        <input id="name" name="TITULO_NOT" class="input" type="text" placeholder="" required>
+                        <span>Título</span>
+                    </label>
+
+                    <label>
+                        <textarea id="autor" name="TEXTO_NOT" class="input textarea" placeholder="" rows="5"
+                            required></textarea>
+                        <span>Texto</span>
+                    </label>
+
+                    <div class="flex">
+                        <div class="left-fields">
+
+                            <div class="category-container">
+                                <select id="categoryNEWS" name="CATEGORIA_NOT" class="input" required>
+                                    <option value="" disabled selected hidden>Categoría</option>
+                                </select>
+
+                                <select id="labelNEWS" name="ETIQUETA_NOT" class="input" required>
+                                    <option value="" disabled selected hidden>Etiqueta</option>
+                                </select>
+                            </div>
+
+
+                            <label>
+                                <input id="isbn" class="input" name="FECHA_PUBLICAR_NOT" type="date" placeholder=""
+                                    required="">
+                                <span>Fecha de publicación</span>
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <button class="submit" type="submit">Registrar noticia</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
