@@ -55,6 +55,10 @@ app.get("/news", (req, res) => {
   res.render("news/news");
 });
 
+app.get("/categorias", (req, res) => {
+  res.render("categories/categories");
+});
+
 //Ver solicitudes
 app.use((req, res, next) => {
   console.log(`Solicitud ${req.method} en ${req.url}`);
