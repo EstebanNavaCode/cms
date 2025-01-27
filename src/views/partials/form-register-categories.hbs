@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/categories.css">
+
+<section class="dashboard">
+
+    <div class="dash-content">
+        <div class="overview">
+            <div class="title">
+                <ion-icon name="layers-outline"></ion-icon>
+                <span class="text">Nueva Categoría</span>
+            </div>
+
+            <div class="form-container">
+                <form id="form-register-news" method="POST" class="form" action="/news">
+                    <p class="title2">Formulario de registro</p>
+                    <p class="message"></p>
+
+                    <label>
+                        <input id="name" name="TITULO_NOT" class="input" type="text" placeholder="" required>
+                        <span>Nombre</span>
+                    </label>
+
+                    <label>
+                        <textarea id="autor" name="TEXTO_NOT" class="input textarea" placeholder="" rows="5"
+                            required></textarea>
+                        <span>Descripción</span>
+                    </label>
+
+                    <div class="subcategories-container">
+                        <label>
+                            <input id="subcategory-input" class="input" type="text"/>
+                            <span>Subcategorías</span>
+                        </label>
+                        <div id="subcategory-list" class="subcategory-list">
+                            <!-- Aquí aparecerán las etiquetas -->
+                        </div>
+                    </div>
+
+
+
+
+                    <button class="submit" type="submit">Registrar categoría</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script src="/assets/js/registerCategories.js"></script>
