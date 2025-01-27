@@ -17,42 +17,37 @@
 
                     <label>
                         <input id="name" name="TITULO_NOT" class="input" type="text" placeholder="" required>
-                        <span>Título</span>
+
+                        <span>Nombre</span>
+
                     </label>
 
                     <label>
                         <textarea id="autor" name="TEXTO_NOT" class="input textarea" placeholder="" rows="5"
                             required></textarea>
-                        <span>Texto</span>
+
+                        <span>Descripción</span>
                     </label>
 
-                    <div class="flex">
-                        <div class="left-fields">
-
-                            <div class="category-container">
-                                <select id="categoryNEWS" name="CATEGORIA_NOT" class="input" required>
-                                    <option value="" disabled selected hidden>Categoría</option>
-                                </select>
-
-                                <select id="labelNEWS" name="ETIQUETA_NOT" class="input" required>
-                                    <option value="" disabled selected hidden>Etiqueta</option>
-                                </select>
-                            </div>
-
-
-                            <label>
-                                <input id="isbn" class="input" name="FECHA_PUBLICAR_NOT" type="date" placeholder=""
-                                    required="">
-                                <span>Fecha de publicación</span>
-                            </label>
+                    <div class="subcategories-container">
+                        <label>
+                            <input id="subcategory-input" class="input" type="text"/>
+                            <span>Subcategorías</span>
+                        </label>
+                        <div id="subcategory-list" class="subcategory-list">
+                            <!-- Aquí aparecerán las etiquetas -->
                         </div>
-
                     </div>
 
-                    <button class="submit" type="submit">Registrar noticia</button>
+                    <button class="submit" type="submit">Registrar categoría</button>
+
                 </form>
             </div>
         </div>
 
     </div>
+
 </section>
+
+<script src="/assets/js/registerCategories.js"></script>
+
