@@ -22,6 +22,10 @@ import {
   editNews,
 } from "../../src/controllers/news.controller.js";
 
+import { 
+  registerCategory,
+} from "../../src/controllers/categories.controller.js";
+
 const router = Router();
 
 router.post("/", login);
@@ -44,5 +48,8 @@ router.get("/news", getNews);
 router.get("/categoriesNEWS", getCategoriesNEWS);
 router.get("/subcategoriesNEWS/:categoryId", getSubcategoriesNEWS);
 router.put("/news/:id", editNews);
+
+//categories routes
+router.post("/categorias", registerCategory);
 
 export default router;
