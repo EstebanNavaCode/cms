@@ -86,3 +86,59 @@ document.getElementById("form-register-category").addEventListener("submit", asy
     alert("Error inesperado. Intenta de nuevo.");
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const subcategoryInput = document.getElementById("edit-subcategory-input");
+  const subcategoryList = document.getElementById("edit-subcategory-list");
+  const subcategoryValues = []; 
+
+  const addSubcategory = (name) => {
+    if (!name || subcategoryValues.includes(name)) return; 
+    subcategoryValues.push(name);
+
+    const tag = document.createElement("div");
+    tag.className = "subcategory-tag";
+    tag.innerHTML = `
+      <span>${name}</span>
+      <button type="button" data-name="${name}">&times;</button>
+    `;
+    subcategoryList.appendChild(tag);
+
+    tag.querySelector("button").addEventListener("click", () => {
+      removeSubcategory(name);
+    });
+  };
+
+  const removeSubcategory = (name) => {
+    const index = subcategoryValues.indexOf(name);
+    if (index > -1) subcategoryValues.splice(index, 1);
+
+    const tag = subcategoryList.querySelector(`button[data-name="${name}"]`).parentElement;
+    if (tag) subcategoryList.removeChild(tag);
+  };
+
+  subcategoryInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      const value = subcategoryInput.value.trim();
+      if (value) {
+        addSubcategory(value);
+        subcategoryInput.value = "";
+      }
+    }
+  });
+
+  document.getElementById("add-subcategory").addEventListener("click", () => {
+    const value = subcategoryInput.value.trim();
+    if (value) {
+      addSubcategory(value);
+      subcategoryInput.value = "";
+    }
+  });
+
+  const updateCheckboxState = () => {
+    const checkbox = document.getElementById("cb-category-active");
+    const hiddenInput = document.getElementById("modal-category-active");
+    hiddenInput.value = checkbox.checked ? 1 : 0;
+  };
+});
