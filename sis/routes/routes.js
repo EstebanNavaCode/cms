@@ -24,6 +24,8 @@ import {
 
 import { 
   registerCategory,
+  getCategoriesAndTags,
+  getCategoryById,
 } from "../../src/controllers/categories.controller.js";
 
 const router = Router();
@@ -51,5 +53,7 @@ router.put("/news/:id", editNews);
 
 //categories routes
 router.post("/categorias", registerCategory);
+router.get("/categorias", getCategoriesAndTags);
+router.get("/categorias/:id", getCategoryById);
 
 export default router;

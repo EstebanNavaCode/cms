@@ -1,6 +1,13 @@
 <link rel="stylesheet" href="/assets/css/dashboard.css">
 <link rel="stylesheet" href="/assets/css/categories.css">
 
+<!-- Estilos de DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<!-- Scripts de DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
 <section class="dashboard">
 
     <div class="dash-content">
@@ -23,7 +30,8 @@
                     </label>
 
                     <label>
-                       <textarea id="descripcion" name="descripcion" class="input textarea" placeholder="" rows="5" required></textarea>
+                        <textarea id="descripcion" name="descripcion" class="input textarea" placeholder="" rows="5"
+                            required></textarea>
 
 
                         <span>Descripción</span>
@@ -50,6 +58,105 @@
 
     </div>
 
+    <div class="category-list">
+        <table id="categoriesTable" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Fecha de Registro</th>
+                    <th>Etiquetas</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each categories}}
+                <tr data-id="{{ID_CAT}}">
+                    <td>{{ID_CAT}}</td>
+                    <td>{{NOMBRE_CAT}}</td>
+                    <td>{{DESCRIPCION_CAT}}</td>
+                    <td>{{FECHA_ALTA_CAT}}</td>
+                    <td>
+                        {{#if etiquetas.length}}
+                        <ul>
+                            {{#each etiquetas}}
+                            <li>{{NOMBRE_ETQ}}</li>
+                            {{/each}}
+                        </ul>
+                        {{else}}
+                        <span>Sin etiquetas</span>
+                        {{/if}}
+                    </td>
+                    <td>
+                        {{#if ACTIVO_CAT}}
+                        <span style="color:green;">Activo</span>
+                        {{else}}
+                        <span style="color:red;">Inactivo</span>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+
+        </table>
+    </div>
 </section>
 
+<!-- Modal -->
+<div class="modal fade" id="modal-edit-category" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="editCategoryLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content form">
+            <div class="modal-header">
+                <h5 class="modal-title title2" id="editCategoryLabel">Editar Categoría</h5>
+                <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-flex-container">
+                    <form id="form-edit-category" class="modal-register">
+                        <input type="hidden" id="edit-category-id" name="ID_CAT">
+
+                        <label>
+                            <input id="edit-category-name" name="nombre" class="input" type="text" required>
+                            <span>Nombre de la Categoría</span>
+                        </label>
+
+                        <label>
+                            <textarea id="edit-category-description" name="descripcion" class="input textarea" rows="4"
+                                required></textarea>
+                            <span>Descripción</span>
+                        </label>
+
+                        <div class="subcategories-container">
+                            <label>
+                                <input id="edit-subcategory-input" class="input" type="text"
+                                    placeholder="Agregar nueva etiqueta">
+                                <span>Etiquetas</span>
+                            </label>
+                            <div id="edit-subcategory-list" class="subcategory-list">
+                                <!-- Etiquetas dinámicas -->
+                            </div>
+                        </div>
+
+                             <div class="flex">
+                                <div class="checkbox-wrapper-10">
+                                    <input id="modal-active" name="ACTIVO_NOT" type="hidden" />
+                                    <input type="checkbox" id="cb5" class="tgl tgl-flip"
+                                        onchange="updateCheckboxState()" />
+                                    <label for="cb5" data-tg-on="Activo" data-tg-off="Inactivo" class="tgl-btn"></label>
+                                </div>
+                                <button class="submit" type="submit">Guardar cambios</button>
+
+                            </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="/assets/js/registerCategories.js"></script>
+<script src="/assets/js/tableFormatCategories.js"></script>
