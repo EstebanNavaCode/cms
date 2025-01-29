@@ -506,7 +506,7 @@ label.custum-file-upload {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  align-items: flex-end;
+  align-items: flex-start;
   flex: 2;
   max-width: 65%;
 }
