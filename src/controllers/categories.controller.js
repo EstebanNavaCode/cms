@@ -69,7 +69,6 @@ export const getCategoriesAndTags = async (req, res) => {
           e.NOMBRE_ETQ
         FROM CATEGORIA_NOT_T c
         LEFT JOIN ETIQUETA_NOT_T e ON c.ID_CAT = e.ID_CAT
-        WHERE c.ACTIVO_CAT = 1
         ORDER BY c.ID_CAT, e.ID_ETQ
       `);
 
@@ -163,18 +162,21 @@ export const editCategoryAndTags = async (req, res) => {
 
     // Actualizar la categoría
     // console.log("✏️ Actualizando categoría...");
+    // ✅ Actualizar el estado de la categoría en la base de datos
     await pool
       .request()
       .input("ID_CAT", sql.Int, id)
       .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
       .input("DESCRIPCION_CAT", sql.NVarChar(300), DESCRIPCION_CAT)
-      .input("ACTIVO_CAT", sql.Bit, ACTIVO_CAT).query(`
-              UPDATE CATEGORIA_NOT_T 
-              SET NOMBRE_CAT = @NOMBRE_CAT, 
-                  DESCRIPCION_CAT = @DESCRIPCION_CAT, 
-                  ACTIVO_CAT = @ACTIVO_CAT
-              WHERE ID_CAT = @ID_CAT
-          `);
+      .input("ACTIVO_CAT", sql.Bit, ACTIVO_CAT) 
+      .query(`
+    UPDATE CATEGORIA_NOT_T 
+    SET NOMBRE_CAT = @NOMBRE_CAT, 
+        DESCRIPCION_CAT = @DESCRIPCION_CAT, 
+        ACTIVO_CAT = @ACTIVO_CAT
+    WHERE ID_CAT = @ID_CAT
+`);
+
     // console.log("✅ Categoría actualizada.");
 
     // Obtener etiquetas actuales
