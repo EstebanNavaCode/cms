@@ -506,9 +506,8 @@ label.custum-file-upload {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  align-items: flex-start;
   flex: 2;
-  max-width: 65%;
+  max-width:100%;
 }
 
 .modal-register label {
@@ -645,6 +644,11 @@ label.custum-file-upload {
 .subcategories-container {
   display: flex;
   flex-direction: column;
+}
+
+.subcategories-container input.input {
+  width: 777px;
+  box-sizing: border-box;
 }
 
 .subcategory-list {
