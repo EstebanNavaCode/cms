@@ -651,6 +651,11 @@ label.custum-file-upload {
   box-sizing: border-box;
 }
 
+.subcategories-container-form input.input {
+  width: 690px;
+  box-sizing: border-box;
+}
+
 .subcategory-list {
   display: flex;
   flex-wrap: wrap;
