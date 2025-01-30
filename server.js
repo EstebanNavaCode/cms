@@ -59,6 +59,10 @@ app.get("/categorias", (req, res) => {
   res.render("categories/categories");
 });
 
+app.get("/generos", (req, res) => {
+  res.render("generos/generos");
+});
+
 //Ver solicitudes
 app.use((req, res, next) => {
   console.log(`Solicitud ${req.method} en ${req.url}`);
