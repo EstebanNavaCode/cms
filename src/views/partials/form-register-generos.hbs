@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/assets/css/dashboard.css">
-<link rel="stylesheet" href="/assets/css/categories.css">
+<link rel="stylesheet" href="/assets/css/generos.css">
 
 <!-- Estilos de DataTables -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -23,37 +23,130 @@
                     <p class="message"></p>
 
                     <label>
-                        <input id="name" name="nombre" class="input" type="text" placeholder="" required>
-
+                        <input id="NOMBRE_LCAT" name="NOMBRE_LCAT" class="input" type="text" placeholder="" required>
                         <span>Nombre</span>
-
                     </label>
 
                     <label>
-                        <textarea id="descripcion" name="descripcion" class="input textarea" placeholder="" rows="5"
-                            required></textarea>
-
-
+                        <textarea id="DESCRIPCION_LCAT" name="DESCRIPCION_LCAT" class="input textarea" placeholder=""
+                            rows="5" required></textarea>
                         <span>Descripción</span>
                     </label>
 
                     <div class="subcategories-container-form">
                         <label>
                             <input id="subcategory-input" class="input" type="text" />
-                            <span>Etiquetas</span>
+                            <span>Subgénero</span>
                         </label>
                         <div id="subcategory-list" class="subcategory-list">
                             <!-- Aquí aparecerán las etiquetas -->
                         </div>
-                        <!-- Input oculto para las subcategorías -->
-                        <input type="hidden" id="subcategory-values" name="subcategorias" />
+                        <input type="hidden" id="subcategory-values" name="subgeneros" />
                     </div>
 
-
-                    <button class="submit" type="submit">Registrar genero</button>
-
+                    <button class="submit" type="submit">Registrar género</button>
                 </form>
+
             </div>
         </div>
 
     </div>
+
+
+    <!-- 📌 TABLA PARA MOSTRAR LOS GÉNEROS -->
+    <div class="category-list">
+        <table id="genresTable" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Fecha de Registro</th>
+                    <th>Subgéneros</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each generos}}
+                <tr data-id="{{ID_LCAT}}">
+                    <td>{{ID_LCAT}}</td>
+                    <td>{{NOMBRE_LCAT}}</td>
+                    <td>{{DESCRIPCION_LCAT}}</td>
+                    <td>{{FECHA_ALTA_LCAT}}</td>
+                    <td>
+                        {{#if subgeneros.length}}
+                        <ul>
+                            {{#each subgeneros}}
+                            <li>{{NOMBRE_SBC}}</li>
+                            {{/each}}
+                        </ul>
+                        {{else}}
+                        <span>Sin subgéneros</span>
+                        {{/if}}
+                    </td>
+                    <td>
+                        {{#if ACTIVO_LCAT}}
+                        <span style="color:green;">Activo</span>
+                        {{else}}
+                        <span style="color:red;">Inactivo</span>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- 🔥 MODAL PARA EDITAR GÉNERO -->
+<div class="modal fade" id="modal-edit-genero" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="editGeneroLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content form">
+            <div class="modal-header">
+                <h5 class="modal-title title2" id="editGeneroLabel">Editar Género</h5>
+                <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-edit-genero" class="modal-register">
+                    <input type="hidden" id="edit-genero-id" name="ID_LCAT">
+
+                    <label>
+                        <input id="edit-genero-name" name="NOMBRE_LCAT" class="input" type="text" required>
+                        <span>Nombre del Género</span>
+                    </label>
+
+                    <label>
+                        <textarea id="edit-genero-description" name="DESCRIPCION_LCAT" class="input textarea" rows="4"
+                            required></textarea>
+                        <span>Descripción</span>
+                    </label>
+
+                    <div class="subcategories-container">
+                        <label>
+                            <input id="edit-subcategory-input" class="input" type="text"
+                                placeholder="Agregar nuevo subgénero">
+                            <span>Subgéneros</span>
+                        </label>
+                        <div id="edit-subcategory-list" class="subcategory-list"></div>
+                        <input type="hidden" id="edit-subcategory-values" name="subgeneros">
+                    </div>
+
+                    <div class="flex">
+                        <div class="checkbox-wrapper-10">
+                            <input type="checkbox" id="edit-genero-active" class="tgl tgl-flip">
+                            <label for="edit-genero-active" data-tg-on="Activo" data-tg-off="Inactivo"
+                                class="tgl-btn"></label>
+                        </div>
+
+                        <button class="submit" type="submit">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="/assets/js/tableFormatGeneros.js"></script>
+<script src="/assets/js/registerGeneros.js"></script>
