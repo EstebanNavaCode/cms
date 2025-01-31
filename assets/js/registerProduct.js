@@ -44,12 +44,11 @@ document
       if (response.ok) {
         const result = await response.json();
         alert(result.message || "Producto registrado exitosamente.");
-        
+
         window.location.href = "/products";
-        
+
         document.getElementById("form-register-product").reset();
       } else {
-      
         const errorResult = await response.json();
         alert(
           errorResult.message || "Ocurrió un error al registrar el producto."

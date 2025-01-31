@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   $("#productsTable tbody").on("click", "tr", async function () {
     const rowData = table.row(this).data();
-  
+
     if (rowData) {
       $("#modal-id").val(rowData[0]);
       $("#modal-name").val(rowData[1]);
@@ -77,16 +77,16 @@ document.addEventListener("DOMContentLoaded", function () {
       $("#modal-editorial").val(rowData[3]);
       $("#modal-isbn").val(rowData[4]);
       $("#modal-stock").val(rowData[5]);
-  
+
       const categoryName = rowData[6];
       const subcategoryName = rowData[7];
-  
+
       const estadoHtml = rowData[8]?.trim();
       //console.log("Estado actual del producto (con etiquetas):", estadoHtml);
-  
+
       const estado = estadoHtml.replace(/<[^>]+>/g, "").trim();
       //console.log("Estado actual del producto (limpio):", estado);
-  
+
       if (estado === "Disponible") {
         $("#modal-active").prop("checked", true);
         $("#cb5").prop("checked", true);
@@ -103,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
       $("#modal-register-product").modal("show");
     }
   });
-  
 
   const selectCategoryAndSubcategory = async (
     categoryName,

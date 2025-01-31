@@ -24,9 +24,12 @@ document.querySelectorAll(".modal").forEach((modal) => {
 
 function previewImage(event) {
   const file = event.target.files[0];
-  const container = event.target.closest(".form-container") || event.target.closest(".modal");
+  const container =
+    event.target.closest(".form-container") || event.target.closest(".modal");
   const preview = container.querySelector(".image-preview img");
-  const placeholder = container.querySelector(".image-preview .placeholder-icon");
+  const placeholder = container.querySelector(
+    ".image-preview .placeholder-icon"
+  );
 
   if (file) {
     const reader = new FileReader();

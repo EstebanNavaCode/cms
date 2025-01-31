@@ -3,51 +3,60 @@ import sql from "mssql";
 
 export const registerCategory = async (req, res) => {
   try {
-      const { NOMBRE_CAT, DESCRIPCION_CAT, subcategorias } = req.body;
+    const { NOMBRE_CAT, DESCRIPCION_CAT, subcategorias } = req.body;
 
-      if (!NOMBRE_CAT || !DESCRIPCION_CAT) {
-          return res.status(400).json({ message: "Nombre y descripción son obligatorios" });
-      }
+    if (!NOMBRE_CAT || !DESCRIPCION_CAT) {
+      return res
+        .status(400)
+        .json({ message: "Nombre y descripción son obligatorios" });
+    }
 
-      const parsedSubcategories = Array.isArray(subcategorias)
-          ? subcategorias.filter(etq => etq.NOMBRE_ETQ && typeof etq.NOMBRE_ETQ === "string" && etq.NOMBRE_ETQ.trim() !== "")
-          : [];
+    const parsedSubcategories = Array.isArray(subcategorias)
+      ? subcategorias.filter(
+          (etq) =>
+            etq.NOMBRE_ETQ &&
+            typeof etq.NOMBRE_ETQ === "string" &&
+            etq.NOMBRE_ETQ.trim() !== ""
+        )
+      : [];
 
-      const pool = await getConnection();
+    const pool = await getConnection();
 
-      const result = await pool
-          .request()
-          .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
-          .input("DESCRIPCION_CAT", sql.NVarChar(300), DESCRIPCION_CAT)
-          .input("FECHA_ALTA_CAT", sql.Date, new Date())
-          .input("ACTIVO_CAT", sql.Bit, true)
-          .query(`
+    const result = await pool
+      .request()
+      .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
+      .input("DESCRIPCION_CAT", sql.NVarChar(300), DESCRIPCION_CAT)
+      .input("FECHA_ALTA_CAT", sql.Date, new Date())
+      .input("ACTIVO_CAT", sql.Bit, true).query(`
               INSERT INTO CATEGORIA_NOT_T (NOMBRE_CAT, DESCRIPCION_CAT, FECHA_ALTA_CAT, ACTIVO_CAT)
               OUTPUT INSERTED.ID_CAT
               VALUES (@NOMBRE_CAT, @DESCRIPCION_CAT, @FECHA_ALTA_CAT, @ACTIVO_CAT)
           `);
 
-      const categoryId = result.recordset[0].ID_CAT;
+    const categoryId = result.recordset[0].ID_CAT;
 
-      for (const subcategory of parsedSubcategories) {
-          await pool
-              .request()
-              .input("ID_CAT", sql.Int, categoryId)
-              .input("NOMBRE_ETQ", sql.NVarChar(300), subcategory.NOMBRE_ETQ)
-              .input("FECHA_ALTA_ETQ", sql.Date, new Date())
-              .input("ACTIVO_ETQ", sql.Bit, true).query(`
+    for (const subcategory of parsedSubcategories) {
+      await pool
+        .request()
+        .input("ID_CAT", sql.Int, categoryId)
+        .input("NOMBRE_ETQ", sql.NVarChar(300), subcategory.NOMBRE_ETQ)
+        .input("FECHA_ALTA_ETQ", sql.Date, new Date())
+        .input("ACTIVO_ETQ", sql.Bit, true).query(`
                   INSERT INTO ETIQUETA_NOT_T (ID_CAT, NOMBRE_ETQ, FECHA_ALTA_ETQ, ACTIVO_ETQ)
                   VALUES (@ID_CAT, @NOMBRE_ETQ, @FECHA_ALTA_ETQ, @ACTIVO_ETQ)
               `);
-      }
+    }
 
-      res.status(201).json({ message: "Categoría y subcategorías registradas con éxito." });
+    res
+      .status(201)
+      .json({ message: "Categoría y subcategorías registradas con éxito." });
   } catch (error) {
-      console.error("❌ Error al registrar categoría y subcategorías:", error);
-      res.status(500).json({ message: "Error al registrar categoría y subcategorías." });
+    console.error("❌ Error al registrar categoría y subcategorías:", error);
+    res
+      .status(500)
+      .json({ message: "Error al registrar categoría y subcategorías." });
   }
 };
-
 
 export const getCategoriesAndTags = async (req, res) => {
   try {
@@ -162,8 +171,7 @@ export const editCategoryAndTags = async (req, res) => {
       .input("ID_CAT", sql.Int, id)
       .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
       .input("DESCRIPCION_CAT", sql.NVarChar(300), DESCRIPCION_CAT)
-      .input("ACTIVO_CAT", sql.Bit, ACTIVO_CAT) 
-      .query(`
+      .input("ACTIVO_CAT", sql.Bit, ACTIVO_CAT).query(`
     UPDATE CATEGORIA_NOT_T 
     SET NOMBRE_CAT = @NOMBRE_CAT, 
         DESCRIPCION_CAT = @DESCRIPCION_CAT, 
@@ -246,5 +254,3 @@ export const editCategoryAndTags = async (req, res) => {
       .json({ message: "Error al actualizar la categoría y etiquetas." });
   }
 };
-
-

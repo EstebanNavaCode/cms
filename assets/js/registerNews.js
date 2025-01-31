@@ -51,33 +51,32 @@ document
     }
   });
 
-  const loadCategoriesNEWS = async () => {
-    try {
-      const response = await fetch("/categoriesNEWS"); 
-      if (response.ok) {
-        const categoriesNEWS = await response.json(); 
-        const categorySelect = document.getElementById("categoryNEWS");
-  
-        categorySelect.innerHTML = '<option value="" disabled selected hidden>Categoría</option>';
-  
-        categoriesNEWS.forEach((category) => {
-          const option = document.createElement("option");
-          option.value = category.ID_CAT; 
-          option.textContent = category.NOMBRE_CAT; 
-          categorySelect.appendChild(option);
-        });
+const loadCategoriesNEWS = async () => {
+  try {
+    const response = await fetch("/categoriesNEWS");
+    if (response.ok) {
+      const categoriesNEWS = await response.json();
+      const categorySelect = document.getElementById("categoryNEWS");
 
-        categorySelect.innerHTML = '<option value="" disabled selected hidden>Categoría</option>';
-      } else {
-        console.error("Error al cargar las categorías:", await response.text());
-      }
-    } catch (error) {
-      console.error("Error al cargar categorías:", error);
+      categorySelect.innerHTML =
+        '<option value="" disabled selected hidden>Categoría</option>';
+
+      categoriesNEWS.forEach((category) => {
+        const option = document.createElement("option");
+        option.value = category.ID_CAT;
+        option.textContent = category.NOMBRE_CAT;
+        categorySelect.appendChild(option);
+      });
+
+      categorySelect.innerHTML =
+        '<option value="" disabled selected hidden>Categoría</option>';
+    } else {
+      console.error("Error al cargar las categorías:", await response.text());
     }
-  };
-  
-  
-  
+  } catch (error) {
+    console.error("Error al cargar categorías:", error);
+  }
+};
 
 document.addEventListener("DOMContentLoaded", loadCategoriesNEWS);
 
@@ -109,48 +108,53 @@ document.getElementById("categoryNEWS").addEventListener("change", (e) => {
   loadSubcategoriesNEWS(categoryId);
 });
 
-document.getElementById("form-edit-news").addEventListener("submit", async function (event) {
-  event.preventDefault();
+document
+  .getElementById("form-edit-news")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-  const ID_NOT = document.getElementById("edit-id").value.trim();
-  const TITULO_NOT = document.getElementById("edit-title").value.trim();
-  const TEXTO_NOT = document.getElementById("edit-text").value.trim();
-  const FECHA_PUBLICAR_NOT = document.getElementById("edit-date").value.trim();
-  const CATEGORIA_NOT = document.getElementById("edit-categoryNEWS").value.trim();
-  const ETIQUETA_NOT = document.getElementById("edit-labelNEWS").value.trim();
-  const ACTIVO_NOT = document.getElementById("modal-active").value.trim(); 
+    const ID_NOT = document.getElementById("edit-id").value.trim();
+    const TITULO_NOT = document.getElementById("edit-title").value.trim();
+    const TEXTO_NOT = document.getElementById("edit-text").value.trim();
+    const FECHA_PUBLICAR_NOT = document
+      .getElementById("edit-date")
+      .value.trim();
+    const CATEGORIA_NOT = document
+      .getElementById("edit-categoryNEWS")
+      .value.trim();
+    const ETIQUETA_NOT = document.getElementById("edit-labelNEWS").value.trim();
+    const ACTIVO_NOT = document.getElementById("modal-active").value.trim();
 
-  try {
-    const response = await fetch(`/news/${ID_NOT}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        TITULO_NOT,
-        TEXTO_NOT,
-        FECHA_PUBLICAR_NOT,
-        CATEGORIA_NOT,
-        ETIQUETA_NOT,
-        ACTIVO_NOT,
-      }),
-    });
+    try {
+      const response = await fetch(`/news/${ID_NOT}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          TITULO_NOT,
+          TEXTO_NOT,
+          FECHA_PUBLICAR_NOT,
+          CATEGORIA_NOT,
+          ETIQUETA_NOT,
+          ACTIVO_NOT,
+        }),
+      });
 
-    if (response.ok) {
-      const result = await response.json();
-      alert(result.message || "Noticia editada exitosamente.");
-      location.reload();
-    } else {
-      const error = await response.json();
-      console.error("Error del servidor:", error);
-      alert(error.message || "Error al editar noticia.");
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message || "Noticia editada exitosamente.");
+        location.reload();
+      } else {
+        const error = await response.json();
+        console.error("Error del servidor:", error);
+        alert(error.message || "Error al editar noticia.");
+      }
+    } catch (err) {
+      console.error("Error en la solicitud:", err);
+      alert("Ocurrió un error inesperado.");
     }
-  } catch (err) {
-    console.error("Error en la solicitud:", err);
-    alert("Ocurrió un error inesperado.");
-  }
-});
-
+  });
 
 function updateCheckboxState() {
   const checkbox = document.getElementById("cb5");

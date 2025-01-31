@@ -54,7 +54,7 @@ $(document).ready(function () {
     },
     columnDefs: [
       {
-        targets: 2, 
+        targets: 2,
         render: function (data) {
           if (!data) return "";
           const words = data.split(" ");
@@ -63,7 +63,7 @@ $(document).ready(function () {
         },
       },
       {
-        targets: 3, 
+        targets: 3,
         render: function (data) {
           if (!data) return "";
           const date = new Date(data);
@@ -91,8 +91,14 @@ $(document).ready(function () {
         return;
       }
 
-      const cleanTitle = typeof rowData[1] === "string" ? rowData[1].trim().substring(0, 300) : "";
-      const cleanText = typeof rowData[2] === "string" ? rowData[2].trim().substring(0, 1000) : "";
+      const cleanTitle =
+        typeof rowData[1] === "string"
+          ? rowData[1].trim().substring(0, 300)
+          : "";
+      const cleanText =
+        typeof rowData[2] === "string"
+          ? rowData[2].trim().substring(0, 1000)
+          : "";
 
       $("#edit-id").val(newsId);
       $("#edit-title").val(cleanTitle);

@@ -142,8 +142,7 @@ export const editNews = async (req, res) => {
       .input("CATEGORIA_NOT", sql.Int, CATEGORIA_NOT)
       .input("ETIQUETA_NOT", sql.Int, ETIQUETA_NOT)
       .input("ACTIVO_NOT", sql.Bit, ACTIVO_NOT_NUM) // Usar el valor convertido
-      .input("ID_NOT", sql.Int, id)
-      .query(`
+      .input("ID_NOT", sql.Int, id).query(`
         UPDATE NOT_T
         SET TITULO_NOT = @TITULO_NOT,
             TEXTO_NOT = @TEXTO_NOT,
