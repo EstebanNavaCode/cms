@@ -20,7 +20,8 @@ export const registerCategory = async (req, res) => {
           .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
           .input("DESCRIPCION_CAT", sql.NVarChar(300), DESCRIPCION_CAT)
           .input("FECHA_ALTA_CAT", sql.Date, new Date())
-          .input("ACTIVO_CAT", sql.Bit, true).query(`
+          .input("ACTIVO_CAT", sql.Bit, true)
+          .query(`
               INSERT INTO CATEGORIA_NOT_T (NOMBRE_CAT, DESCRIPCION_CAT, FECHA_ALTA_CAT, ACTIVO_CAT)
               OUTPUT INSERTED.ID_CAT
               VALUES (@NOMBRE_CAT, @DESCRIPCION_CAT, @FECHA_ALTA_CAT, @ACTIVO_CAT)
@@ -245,3 +246,5 @@ export const editCategoryAndTags = async (req, res) => {
       .json({ message: "Error al actualizar la categoría y etiquetas." });
   }
 };
+
+

@@ -29,6 +29,13 @@ import {
   editCategoryAndTags
 } from "../../src/controllers/categories.controller.js";
 
+import{
+  registerGenero,
+  getGenerosAndSubgeneros,
+  getGeneroById,
+  editGenero
+}from "../../src/controllers/generos.controller.js"
+
 const router = Router();
 
 router.post("/", login);
@@ -58,6 +65,10 @@ router.get("/categorias", getCategoriesAndTags);
 router.get("/categorias/:id", getCategoryById);
 router.put("/categorias/:id", editCategoryAndTags);
 
-
+//generos routes
+router.post("/generos", registerGenero);
+router.get("/generos", getGenerosAndSubgeneros);
+router.get("/generos/:id", getGeneroById);
+router.put("/generos/:id", editGenero);
 
 export default router;
