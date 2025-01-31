@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import path from "path";
 import favicon from "serve-favicon";
+import fileUpload from "express-fileupload";
 
 import router from "./sis/routes/routes.js";
 import config from "./sis/config/config.js";
@@ -26,9 +27,13 @@ app.set("views", path.join(__dirname, "src", "views"));
 // Middleware for parsing JSON and form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 // Static files
 app.use("/assets", express.static(path.join(__dirname, "assets")));
+app.use("/uploads/pics", express.static(path.join(process.cwd(), "uploads/pics")));
+
+
 
 app.use(favicon(path.join(__dirname, "assets", "img", "favicon.ico")));
 

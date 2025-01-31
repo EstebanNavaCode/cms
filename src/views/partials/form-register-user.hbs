@@ -85,33 +85,47 @@
     </div>
 
     <div class="user-list">
-        <table id="usersTable" class="display">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Correo</th>
-                    <th>Tipo</th>
-                    <th>Fecha de Registro</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each users}}
-                <tr>
-                    <td>{{ID_USR}}</td>
-                    <td>{{NOMBRE_USR}}</td>
-                    <td>{{APELLIDO_USR}}</td>
-                    <td>{{CORREO_USR}}</td>
-                    <td>{{TIPO_USR}}</td>
-                    <td>{{FECHA_ALTA_USR}}</td>
-                    <td>{{#if ACTIVO_USR}}<span style="color:green;">Activo</span>{{else}}<span
-                            style="color:red;">Inactivo</span>{{/if}}</td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
+      <table id="usersTable" class="display">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Tipo</th>
+            <th>Fecha de Registro</th>
+            <th>Estado</th>
+            <th>Imagen</th>  <!-- Asegúrate de que la imagen tenga una columna -->
+        </tr>
+    </thead>
+    <tbody>
+        {{#each users}}
+        <tr>
+            <td>{{ID_USR}}</td>
+            <td>{{NOMBRE_USR}}</td>
+            <td>{{APELLIDO_USR}}</td>
+            <td>{{CORREO_USR}}</td>
+            <td>{{TIPO_USR}}</td>
+            <td>{{FECHA_ALTA_USR}}</td>
+            <td>
+                {{#if ACTIVO_USR}}
+                    <span style="color:green;">Activo</span>
+                {{else}}
+                    <span style="color:red;">Inactivo</span>
+                {{/if}}
+            </td>
+            <td>
+                {{#if IMG_USR}}
+                    <img src="{{IMG_USR}}" alt="Foto de usuario" style="width: 50px; height: 50px; border-radius: 50%;">
+                {{else}}
+                    <span>Sin imagen</span>
+                {{/if}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
     </div>
 </section>
 
@@ -181,6 +195,7 @@
                     <div class="image-preview">
                         <i id="icon-placeholder-user" class="uil uil-image-search placeholder-icon"></i>
                         <img id="preview-user" src="" alt="Vista previa de la imagen">
+
                     </div>
 
                 </div>
