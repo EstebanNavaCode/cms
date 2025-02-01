@@ -4,47 +4,70 @@ import { getConnection } from "../../sis/database/conection.js";
 import sql from "mssql";
 
 export const registerProduct = async (req, res) => {
-    try {
-        const { NOMBRE_LIB, AUTOR_LIB, EDITORIAL_LIB, CATEGORIA_LIB, SUBCATEGORIA_LIB, ISBN_LIB, STOCK_LIB } = req.body;
-        const imgFile = req.files?.IMG_LIB; 
+  try {
+    const {
+      NOMBRE_LIB,
+      AUTOR_LIB,
+      EDITORIAL_LIB,
+      CATEGORIA_LIB,
+      SUBCATEGORIA_LIB,
+      ISBN_LIB,
+      STOCK_LIB,
+    } = req.body;
+    const imgFile = req.files?.IMG_LIB;
 
-        if (!NOMBRE_LIB || !AUTOR_LIB || !EDITORIAL_LIB || !CATEGORIA_LIB || !SUBCATEGORIA_LIB || !ISBN_LIB || !STOCK_LIB) {
-            return res.status(400).json({ message: "Todos los campos obligatorios deben ser proporcionados." });
-        }
+    if (
+      !NOMBRE_LIB ||
+      !AUTOR_LIB ||
+      !EDITORIAL_LIB ||
+      !CATEGORIA_LIB ||
+      !SUBCATEGORIA_LIB ||
+      !ISBN_LIB ||
+      !STOCK_LIB
+    ) {
+      return res
+        .status(400)
+        .json({
+          message: "Todos los campos obligatorios deben ser proporcionados.",
+        });
+    }
 
-        let imgFilename = null;
-        if (imgFile) {
-            const uploadDir = path.join(process.cwd(), "uploads/products");
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, { recursive: true });
-            }
-            imgFilename = ISBN_LIB.replace(/[@.]/g, "_") + path.extname(imgFile.name);
-            const uploadPath = path.join(uploadDir, imgFilename);
-            await imgFile.mv(uploadPath);
-        }
+    let imgFilename = null;
+    if (imgFile) {
+      const uploadDir = path.join(process.cwd(), "uploads/products");
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      imgFilename = ISBN_LIB.replace(/[@.]/g, "_") + path.extname(imgFile.name);
+      const uploadPath = path.join(uploadDir, imgFilename);
+      await imgFile.mv(uploadPath);
+    }
 
-        const pool = await getConnection();
-        await pool.request()
-            .input("NOMBRE_LIB", sql.NVarChar(300), NOMBRE_LIB)
-            .input("AUTOR_LIB", sql.NVarChar(300), AUTOR_LIB)
-            .input("EDITORIAL_LIB", sql.NVarChar(300), EDITORIAL_LIB)
-            .input("CATEGORIA_LIB", sql.Int, CATEGORIA_LIB)
-            .input("SUBCATEGORIA_LIB", sql.Int, SUBCATEGORIA_LIB)
-            .input("ISBN_LIB", sql.NVarChar(300), ISBN_LIB)
-            .input("STOCK_LIB", sql.Int, STOCK_LIB)
-            .input("IMG_LIB", sql.NVarChar(300), imgFilename ? `/uploads/products/${imgFilename}` : null)
-            .query(`
+    const pool = await getConnection();
+    await pool
+      .request()
+      .input("NOMBRE_LIB", sql.NVarChar(300), NOMBRE_LIB)
+      .input("AUTOR_LIB", sql.NVarChar(300), AUTOR_LIB)
+      .input("EDITORIAL_LIB", sql.NVarChar(300), EDITORIAL_LIB)
+      .input("CATEGORIA_LIB", sql.Int, CATEGORIA_LIB)
+      .input("SUBCATEGORIA_LIB", sql.Int, SUBCATEGORIA_LIB)
+      .input("ISBN_LIB", sql.NVarChar(300), ISBN_LIB)
+      .input("STOCK_LIB", sql.Int, STOCK_LIB)
+      .input(
+        "IMG_LIB",
+        sql.NVarChar(300),
+        imgFilename ? `/uploads/products/${imgFilename}` : null
+      ).query(`
                 INSERT INTO LIB_T_ (NOMBRE_LIB, AUTOR_LIB, EDITORIAL_LIB, CATEGORIA_LIB, SUBCATEGORIA_LIB, ISBN_LIB, STOCK_LIB, IMG_LIB)
                 VALUES (@NOMBRE_LIB, @AUTOR_LIB, @EDITORIAL_LIB, @CATEGORIA_LIB, @SUBCATEGORIA_LIB, @ISBN_LIB, @STOCK_LIB, @IMG_LIB)
             `);
 
-        res.status(201).json({ message: "Producto registrado exitosamente." });
-    } catch (error) {
-        console.error("Error al registrar producto:", error);
-        res.status(500).json({ message: "Error al registrar producto." });
-    }
+    res.status(201).json({ message: "Producto registrado exitosamente." });
+  } catch (error) {
+    console.error("Error al registrar producto:", error);
+    res.status(500).json({ message: "Error al registrar producto." });
+  }
 };
-
 
 export const getCategories = async (req, res) => {
   try {
@@ -110,59 +133,71 @@ export const getProducts = async (req, res) => {
     res.render("products/products", { products: result.recordset });
   } catch (error) {
     console.error("Error al obtener productos:", error);
-    res.status(500).json({ message: "Error al obtener la lista de productos." });
+    res
+      .status(500)
+      .json({ message: "Error al obtener la lista de productos." });
   }
 };
 
 export const editProduct = async (req, res) => {
   try {
-      const { id } = req.params;
-      console.log("🔹 ID recibido en el backend:", id);
+    const { id } = req.params;
+    console.log("🔹 ID recibido en el backend:", id);
 
-      const { NOMBRE_LIB, AUTOR_LIB, EDITORIAL_LIB, ISBN_LIB, STOCK_LIB, CATEGORIA_LIB, SUBCATEGORIA_LIB, ACTIVO_LIB } = req.body;
-      const imgFile = req.files?.IMG_LIB;
+    const {
+      NOMBRE_LIB,
+      AUTOR_LIB,
+      EDITORIAL_LIB,
+      ISBN_LIB,
+      STOCK_LIB,
+      CATEGORIA_LIB,
+      SUBCATEGORIA_LIB,
+      ACTIVO_LIB,
+    } = req.body;
+    const imgFile = req.files?.IMG_LIB;
 
-      if (!id) {
-          return res.status(400).json({ message: "ID del producto es requerido." });
+    if (!id) {
+      return res.status(400).json({ message: "ID del producto es requerido." });
+    }
+
+    const pool = await getConnection();
+
+    const result = await pool
+      .request()
+      .input("ID_LIB", sql.Int, id)
+      .query("SELECT IMG_LIB FROM LIB_T_ WHERE ID_LIB = @ID_LIB");
+
+    let imgFilename = result.recordset[0]?.IMG_LIB || null;
+
+    if (imgFile) {
+      const uploadDir = path.join(process.cwd(), "uploads/products");
+
+      if (imgFilename) {
+        const oldImagePath = path.join(uploadDir, path.basename(imgFilename));
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
       }
 
-      const pool = await getConnection();
+      imgFilename = ISBN_LIB.replace(/[@.]/g, "_") + path.extname(imgFile.name);
+      const uploadPath = path.join(uploadDir, imgFilename);
+      await imgFile.mv(uploadPath);
 
-      const result = await pool.request()
-          .input("ID_LIB", sql.Int, id)
-          .query("SELECT IMG_LIB FROM LIB_T_ WHERE ID_LIB = @ID_LIB");
+      imgFilename = `/uploads/products/${imgFilename}`;
+    }
 
-      let imgFilename = result.recordset[0]?.IMG_LIB || null;
-
-      if (imgFile) {
-          const uploadDir = path.join(process.cwd(), "uploads/products");
-
-          if (imgFilename) {
-              const oldImagePath = path.join(uploadDir, path.basename(imgFilename));
-              if (fs.existsSync(oldImagePath)) {
-                  fs.unlinkSync(oldImagePath);
-              }
-          }
-
-          imgFilename = ISBN_LIB.replace(/[@.]/g, "_") + path.extname(imgFile.name);
-          const uploadPath = path.join(uploadDir, imgFilename);
-          await imgFile.mv(uploadPath);
-
-          imgFilename = `/uploads/products/${imgFilename}`;
-      }
-
-      await pool.request()
-          .input("ID_LIB", sql.Int, parseInt(id, 10))
-          .input("NOMBRE_LIB", sql.NVarChar(300), NOMBRE_LIB)
-          .input("AUTOR_LIB", sql.NVarChar(300), AUTOR_LIB)
-          .input("EDITORIAL_LIB", sql.NVarChar(300), EDITORIAL_LIB)
-          .input("ISBN_LIB", sql.NVarChar(300), ISBN_LIB)
-          .input("STOCK_LIB", sql.Int, STOCK_LIB)
-          .input("CATEGORIA_LIB", sql.Int, CATEGORIA_LIB)
-          .input("SUBCATEGORIA_LIB", sql.Int, SUBCATEGORIA_LIB)
-          .input("ACTIVO_LIB", sql.Bit, ACTIVO_LIB)
-          .input("IMG_LIB", sql.NVarChar(300), imgFilename)
-          .query(`
+    await pool
+      .request()
+      .input("ID_LIB", sql.Int, parseInt(id, 10))
+      .input("NOMBRE_LIB", sql.NVarChar(300), NOMBRE_LIB)
+      .input("AUTOR_LIB", sql.NVarChar(300), AUTOR_LIB)
+      .input("EDITORIAL_LIB", sql.NVarChar(300), EDITORIAL_LIB)
+      .input("ISBN_LIB", sql.NVarChar(300), ISBN_LIB)
+      .input("STOCK_LIB", sql.Int, STOCK_LIB)
+      .input("CATEGORIA_LIB", sql.Int, CATEGORIA_LIB)
+      .input("SUBCATEGORIA_LIB", sql.Int, SUBCATEGORIA_LIB)
+      .input("ACTIVO_LIB", sql.Bit, ACTIVO_LIB)
+      .input("IMG_LIB", sql.NVarChar(300), imgFilename).query(`
               UPDATE LIB_T_
               SET 
                   NOMBRE_LIB = @NOMBRE_LIB,
@@ -177,10 +212,11 @@ export const editProduct = async (req, res) => {
               WHERE ID_LIB = @ID_LIB
           `);
 
-      res.json({ message: "Producto actualizado correctamente." });
+    res.json({ message: "Producto actualizado correctamente." });
   } catch (error) {
-      console.error("⚠️ Error al actualizar producto:", error);
-      res.status(500).json({ message: "Ocurrió un error al actualizar el producto." });
+    console.error("⚠️ Error al actualizar producto:", error);
+    res
+      .status(500)
+      .json({ message: "Ocurrió un error al actualizar el producto." });
   }
 };
-

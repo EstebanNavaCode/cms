@@ -1,39 +1,46 @@
-document.getElementById("form-register-product").addEventListener("submit", async function (event) {
-  event.preventDefault();
+document
+  .getElementById("form-register-product")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-  const formData = new FormData();
-  formData.append("CATEGORIA_LIB", document.getElementById("category").value);
-  formData.append("SUBCATEGORIA_LIB", document.getElementById("subcategory").value);
-  formData.append("ISBN_LIB", document.getElementById("isbn").value);
-  formData.append("NOMBRE_LIB", document.getElementById("name").value);
-  formData.append("AUTOR_LIB", document.getElementById("autor").value);
-  formData.append("EDITORIAL_LIB", document.getElementById("lastname").value);
-  formData.append("STOCK_LIB", document.getElementById("stock").value);
+    const formData = new FormData();
+    formData.append("CATEGORIA_LIB", document.getElementById("category").value);
+    formData.append(
+      "SUBCATEGORIA_LIB",
+      document.getElementById("subcategory").value
+    );
+    formData.append("ISBN_LIB", document.getElementById("isbn").value);
+    formData.append("NOMBRE_LIB", document.getElementById("name").value);
+    formData.append("AUTOR_LIB", document.getElementById("autor").value);
+    formData.append("EDITORIAL_LIB", document.getElementById("lastname").value);
+    formData.append("STOCK_LIB", document.getElementById("stock").value);
 
-  const fileInput = document.getElementById("file"); // Capturar la imagen
-  if (fileInput.files.length > 0) {
+    const fileInput = document.getElementById("file"); // Capturar la imagen
+    if (fileInput.files.length > 0) {
       formData.append("IMG_LIB", fileInput.files[0]); // Adjuntar la imagen al formulario
-  }
+    }
 
-  try {
+    try {
       const response = await fetch("/products", {
-          method: "POST",
-          body: formData, // Enviar como FormData
+        method: "POST",
+        body: formData, // Enviar como FormData
       });
 
       if (response.ok) {
-          const result = await response.json();
-          alert(result.message || "Producto registrado exitosamente.");
-          window.location.href = "/products";
+        const result = await response.json();
+        alert(result.message || "Producto registrado exitosamente.");
+        window.location.href = "/products";
       } else {
-          const errorResult = await response.json();
-          alert(errorResult.message || "Ocurrió un error al registrar el producto.");
+        const errorResult = await response.json();
+        alert(
+          errorResult.message || "Ocurrió un error al registrar el producto."
+        );
       }
-  } catch (err) {
+    } catch (err) {
       console.error("Error:", err);
       alert("Ocurrió un error al procesar el registro del producto.");
-  }
-});
+    }
+  });
 
 const loadCategories = async () => {
   try {
@@ -84,40 +91,43 @@ document.getElementById("category").addEventListener("change", (e) => {
 
 document.addEventListener("DOMContentLoaded", loadCategories);
 
-document.getElementById("form-update-product").addEventListener("submit", async function (event) {
-  event.preventDefault();
+document
+  .getElementById("form-update-product")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-  const productId = document.getElementById("modal-id").value; 
-  const formData = new FormData(this); 
+    const productId = document.getElementById("modal-id").value;
+    const formData = new FormData(this);
 
-  try {
-      const response = await fetch(`/products/${productId}`, { 
-          method: "PUT",
-          body: formData
+    try {
+      const response = await fetch(`/products/${productId}`, {
+        method: "PUT",
+        body: formData,
       });
 
       if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
+        throw new Error(`Error en la solicitud: ${response.status}`);
       }
 
       const result = await response.json();
       //console.log("✅ Producto actualizado:", result);
 
-      $("#modal-register-product").modal("hide"); 
-      location.reload(); 
-  } catch (error) {
+      $("#modal-register-product").modal("hide");
+      location.reload();
+    } catch (error) {
       //console.error("⚠️ Error al actualizar producto:", error);
-  }
-});
+    }
+  });
 
-
-document.getElementById("modal-file").addEventListener("change", function(event) {
-  const file = event.target.files[0];
-  if (file) {
+document
+  .getElementById("modal-file")
+  .addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
       const reader = new FileReader();
-      reader.onload = function(e) {
-          document.getElementById("preview-product").src = e.target.result;
+      reader.onload = function (e) {
+        document.getElementById("preview-product").src = e.target.result;
       };
       reader.readAsDataURL(file);
-  }
-});
+    }
+  });

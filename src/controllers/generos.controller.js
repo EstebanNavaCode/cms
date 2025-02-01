@@ -49,12 +49,10 @@ export const registerGenero = async (req, res) => {
                 `);
     }
 
-    res
-      .status(201)
-      .json({
-        message: "Género y subgéneros registrados con éxito.",
-        redirect: "/generos",
-      });
+    res.status(201).json({
+      message: "Género y subgéneros registrados con éxito.",
+      redirect: "/generos",
+    });
   } catch (error) {
     console.error("❌ Error al registrar género y subgéneros:", error);
     res

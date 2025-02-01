@@ -22,19 +22,19 @@ import {
   editNews,
 } from "../../src/controllers/news.controller.js";
 
-import { 
+import {
   registerCategory,
   getCategoriesAndTags,
   getCategoryById,
-  editCategoryAndTags
+  editCategoryAndTags,
 } from "../../src/controllers/categories.controller.js";
 
-import{
+import {
   registerGenero,
   getGenerosAndSubgeneros,
   getGeneroById,
-  editGenero
-}from "../../src/controllers/generos.controller.js"
+  editGenero,
+} from "../../src/controllers/generos.controller.js";
 
 const router = Router();
 
