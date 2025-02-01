@@ -3,74 +3,76 @@ document.addEventListener("DOMContentLoaded", function () {
   const subcategorySelect = document.getElementById("modal-subcategory");
 
   if (!categorySelect || !subcategorySelect) {
-    console.error(
-      "No se encontraron los selectores de categoría o subcategoría en el DOM."
-    );
-    return;
+      console.error("❌ No se encontraron los selectores de categoría o subcategoría en el DOM.");
+      return;
   }
 
-  fetch("/categories")
-    .then((response) => response.json())
-    .then((categories) => {
-      //console.log("Categorías obtenidas:", categories);
-      categorySelect.innerHTML =
-        '<option value="" disabled selected hidden>Seleccione categoría</option>';
-      categories.forEach((category) => {
-        const option = document.createElement("option");
-        option.value = category.ID_LCAT;
-        option.textContent = category.NOMBRE_LCAT;
-        categorySelect.appendChild(option);
-      });
-    })
-    .catch((error) => console.error("Error al cargar las categorías:", error));
+  async function loadCategories() {
+      try {
+          const response = await fetch("/categories");
+          if (!response.ok) throw new Error("Error al cargar las categorías.");
+          const categories = await response.json();
+
+          categorySelect.innerHTML = '<option value="" disabled selected hidden>Seleccione categoría</option>';
+          categories.forEach(category => {
+              const option = document.createElement("option");
+              option.value = category.ID_LCAT;
+              option.textContent = category.NOMBRE_LCAT;
+              categorySelect.appendChild(option);
+          });
+
+          console.log("✅ Categorías cargadas correctamente.");
+      } catch (error) {
+          console.error("⚠️ Error al cargar categorías:", error);
+      }
+  }
+
+  async function loadSubcategories(categoryId) {
+      try {
+          if (!categoryId) return;
+          const response = await fetch(`/subcategories/${categoryId}`);
+          if (!response.ok) throw new Error("Error al cargar las subcategorías.");
+          const subcategories = await response.json();
+
+          subcategorySelect.innerHTML = '<option value="" disabled selected hidden>Seleccione subcategoría</option>';
+          subcategories.forEach(subcategory => {
+              const option = document.createElement("option");
+              option.value = subcategory.ID_SBC;
+              option.textContent = subcategory.NOMBRE_SBC;
+              subcategorySelect.appendChild(option);
+          });
+
+          console.log("✅ Subcategorías cargadas correctamente.");
+      } catch (error) {
+          console.error("⚠️ Error al cargar subcategorías:", error);
+      }
+  }
+
+  loadCategories();
 
   categorySelect.addEventListener("change", function () {
-    const categoryId = this.value;
-    //console.log("Categoría seleccionada:", categoryId);
-
-    fetch(`/subcategories/${categoryId}`)
-      .then((response) => response.json())
-      .then((subcategories) => {
-        //console.log("Subcategorías obtenidas:", subcategories);
-        subcategorySelect.innerHTML =
-          '<option value="" disabled selected hidden>Seleccione subcategoría</option>';
-        subcategories.forEach((subcategory) => {
-          const option = document.createElement("option");
-          option.value = subcategory.ID_SBC;
-          option.textContent = subcategory.NOMBRE_SBC;
-          subcategorySelect.appendChild(option);
-        });
-      })
-      .catch((error) =>
-        console.error("Error al cargar las subcategorías:", error)
-      );
+      loadSubcategories(this.value);
   });
 
   let table = $("#productsTable").DataTable({
-    columnDefs: [
-      { targets: [6], visible: true },
-      { targets: [7], visible: true },
-    ],
-    language: {
-      lengthMenu: "Mostrar _MENU_ registros por página",
-      zeroRecords: "No se encontraron productos",
-      info: "Mostrando _START_ a _END_ de _TOTAL_ productos",
-      infoEmpty: "No hay productos disponibles",
-      infoFiltered: "(filtrado de _MAX_ productos en total)",
-      search: "Buscar:",
-      paginate: {
-        first: "Primero",
-        last: "Último",
-        next: "Siguiente",
-        previous: "Anterior",
+      columnDefs: [{ targets: [6], visible: true }, { targets: [7], visible: true }],
+      language: {
+          lengthMenu: "Mostrar _MENU_ registros por página",
+          zeroRecords: "No se encontraron productos",
+          info: "Mostrando _START_ a _END_ de _TOTAL_ productos",
+          infoEmpty: "No hay productos disponibles",
+          infoFiltered: "(filtrado de _MAX_ productos en total)",
+          search: "Buscar:",
+          paginate: { first: "Primero", last: "Último", next: "Siguiente", previous: "Anterior" },
       },
-    },
   });
 
   $("#productsTable tbody").on("click", "tr", async function () {
-    const rowData = table.row(this).data();
+      const rowData = table.row(this).data();
+      if (!rowData) return;
 
-    if (rowData) {
+      console.log("🔹 Datos de la fila seleccionada:", rowData);
+
       $("#modal-id").val(rowData[0]);
       $("#modal-name").val(rowData[1]);
       $("#modal-autor").val(rowData[2]);
@@ -82,78 +84,58 @@ document.addEventListener("DOMContentLoaded", function () {
       const subcategoryName = rowData[7];
 
       const estadoHtml = rowData[8]?.trim();
-      //console.log("Estado actual del producto (con etiquetas):", estadoHtml);
-
       const estado = estadoHtml.replace(/<[^>]+>/g, "").trim();
-      //console.log("Estado actual del producto (limpio):", estado);
+      const isActive = estado === "Disponible";
+      $("#modal-active").prop("checked", isActive);
+      $("#cb5").prop("checked", isActive);
 
-      if (estado === "Disponible") {
-        $("#modal-active").prop("checked", true);
-        $("#cb5").prop("checked", true);
-        //console.log("El producto está marcado como 'Disponible'.");
-      } else if (estado === "No Disponible") {
-        $("#modal-active").prop("checked", false);
-        $("#cb5").prop("checked", false);
-        //console.log("El producto está marcado como 'No Disponible'.");
-      } else {
-        console.warn("Estado desconocido o inválido:", estado);
-      }
+      await loadCategories();
       await selectCategoryAndSubcategory(categoryName, subcategoryName);
 
-      $("#modal-register-product").modal("show");
-    }
-  });
-
-  const selectCategoryAndSubcategory = async (
-    categoryName,
-    subcategoryName
-  ) => {
-    try {
-      const categoryOption = Array.from(categorySelect.options).find(
-        (option) => option.textContent === categoryName
-      );
-
-      if (categoryOption) {
-        categorySelect.value = categoryOption.value;
-
-        const response = await fetch(`/subcategories/${categoryOption.value}`);
-        if (response.ok) {
-          const subcategories = await response.json();
-          //console.log("Subcategorías obtenidas:", subcategories);
-          subcategorySelect.innerHTML =
-            '<option value="" disabled selected hidden>Seleccione subcategoría</option>';
-          subcategories.forEach((subcategory) => {
-            const option = document.createElement("option");
-            option.value = subcategory.ID_SBC;
-            option.textContent = subcategory.NOMBRE_SBC;
-            subcategorySelect.appendChild(option);
+      let imageUrl = rowData[9] ? rowData[9].trim() : "/assets/img/default-placeholder.jpg";
+      if (imageUrl.includes("<img")) {
+          imageUrl = imageUrl.replace(/<img[^>]+src=['"]([^'"]+)['"][^>]*>/, "$1");
+      }
+      $("#preview-product").attr("src", imageUrl)
+          .css({ display: "block", visibility: "visible", width: "100%", height: "auto" })
+          .off("error")
+          .on("error", function () {
+              if ($(this).attr("src") !== "/assets/img/default-placeholder.jpg") {
+                  console.log("⚠️ Imagen no encontrada, usando placeholder.");
+                  $(this).attr("src", "/assets/img/default-placeholder.jpg");
+              }
           });
 
-          const subcategoryOption = Array.from(subcategorySelect.options).find(
-            (option) => option.textContent === subcategoryName
-          );
+      $("#modal-register-product").modal("show");
+  });
 
-          if (subcategoryOption) {
-            subcategorySelect.value = subcategoryOption.value;
+  async function selectCategoryAndSubcategory(categoryName, subcategoryName) {
+      try {
+          await new Promise(resolve => setTimeout(resolve, 500));
+
+          const categoryOption = Array.from(categorySelect.options).find(option => option.textContent === categoryName);
+          if (!categoryOption) {
+              console.error("❌ Categoría no encontrada:", categoryName);
+              return;
           }
-        } else {
-          console.error(
-            "Error al cargar las subcategorías:",
-            response.statusText
-          );
-        }
-      } else {
-        console.error("Categoría no encontrada:", categoryName);
+
+          categorySelect.value = categoryOption.value;
+          await loadSubcategories(categoryOption.value);
+
+          const subcategoryOption = Array.from(subcategorySelect.options).find(option => option.textContent === subcategoryName);
+          if (subcategoryOption) {
+              subcategorySelect.value = subcategoryOption.value;
+          }
+
+          console.log("✅ Categoría y subcategoría seleccionadas correctamente.");
+      } catch (error) {
+          console.error("⚠️ Error al cargar categoría y subcategorías:", error);
       }
-    } catch (error) {
-      console.error("Error al cargar categoría y subcategorías:", error);
-    }
-  };
+  }
+
+  function updateCheckboxState() {
+      const visibleCheckbox = document.getElementById("cb5");
+      const hiddenCheckbox = document.getElementById("modal-active");
+      hiddenCheckbox.checked = visibleCheckbox.checked;
+  }
 });
-
-function updateCheckboxState() {
-  const visibleCheckbox = document.getElementById("cb5");
-  const hiddenCheckbox = document.getElementById("modal-active");
-
-  hiddenCheckbox.checked = visibleCheckbox.checked;
-}
