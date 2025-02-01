@@ -100,6 +100,7 @@
                 <th>Categoría</th>
                 <th>Subcategoría</th>
                 <th>Estado</th>
+                <th>Imagen</th>
             </tr>
         </thead>
         <tbody>
@@ -113,12 +114,27 @@
                 <td>{{STOCK_LIB}}</td>
                 <td>{{CATEGORIA}}</td>
                 <td>{{SUBCATEGORIA}}</td>
-                <td>{{#if ACTIVO_LIB}}<span style="color:green;">Disponible</span>{{else}}<span style="color:red;">No
-                        Disponible</span>{{/if}}</td>
+                <td>
+                    {{#if ACTIVO_LIB}}
+                    <span style="color:green;">Disponible</span>
+                    {{else}}
+                    <span style="color:red;">No Disponible</span>
+                    {{/if}}
+                </td>
+                <td>
+                    {{#if IMG_LIB}}
+                    <img src="{{IMG_LIB}}" alt="Imagen Producto" style="width: 50px; height: 50px; border-radius: 5px;">
+                    {{else}}
+                    <img src="/assets/img/default-placeholder.jpg" alt="Sin imagen"
+                        style="width: 50px; height: 50px; border-radius: 5px;">
+                    {{/if}}
+                </td>
+
             </tr>
             {{/each}}
         </tbody>
     </table>
+
 
 </section>
 
@@ -135,12 +151,10 @@
             <div class="modal-body">
                 <div class="modal-flex-container" class="form">
 
-                    <form id="form-update-product" class="modal-register">
+                    <form id="form-update-product" class="modal-register" method="POST" enctype="multipart/form-data">
                         <input type="hidden" id="modal-id" name="ID_LIB" />
 
-
                         <div class="flex">
-
                             <label>
                                 <input id="modal-name" name="NOMBRE_LIB" class="input" type="text" placeholder=""
                                     required>
@@ -168,34 +182,29 @@
                                     style="margin-bottom: 5px;">
                                     <option value="" disabled selected hidden>Subcategoría</option>
                                 </select>
-
                             </div>
-
                         </div>
 
                         <div class="flex">
                             <div class="left-fields-modal">
-
                                 <label>
                                     <input id="modal-isbn" class="input" name="ISBN_LIB" type="input" placeholder=""
-                                        required="">
+                                        required>
                                     <span>ISBN</span>
                                 </label>
 
                                 <label>
                                     <input id="modal-stock" class="input" name="STOCK_LIB" type="input" placeholder=""
-                                        required="">
+                                        required>
                                     <span>Cantidad</span>
                                 </label>
-
                             </div>
 
                             <label class="custum-file-upload">
                                 <ion-icon name="cloud-upload-outline"></ion-icon>
                                 <div class="text">Click aquí para subir una imagen</div>
-                                <input type="file" id="modal-file" accept="image/*" onchange="previewImage(event)">
+                                <input type="file" id="modal-file" name="IMG_LIB" accept="image/*">
                             </label>
-
                         </div>
 
                         <div class="flex">
@@ -212,7 +221,7 @@
 
                     <div class="image-preview">
                         <i class="placeholder-icon uil uil-image-search"></i>
-                        <img src="" alt="Vista previa de la imagen">
+                        <img id="preview-product" src="" alt="Vista previa de la imagen">
                     </div>
 
                 </div>

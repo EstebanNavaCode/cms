@@ -1,64 +1,39 @@
-document
-  .getElementById("form-register-product")
-  .addEventListener("submit", async function (event) {
-    event.preventDefault();
+document.getElementById("form-register-product").addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    const CATEGORIA_LIB = document.getElementById("category").value;
-    const SUBCATEGORIA_LIB = document.getElementById("subcategory").value;
-    const ISBN_LIB = document.getElementById("isbn").value;
-    const NOMBRE_LIB = document.getElementById("name").value;
-    const AUTOR_LIB = document.getElementById("autor").value;
-    const EDITORIAL_LIB = document.getElementById("lastname").value;
-    const STOCK_LIB = document.getElementById("stock").value;
+  const formData = new FormData();
+  formData.append("CATEGORIA_LIB", document.getElementById("category").value);
+  formData.append("SUBCATEGORIA_LIB", document.getElementById("subcategory").value);
+  formData.append("ISBN_LIB", document.getElementById("isbn").value);
+  formData.append("NOMBRE_LIB", document.getElementById("name").value);
+  formData.append("AUTOR_LIB", document.getElementById("autor").value);
+  formData.append("EDITORIAL_LIB", document.getElementById("lastname").value);
+  formData.append("STOCK_LIB", document.getElementById("stock").value);
 
-    if (
-      !CATEGORIA_LIB ||
-      !SUBCATEGORIA_LIB ||
-      !ISBN_LIB ||
-      !NOMBRE_LIB ||
-      !AUTOR_LIB ||
-      !EDITORIAL_LIB ||
-      !STOCK_LIB
-    ) {
-      alert("Por favor, completa todos los campos obligatorios.");
-      return;
-    }
+  const fileInput = document.getElementById("file"); // Capturar la imagen
+  if (fileInput.files.length > 0) {
+      formData.append("IMG_LIB", fileInput.files[0]); // Adjuntar la imagen al formulario
+  }
 
-    try {
+  try {
       const response = await fetch("/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ISBN_LIB,
-          NOMBRE_LIB,
-          AUTOR_LIB,
-          EDITORIAL_LIB,
-          STOCK_LIB,
-          CATEGORIA_LIB,
-          SUBCATEGORIA_LIB,
-        }),
+          method: "POST",
+          body: formData, // Enviar como FormData
       });
 
       if (response.ok) {
-        const result = await response.json();
-        alert(result.message || "Producto registrado exitosamente.");
-
-        window.location.href = "/products";
-
-        document.getElementById("form-register-product").reset();
+          const result = await response.json();
+          alert(result.message || "Producto registrado exitosamente.");
+          window.location.href = "/products";
       } else {
-        const errorResult = await response.json();
-        alert(
-          errorResult.message || "Ocurrió un error al registrar el producto."
-        );
+          const errorResult = await response.json();
+          alert(errorResult.message || "Ocurrió un error al registrar el producto.");
       }
-    } catch (err) {
+  } catch (err) {
       console.error("Error:", err);
       alert("Ocurrió un error al procesar el registro del producto.");
-    }
-  });
+  }
+});
 
 const loadCategories = async () => {
   try {
@@ -109,68 +84,40 @@ document.getElementById("category").addEventListener("change", (e) => {
 
 document.addEventListener("DOMContentLoaded", loadCategories);
 
-document
-  .getElementById("form-update-product")
-  .addEventListener("submit", async function (event) {
-    event.preventDefault();
+document.getElementById("form-update-product").addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    const ID_LIB = document.getElementById("modal-id").value.trim();
-    const NOMBRE_LIB = document.getElementById("modal-name").value.trim();
-    const AUTOR_LIB = document.getElementById("modal-autor").value.trim();
-    const EDITORIAL_LIB = document
-      .getElementById("modal-editorial")
-      .value.trim();
-    const ISBN_LIB = document.getElementById("modal-isbn").value.trim();
-    const STOCK_LIB = document.getElementById("modal-stock").value.trim();
-    const CATEGORIA_LIB = document
-      .getElementById("modal-category")
-      .value.trim();
-    const SUBCATEGORIA_LIB = document
-      .getElementById("modal-subcategory")
-      .value.trim();
-    const ACTIVO_LIB = document.getElementById("modal-active").checked;
+  const productId = document.getElementById("modal-id").value; 
+  const formData = new FormData(this); 
 
-    console.log("Datos enviados al backend:", {
-      ID_LIB,
-      NOMBRE_LIB,
-      AUTOR_LIB,
-      EDITORIAL_LIB,
-      ISBN_LIB,
-      STOCK_LIB,
-      CATEGORIA_LIB,
-      SUBCATEGORIA_LIB,
-      ACTIVO_LIB,
-    });
-
-    try {
-      const response = await fetch(`/products/${ID_LIB}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          NOMBRE_LIB,
-          AUTOR_LIB,
-          EDITORIAL_LIB,
-          ISBN_LIB,
-          STOCK_LIB,
-          CATEGORIA_LIB,
-          SUBCATEGORIA_LIB,
-          ACTIVO_LIB,
-        }),
+  try {
+      const response = await fetch(`/products/${productId}`, { 
+          method: "PUT",
+          body: formData
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        alert(result.message || "Producto actualizado exitosamente.");
-        location.reload();
-      } else {
-        const error = await response.json();
-        console.error("Error del servidor:", error);
-        alert(error.message || "Error al actualizar producto.");
+      if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
       }
-    } catch (err) {
-      console.error("Error en la solicitud:", err);
-      alert("Ocurrió un error inesperado.");
-    }
-  });
+
+      const result = await response.json();
+      //console.log("✅ Producto actualizado:", result);
+
+      $("#modal-register-product").modal("hide"); 
+      location.reload(); 
+  } catch (error) {
+      //console.error("⚠️ Error al actualizar producto:", error);
+  }
+});
+
+
+document.getElementById("modal-file").addEventListener("change", function(event) {
+  const file = event.target.files[0];
+  if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+          document.getElementById("preview-product").src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+  }
+});
