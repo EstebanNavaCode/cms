@@ -19,7 +19,8 @@
             </div>
 
             <div class="form-container">
-                <form id="form-register-news" method="POST" class="form" action="/news">
+                <form id="form-register-news" method="POST" class="form" action="/news" enctype="multipart/form-data">
+
                     <p class="title2">Formulario de registro</p>
                     <p class="message"></p>
 
@@ -90,7 +91,7 @@
             <tbody>
                 {{#each news}}
                 <tr data-id="{{ID_NOT}}" data-category-id="{{ID_CATEGORIA}}" data-label-id="{{ID_ETIQUETA}}"
-                    data-active="{{ACTIVO_NOT}}">
+                    data-active="{{ACTIVO_NOT}}" data-image="{{IMG_NOT}}">
                     <td>{{ID_NOT}}</td>
                     <td>{{TITULO_NOT}}</td>
                     <td>{{TEXTO_NOT}}</td>
@@ -105,9 +106,10 @@
                         {{/if}}
                     </td>
                 </tr>
-
                 {{/each}}
             </tbody>
+
+
 
         </table>
     </div>
@@ -127,7 +129,8 @@
                 <div class="modal-flex-container">
                     <input type="hidden" id="edit-id" name="ID_NOT" />
                     <div class="modal-register">
-                        <form id="form-edit-news" method="POST" class="-modal-form" action="/news/:id">
+                        <form id="form-edit-news" method="POST" class="-modal-form" action="/news/:id"
+                            enctype="multipart/form-data">
                             <label>
                                 <input id="edit-title" name="TITULO_NOT" class="input" type="text" placeholder=""
                                     required>
@@ -185,8 +188,9 @@
                         <label class="custum-file-upload-modal">
                             <ion-icon name="cloud-upload-outline"></ion-icon>
                             <div class="text">Haz clic aquí para subir una imagen</div>
-                            <input type="file" accept="image/*" onchange="previewImage(event)">
+                            <input type="file" id="edit-file" accept="image/*">
                         </label>
+
                     </div>
                 </div>
 
