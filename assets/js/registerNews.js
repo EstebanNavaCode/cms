@@ -1,55 +1,36 @@
-document
-  .getElementById("form-register-news")
-  .addEventListener("submit", async function (event) {
-    event.preventDefault();
-    console.log("Formulario enviado");
+document.getElementById("form-register-news").addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    const TITULO_NOT = document.getElementById("name").value;
-    const TEXTO_NOT = document.getElementById("autor").value;
-    const CATEGORIA_NOT = document.getElementById("categoryNEWS").value;
-    const ETIQUETA_NOT = document.getElementById("labelNEWS").value;
-    const FECHA_PUBLICAR_NOT = document.getElementById("isbn").value;
+  const formData = new FormData(this);
+  const fileInput = document.getElementById("file");
 
-    if (
-      !TITULO_NOT ||
-      !TEXTO_NOT ||
-      !CATEGORIA_NOT ||
-      !FECHA_PUBLICAR_NOT ||
-      !ETIQUETA_NOT
-    ) {
-      alert("Por favor, completa todos los campos obligatorios.");
-      return;
+  if (fileInput.files.length > 0) {
+    formData.append("IMG_NOT", fileInput.files[0]);
+  }
+
+  // 🔹 Agregar `ACTIVO_NOT` con valor por defecto `1`
+  formData.append("ACTIVO_NOT", 1);
+
+  try {
+    const response = await fetch("/news", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.ok) {
+      alert("Noticia registrada exitosamente.");
+      document.getElementById("form-register-news").reset();
+      window.location.reload();
+    } else {
+      alert("Error al registrar noticia.");
     }
+  } catch (err) {
+    console.error("Error:", err);
+    alert("Ocurrió un error al procesar el registro de la noticia.");
+  }
+});
 
-    try {
-      const response = await fetch("/news", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          TITULO_NOT,
-          TEXTO_NOT,
-          CATEGORIA_NOT,
-          ETIQUETA_NOT,
-          FECHA_PUBLICAR_NOT,
-        }),
-      });
 
-      if (response.ok) {
-        const result = await response.json();
-        alert(result.message || "Producto registrado exitosamente.");
-        document.getElementById("form-register-news").reset();
-        window.location.reload();
-      } else {
-        const error = await response.json();
-        alert(error.message || "Error al registrar producto.");
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Ocurrió un error al procesar el registro del producto.");
-    }
-  });
 
 const loadCategoriesNEWS = async () => {
   try {
@@ -113,48 +94,34 @@ document
   .addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const ID_NOT = document.getElementById("edit-id").value.trim();
-    const TITULO_NOT = document.getElementById("edit-title").value.trim();
-    const TEXTO_NOT = document.getElementById("edit-text").value.trim();
-    const FECHA_PUBLICAR_NOT = document
-      .getElementById("edit-date")
-      .value.trim();
-    const CATEGORIA_NOT = document
-      .getElementById("edit-categoryNEWS")
-      .value.trim();
-    const ETIQUETA_NOT = document.getElementById("edit-labelNEWS").value.trim();
-    const ACTIVO_NOT = document.getElementById("modal-active").value.trim();
+    const formData = new FormData(this);
+    const fileInput = document.getElementById("edit-file");
+
+    if (fileInput && fileInput.files.length > 0) {
+      formData.append("IMG_NOT", fileInput.files[0]);
+    }
+
+    const ID_NOT = document.getElementById("edit-id").value;
 
     try {
       const response = await fetch(`/news/${ID_NOT}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          TITULO_NOT,
-          TEXTO_NOT,
-          FECHA_PUBLICAR_NOT,
-          CATEGORIA_NOT,
-          ETIQUETA_NOT,
-          ACTIVO_NOT,
-        }),
+        body: formData,
       });
 
       if (response.ok) {
-        const result = await response.json();
-        alert(result.message || "Noticia editada exitosamente.");
+        alert("Noticia editada exitosamente.");
         location.reload();
       } else {
-        const error = await response.json();
-        console.error("Error del servidor:", error);
-        alert(error.message || "Error al editar noticia.");
+        alert("Error al editar noticia.");
       }
     } catch (err) {
       console.error("Error en la solicitud:", err);
       alert("Ocurrió un error inesperado.");
     }
   });
+
+
 
 function updateCheckboxState() {
   const checkbox = document.getElementById("cb5");

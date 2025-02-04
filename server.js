@@ -31,8 +31,10 @@ app.use(fileUpload());
 
 // Static files
 app.use("/assets", express.static(path.join(__dirname, "assets")));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/uploads/pics", express.static(path.join(process.cwd(), "uploads/pics")));
 app.use("/uploads/products", express.static(path.join(process.cwd(), "uploads/products")));
+app.use("/uploads/news", express.static(path.join(process.cwd(), "uploads/news")));
 
 
 
