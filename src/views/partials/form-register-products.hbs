@@ -57,12 +57,12 @@
                         <div class="left-fields">
 
                             <label>
-                                <input id="isbn" class="input" name="ISBN_LIB" type="input" placeholder="" required="">
+                                <input id="isbn" class="input" name="ISBN_LIB" type="number" placeholder="" required="">
                                 <span>ISBN</span>
                             </label>
 
                             <label>
-                                <input id="stock" class="input" name="STOCK_LIB" type="input" placeholder=""
+                                <input id="stock" class="input" name="STOCK_LIB" type="number" placeholder=""
                                     required="">
                                 <span>Cantidad</span>
                             </label>
@@ -188,13 +188,13 @@
                         <div class="flex">
                             <div class="left-fields-modal">
                                 <label>
-                                    <input id="modal-isbn" class="input" name="ISBN_LIB" type="input" placeholder=""
+                                    <input id="modal-isbn" class="input" name="ISBN_LIB" type="number" placeholder=""
                                         required>
                                     <span>ISBN</span>
                                 </label>
 
                                 <label>
-                                    <input id="modal-stock" class="input" name="STOCK_LIB" type="input" placeholder=""
+                                    <input id="modal-stock" class="input" name="STOCK_LIB" type="number" placeholder=""
                                         required>
                                     <span>Cantidad</span>
                                 </label>
@@ -209,10 +209,13 @@
 
                         <div class="flex">
                             <div class="checkbox-wrapper-10">
+                                <input type="hidden" name="ACTIVO_LIB" value="0">
                                 <input id="modal-active" name="ACTIVO_LIB" type="checkbox" hidden>
                                 <input type="checkbox" id="cb5" class="tgl tgl-flip" onchange="updateCheckboxState()">
                                 <label for="cb5" data-tg-on="Disponible" data-tg-off="No Disponible"
                                     class="tgl-btn"></label>
+
+
                             </div>
 
                             <button class="submit" type="submit">Guardar cambios</button>

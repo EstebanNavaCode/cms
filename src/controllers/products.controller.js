@@ -160,6 +160,9 @@ export const editProduct = async (req, res) => {
       return res.status(400).json({ message: "ID del producto es requerido." });
     }
 
+    // Convertir el estado del checkbox en un booleano para SQL
+    const estadoProducto = ACTIVO_LIB === "1" ? 1 : 0;
+
     const pool = await getConnection();
 
     const result = await pool
@@ -196,7 +199,7 @@ export const editProduct = async (req, res) => {
       .input("STOCK_LIB", sql.Int, STOCK_LIB)
       .input("CATEGORIA_LIB", sql.Int, CATEGORIA_LIB)
       .input("SUBCATEGORIA_LIB", sql.Int, SUBCATEGORIA_LIB)
-      .input("ACTIVO_LIB", sql.Bit, ACTIVO_LIB)
+      .input("ACTIVO_LIB", sql.Bit, estadoProducto)  // ✅ Corregido
       .input("IMG_LIB", sql.NVarChar(300), imgFilename).query(`
               UPDATE LIB_T_
               SET 

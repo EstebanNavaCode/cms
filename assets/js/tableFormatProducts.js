@@ -157,9 +157,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function updateCheckboxState() {
-    const visibleCheckbox = document.getElementById("cb5");
-    const hiddenCheckbox = document.getElementById("modal-active");
-    hiddenCheckbox.checked = visibleCheckbox.checked;
-  }
 });

@@ -130,4 +130,19 @@ document
       };
       reader.readAsDataURL(file);
     }
+
+
+function updateCheckboxState() {
+    const visibleCheckbox = document.getElementById("cb5");
+    const hiddenCheckbox = document.getElementById("modal-active");
+
+    if (visibleCheckbox.checked) {
+        hiddenCheckbox.value = "1";  // Enviar como "1" si está marcado
+    } else {
+        hiddenCheckbox.value = "0";  // Enviar como "0" si está desmarcado
+    }
+    hiddenCheckbox.checked = visibleCheckbox.checked;
+}
+
+
   });
