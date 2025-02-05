@@ -34,7 +34,7 @@ $(document).ready(function () {
       let rowData = table.row(this).data();
       if (!rowData) return;
 
-      console.log("🔹 Datos de la fila seleccionada:", rowData);
+      //console.log("🔹 Datos de la fila seleccionada:", rowData);
 
       $("#modal-id").val(rowData[0] || "");
       $("#modal-name").val(rowData[1] || "");
@@ -48,7 +48,7 @@ $(document).ready(function () {
       $("#modal-active").prop("checked", isActive);
       $("#cb5").prop("checked", isActive);
 
-      console.log("🟡 Valor original de rowData[7]:", rowData[7]);
+      //console.log("🟡 Valor original de rowData[7]:", rowData[7]);
 
       let imageUrl = rowData[7] ? rowData[7].trim() : "";
 
@@ -57,21 +57,21 @@ $(document).ready(function () {
           /<img[^>]+src=['"]([^'"]+)['"][^>]*>/,
           "$1"
         );
-        console.log(
+       /* console.log(
           "🔵 Imagen corregida tras eliminar etiquetas HTML:",
           imageUrl
-        );
+        );*/
       }
 
       if (!imageUrl || imageUrl === "NULL") {
         imageUrl = "/assets/img/default-placeholder.jpg";
-        console.log("🟠 No se encontró imagen, usando placeholder.");
+        //console.log("🟠 No se encontró imagen, usando placeholder.");
       } else if (!imageUrl.startsWith("/uploads/pics/")) {
         imageUrl = `/uploads/pics/${imageUrl.replace("uploads/pics/", "")}`;
-        console.log("🟢 Imagen corregida con ruta completa:", imageUrl);
+        //console.log("🟢 Imagen corregida con ruta completa:", imageUrl);
       }
 
-      console.log("✅ URL final de la imagen en el modal:", imageUrl);
+      //console.log("✅ URL final de la imagen en el modal:", imageUrl);
 
       // **Corrección: Asegurar que la imagen sea visible**
       $("#preview-user")

@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
         categorySelect.appendChild(option);
       });
 
-      console.log("✅ Categorías cargadas correctamente.");
+      //console.log("✅ Categorías cargadas correctamente.");
     } catch (error) {
       console.error("⚠️ Error al cargar categorías:", error);
     }
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
         subcategorySelect.appendChild(option);
       });
 
-      console.log("✅ Subcategorías cargadas correctamente.");
+      //console.log("✅ Subcategorías cargadas correctamente.");
     } catch (error) {
       console.error("⚠️ Error al cargar subcategorías:", error);
     }
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const rowData = table.row(this).data();
     if (!rowData) return;
 
-    console.log("🔹 Datos de la fila seleccionada:", rowData);
+    //console.log("🔹 Datos de la fila seleccionada:", rowData);
 
     $("#modal-id").val(rowData[0]);
     $("#modal-name").val(rowData[1]);
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .off("error")
       .on("error", function () {
         if ($(this).attr("src") !== "/assets/img/default-placeholder.jpg") {
-          console.log("⚠️ Imagen no encontrada, usando placeholder.");
+          //console.log("⚠️ Imagen no encontrada, usando placeholder.");
           $(this).attr("src", "/assets/img/default-placeholder.jpg");
         }
       });
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
         subcategorySelect.value = subcategoryOption.value;
       }
 
-      console.log("✅ Categoría y subcategoría seleccionadas correctamente.");
+      //console.log("✅ Categoría y subcategoría seleccionadas correctamente.");
     } catch (error) {
       console.error("⚠️ Error al cargar categoría y subcategorías:", error);
     }

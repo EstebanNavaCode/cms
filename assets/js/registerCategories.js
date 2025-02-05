@@ -122,11 +122,11 @@ document.addEventListener("DOMContentLoaded", () => {
           etq.NOMBRE_ETQ.trim() !== ""
       );
 
-      console.log("📤 Enviando datos de categoría:", {
+      /*console.log("📤 Enviando datos de categoría:", {
         nombre,
         descripcion,
         subcategorias,
-      });
+      });*/
 
       try {
         const response = await fetch("/categorias", {
@@ -186,13 +186,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .value.trim();
       const activo = document.getElementById("cb5").checked ? 1 : 0;
 
-      console.log("📤 Enviando actualización:", {
+      /*console.log("📤 Enviando actualización:", {
         id,
         nombre,
         descripcion,
         activo,
         etiquetas,
-      });
+      });*/
 
       try {
         const response = await fetch(`/categorias/${id}`, {

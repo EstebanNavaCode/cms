@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("IMG_USR", fileInput.files[0]); // Aquí enviamos la imagen correctamente
       }
 
-      console.log("Cuerpo de la solicitud a enviar:", formData);
+      //console.log("Cuerpo de la solicitud a enviar:", formData);
 
       try {
         const response = await fetch("/users", {

@@ -121,7 +121,7 @@ export const getNews = async (req, res) => {
           LEFT JOIN ETIQUETA_NOT_T E ON N.ETIQUETA_NOT = E.ID_ETQ
       `);
 
-      console.log("Noticias cargadas desde la BD:", result.recordset);
+      //console.log("Noticias cargadas desde la BD:", result.recordset);
 
       res.render("news/news", { news: result.recordset });
   } catch (error) {

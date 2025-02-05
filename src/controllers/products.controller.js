@@ -142,7 +142,7 @@ export const getProducts = async (req, res) => {
 export const editProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("🔹 ID recibido en el backend:", id);
+    //console.log("🔹 ID recibido en el backend:", id);
 
     const {
       NOMBRE_LIB,
