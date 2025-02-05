@@ -119,30 +119,29 @@ document
     }
   });
 
-document
-  .getElementById("modal-file")
-  .addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        document.getElementById("preview-product").src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-
 function updateCheckboxState() {
-    const visibleCheckbox = document.getElementById("cb5");
-    const hiddenCheckbox = document.getElementById("modal-active");
+  const visibleCheckbox = document.getElementById("cb5");
+  const hiddenCheckbox = document.getElementById("modal-active");
 
-    if (visibleCheckbox.checked) {
-        hiddenCheckbox.value = "1";  // Enviar como "1" si está marcado
-    } else {
-        hiddenCheckbox.value = "0";  // Enviar como "0" si está desmarcado
-    }
-    hiddenCheckbox.checked = visibleCheckbox.checked;
+  if (visibleCheckbox.checked) {
+    hiddenCheckbox.value = "1"; 
+  } else {
+    hiddenCheckbox.value = "0"; 
+  }
+
+  hiddenCheckbox.checked = visibleCheckbox.checked;
 }
 
+document.getElementById("modal-file").addEventListener("change", function (event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      document.getElementById("preview-product").src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
 
-  });
+document.getElementById("cb5").addEventListener("change", updateCheckboxState);
+
