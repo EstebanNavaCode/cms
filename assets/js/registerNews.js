@@ -8,7 +8,6 @@ document.getElementById("form-register-news").addEventListener("submit", async f
     formData.append("IMG_NOT", fileInput.files[0]);
   }
 
-  // 🔹 Agregar `ACTIVO_NOT` con valor por defecto `1`
   formData.append("ACTIVO_NOT", 1);
 
   try {
@@ -18,16 +17,35 @@ document.getElementById("form-register-news").addEventListener("submit", async f
     });
 
     if (response.ok) {
-      alert("Noticia registrada exitosamente.");
-      document.getElementById("form-register-news").reset();
-      window.location.reload();
+      Swal.fire({
+        icon: "success",
+        title: "Registro exitoso",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        document.getElementById("form-register-news")?.reset();
+        window.location.reload();
+      });
     } else {
-      alert("Error al registrar noticia.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Algo salió mal, intente de nuevo en un momento.",
+          showConfirmButton: false,
+          timer: 1500,
+      });
     }
-  } catch (err) {
+} catch (err) {
     console.error("Error:", err);
-    alert("Ocurrió un error al procesar el registro de la noticia.");
-  }
+    Swal.fire({
+      icon: "error",
+      title: "Error de conexión",
+      text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+}
+
 });
 
 
@@ -110,18 +128,35 @@ document
       });
 
       if (response.ok) {
-        alert("Noticia editada exitosamente.");
-        location.reload();
+        Swal.fire({
+          icon: "success",
+          title: "NOticia actualizada",
+          text: result.message,
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          window.location.reload();
+        });
       } else {
-        alert("Error al editar noticia.");
+        Swal.fire({
+          icon: "error",
+          title: "Error al actualizar",
+          text: "Algo salió mal, intente de nuevo en un momento.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (err) {
-      console.error("Error en la solicitud:", err);
-      alert("Ocurrió un error inesperado.");
+      Swal.fire({
+        icon: "error",
+        title: "Error de conexión",
+        text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log("Error:", err);
     }
   });
-
-
 
 function updateCheckboxState() {
   const checkbox = document.getElementById("cb5");
