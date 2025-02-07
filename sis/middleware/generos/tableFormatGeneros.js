@@ -53,7 +53,14 @@ $(document).ready(function () {
           $("#modal-edit-genero").modal("show");
         }
       } catch (error) {
-        console.error("❌ Error al cargar datos:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error al cargar los datos",
+          text: "Algo salió mal, intente de nuevo en un momento.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
       }
     });
 
@@ -76,14 +83,32 @@ $(document).ready(function () {
 
         const result = await response.json();
         if (response.ok) {
-          alert("✅ Género actualizado con éxito");
-          location.reload();
+          Swal.fire({
+            icon: "success",
+            title: "Genero actualizado",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            window.location.reload();
+          });
         } else {
-          alert(result.message || "⚠️ Error al actualizar género.");
+          Swal.fire({
+            icon: "error",
+            title: "Error al actualizar",
+            text: "Algo salió mal, intente de nuevo en un momento.",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       } catch (error) {
-        console.error("❌ Error al enviar la solicitud:", error);
-        alert("Error inesperado. Inténtalo de nuevo.");
+        Swal.fire({
+          icon: "error",
+          title: "Error de conexión",
+          text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.error("Error:", err);
       }
     });
   });
@@ -178,14 +203,33 @@ $(document).ready(function () {
 
         const result = await response.json();
         if (response.ok) {
-          alert("✅ Género actualizado con éxito");
-          location.reload();
+          Swal.fire({
+            icon: "success",
+            title: "Genero actualizado",
+            text: result.message,
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            window.location.reload();
+          });
         } else {
-          alert(result.message || "⚠️ Error al actualizar género.");
+          Swal.fire({
+            icon: "error",
+            title: "Error al actualizar",
+            text: "Algo salió mal, intente de nuevo en un momento.",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       } catch (error) {
-        console.error("❌ Error al enviar la solicitud:", error);
-        alert("Error inesperado. Inténtalo de nuevo.");
+        Swal.fire({
+          icon: "error",
+          title: "Error de conexión",
+          text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.error("Error:", err);
       }
     });
   });

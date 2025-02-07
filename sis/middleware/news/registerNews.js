@@ -128,9 +128,10 @@ document
       });
 
       if (response.ok) {
+        const result = await response.json();
         Swal.fire({
           icon: "success",
-          title: "NOticia actualizada",
+          title: "Noticia actualizada",
           text: result.message,
           showConfirmButton: false,
           timer: 1500,

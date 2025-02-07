@@ -108,24 +108,26 @@ document.addEventListener("DOMContentLoaded", loadCategories);
 
 document
   .getElementById("form-update-product")
-  .addEventListener("submit", async function (event) {
+  .addEventListener("submit", function (event) {
     event.preventDefault();
+    
+    // 🔹 Asegurar que el estado del checkbox se refleje antes de enviar
+    updateCheckboxState();
 
     const productId = document.getElementById("modal-id").value;
     const formData = new FormData(this);
 
-    try {
-      const response = await fetch(`/products/${productId}`, {
-        method: "PUT",
-        body: formData,
-      });
-    
+    fetch(`/products/${productId}`, {
+      method: "PUT",
+      body: formData,
+    })
+    .then(response => {
       if (!response.ok) {
         throw new Error(`Error en la solicitud: ${response.status}`);
       }
-    
-      const result = await response.json();
-    
+      return response.json();
+    })
+    .then(() => {
       Swal.fire({
         icon: "success",
         title: "Producto actualizado",
@@ -133,9 +135,10 @@ document
         timer: 1500,
       }).then(() => {
         $("#modal-register-product").modal("hide"); 
-        location.reload()
+        location.reload();
       });
-    } catch (error) {
+    })
+    .catch(error => {
       Swal.fire({
         icon: "error",
         title: "Error al actualizar",
@@ -143,22 +146,26 @@ document
         showConfirmButton: false,
         timer: 1500,
       });
-    }
+    });
   });
 
-function updateCheckboxState() {
-  const visibleCheckbox = document.getElementById("cb5");
-  const hiddenCheckbox = document.getElementById("modal-active");
 
-  if (visibleCheckbox.checked) {
-    hiddenCheckbox.value = "1"; 
-  } else {
-    hiddenCheckbox.value = "0"; 
+  function updateCheckboxState() {
+    const visibleCheckbox = document.getElementById("cb5");
+    const hiddenCheckbox = document.getElementById("modal-active");
+  
+    hiddenCheckbox.value = visibleCheckbox.checked ? "1" : "0"; 
+    hiddenCheckbox.checked = visibleCheckbox.checked;
   }
-
-  hiddenCheckbox.checked = visibleCheckbox.checked;
-}
-
+  
+  // 🔹 Asegurar que el estado del checkbox se carga correctamente al abrir el modal
+  document.getElementById("modal-register-product").addEventListener("show.bs.modal", () => {
+    const hiddenCheckbox = document.getElementById("modal-active");
+    const visibleCheckbox = document.getElementById("cb5");
+  
+    visibleCheckbox.checked = hiddenCheckbox.value === "1";
+  });
+  
 document.getElementById("modal-file").addEventListener("change", function (event) {
   const file = event.target.files[0];
   if (file) {

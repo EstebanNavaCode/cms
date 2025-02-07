@@ -82,31 +82,33 @@ document.addEventListener("DOMContentLoaded", function () {
   $("#productsTable tbody").on("click", "tr", async function () {
     const rowData = table.row(this).data();
     if (!rowData) return;
-
-    //console.log("🔹 Datos de la fila seleccionada:", rowData);
-
+  
     $("#modal-id").val(rowData[0]);
     $("#modal-name").val(rowData[1]);
     $("#modal-autor").val(rowData[2]);
     $("#modal-editorial").val(rowData[3]);
     $("#modal-isbn").val(rowData[4]);
     $("#modal-stock").val(rowData[5]);
-
+  
     const categoryName = rowData[6];
     const subcategoryName = rowData[7];
-
+  
+    // 🔹 Obtener el estado del producto desde la tabla
     const estadoHtml = rowData[8]?.trim();
     const estado = estadoHtml.replace(/<[^>]+>/g, "").trim();
     const isActive = estado === "Disponible";
-    $("#modal-active").prop("checked", isActive);
-    $("#cb5").prop("checked", isActive);
-
+  
+    // 🔹 Sincronizar valores de los checkboxes correctamente
+    const hiddenCheckbox = document.getElementById("modal-active");
+    const visibleCheckbox = document.getElementById("cb5");
+  
+    hiddenCheckbox.value = isActive ? "1" : "0";
+    visibleCheckbox.checked = isActive;
+  
     await loadCategories();
     await selectCategoryAndSubcategory(categoryName, subcategoryName);
-
-    let imageUrl = rowData[9]
-      ? rowData[9].trim()
-      : "/assets/img/default-placeholder.jpg";
+  
+    let imageUrl = rowData[9] ? rowData[9].trim() : "/assets/img/default-placeholder.jpg";
     if (imageUrl.includes("<img")) {
       imageUrl = imageUrl.replace(/<img[^>]+src=['"]([^'"]+)['"][^>]*>/, "$1");
     }
@@ -121,13 +123,13 @@ document.addEventListener("DOMContentLoaded", function () {
       .off("error")
       .on("error", function () {
         if ($(this).attr("src") !== "/assets/img/default-placeholder.jpg") {
-          //console.log("⚠️ Imagen no encontrada, usando placeholder.");
           $(this).attr("src", "/assets/img/default-placeholder.jpg");
         }
       });
-
+  
     $("#modal-register-product").modal("show");
   });
+  
 
   async function selectCategoryAndSubcategory(categoryName, subcategoryName) {
     try {

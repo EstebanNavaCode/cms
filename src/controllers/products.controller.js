@@ -142,8 +142,7 @@ export const getProducts = async (req, res) => {
 export const editProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    //console.log("🔹 ID recibido en el backend:", id);
-
+    
     const {
       NOMBRE_LIB,
       AUTOR_LIB,
@@ -152,7 +151,7 @@ export const editProduct = async (req, res) => {
       STOCK_LIB,
       CATEGORIA_LIB,
       SUBCATEGORIA_LIB,
-      ACTIVO_LIB,
+      ACTIVO_LIB, // Este valor puede venir vacío si el usuario no lo cambia
     } = req.body;
     const imgFile = req.files?.IMG_LIB;
 
@@ -160,15 +159,23 @@ export const editProduct = async (req, res) => {
       return res.status(400).json({ message: "ID del producto es requerido." });
     }
 
-    // Convertir el estado del checkbox en un booleano para SQL
-    const estadoProducto = ACTIVO_LIB === "1" ? 1 : 0;
-
     const pool = await getConnection();
 
+    // 🔹 Obtener el estado actual del producto antes de actualizar
     const result = await pool
       .request()
       .input("ID_LIB", sql.Int, id)
-      .query("SELECT IMG_LIB FROM LIB_T_ WHERE ID_LIB = @ID_LIB");
+      .query("SELECT ACTIVO_LIB, IMG_LIB FROM LIB_T_ WHERE ID_LIB = @ID_LIB");
+
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ message: "Producto no encontrado." });
+    }
+
+    // 🔹 Si no se envía el valor de ACTIVO_LIB, se mantiene el estado original
+    let estadoProducto = result.recordset[0].ACTIVO_LIB;
+    if (ACTIVO_LIB !== undefined) {
+      estadoProducto = ACTIVO_LIB === "1" ? 1 : 0;
+    }
 
     let imgFilename = result.recordset[0]?.IMG_LIB || null;
 
@@ -199,7 +206,7 @@ export const editProduct = async (req, res) => {
       .input("STOCK_LIB", sql.Int, STOCK_LIB)
       .input("CATEGORIA_LIB", sql.Int, CATEGORIA_LIB)
       .input("SUBCATEGORIA_LIB", sql.Int, SUBCATEGORIA_LIB)
-      .input("ACTIVO_LIB", sql.Bit, estadoProducto)  // ✅ Corregido
+      .input("ACTIVO_LIB", sql.Bit, estadoProducto) // ✅ Ahora se conserva correctamente
       .input("IMG_LIB", sql.NVarChar(300), imgFilename).query(`
               UPDATE LIB_T_
               SET 
@@ -218,8 +225,7 @@ export const editProduct = async (req, res) => {
     res.json({ message: "Producto actualizado correctamente." });
   } catch (error) {
     console.error("⚠️ Error al actualizar producto:", error);
-    res
-      .status(500)
-      .json({ message: "Ocurrió un error al actualizar el producto." });
+    res.status(500).json({ message: "Ocurrió un error al actualizar el producto." });
   }
 };
+
