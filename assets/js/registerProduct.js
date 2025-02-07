@@ -28,17 +28,32 @@ document
 
       if (response.ok) {
         const result = await response.json();
-        alert(result.message || "Producto registrado exitosamente.");
-        window.location.href = "/products";
+        Swal.fire({
+          icon: "success",
+          title: "Registro exitoso",
+          text: result.message,
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          window.location.reload();
+        });;
       } else {
-        const errorResult = await response.json();
-        alert(
-          errorResult.message || "Ocurrió un error al registrar el producto."
-        );
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Algo salió mal, intente de nuevo en un momento.",
+          showConfirmButton: false,
+        timer: 1500,
+        });
       }
     } catch (err) {
       console.error("Error:", err);
-      alert("Ocurrió un error al procesar el registro del producto.");
+      Swal.fire({
+        icon: "error",
+        title: "Error de conexión",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   });
 
@@ -104,18 +119,30 @@ document
         method: "PUT",
         body: formData,
       });
-
+    
       if (!response.ok) {
         throw new Error(`Error en la solicitud: ${response.status}`);
       }
-
+    
       const result = await response.json();
-      //console.log("✅ Producto actualizado:", result);
-
-      $("#modal-register-product").modal("hide");
-      location.reload();
+    
+      Swal.fire({
+        icon: "success",
+        title: "Producto actualizado",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        $("#modal-register-product").modal("hide"); 
+        location.reload()
+      });
     } catch (error) {
-      //console.error("⚠️ Error al actualizar producto:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al actualizar",
+        text: error.message || "Ocurrió un error al actualizar el producto.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   });
 

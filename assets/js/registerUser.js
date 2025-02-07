@@ -30,20 +30,38 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const response = await fetch("/users", {
           method: "POST",
-          body: formData, // Enviar como FormData para manejar archivos
+          body: formData, 
         });
 
+        const result = await response.json();
+
         if (response.ok) {
-          const result = await response.json();
-          alert(result.message);
-          window.location.reload();
+          Swal.fire({
+            icon: "success",
+            title: "Registro exitoso",
+            text: result.message,
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            window.location.reload();
+          });
         } else {
-          const error = await response.json();
-          alert(error.message || "Error al registrar usuario.");
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Algo salió mal, intente de nuevo en un momento.",
+            showConfirmButton: false,
+          timer: 1500,
+          });
         }
       } catch (err) {
         console.error("Error:", err);
-        alert("Ocurrió un error al procesar el registro.");
+        Swal.fire({
+          icon: "error",
+          title: "Error de conexión",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     });
 });
@@ -89,14 +107,35 @@ document
 
       if (response.ok) {
         const result = await response.json();
-        alert(result.message);
-        location.reload();
+        Swal.fire({
+          icon: "success",
+          title: "Usuario actualizado",
+          text: result.message,
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          window.location.reload();
+        });
       } else {
         const error = await response.json();
-        alert(error.message || "Error al actualizar usuario.");
+        Swal.fire({
+          icon: "error",
+          title: "Error al actualizar",
+          text: "Algo salió mal, intente de nuevo en un momento.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(error);
       }
+      
     } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error de conexión",
+        text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       console.error("Error:", err);
-      alert("Ocurrió un error al procesar la actualización.");
     }
   });

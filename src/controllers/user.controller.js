@@ -20,11 +20,11 @@ export const login = async (req, res) => {
       );
 
     if (result.recordset.length > 0) {
-      res.redirect("/dashboard");
+      res.json({ success: true });
     } else {
-      res.status(401).render("home/home", {
-        error: "Usuario o contraseña incorrectos",
-      });
+      res
+        .status(401)
+        .json({ success: false, message: "Usuario o contraseña incorrectos" });
     }
   } catch (err) {
     res.status(500).render("home/home", {
@@ -131,11 +131,9 @@ export const editUser = async (req, res) => {
     const imgFile = req.files?.IMG_USR;
 
     if (!id || !TIPO_USR || !NOMBRE_USR || !APELLIDO_USR || !CORREO_USR) {
-      return res
-        .status(400)
-        .json({
-          message: "Todos los campos obligatorios deben ser proporcionados.",
-        });
+      return res.status(400).json({
+        message: "Todos los campos obligatorios deben ser proporcionados.",
+      });
     }
 
     const pool = await getConnection();
