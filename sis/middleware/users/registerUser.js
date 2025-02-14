@@ -20,12 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("contrasena_usr").value
       );
 
-      const fileInput = document.getElementById("file"); // ID del input type="file"
+      const fileInput = document.getElementById("file"); 
       if (fileInput.files.length > 0) {
-        formData.append("IMG_USR", fileInput.files[0]); // Aquí enviamos la imagen correctamente
+        formData.append("IMG_USR", fileInput.files[0]);
       }
-
-      //console.log("Cuerpo de la solicitud a enviar:", formData);
 
       try {
         const response = await fetch("/users", {
@@ -73,36 +71,23 @@ document
 
     const formData = new FormData();
     formData.append("ID_USR", document.getElementById("modal-id").value.trim());
-    formData.append(
-      "TIPO_USR",
-      document.getElementById("type-modal").value.trim()
-    );
-    formData.append(
-      "NOMBRE_USR",
-      document.getElementById("modal-name").value.trim()
-    );
-    formData.append(
-      "APELLIDO_USR",
-      document.getElementById("modal-lastname").value.trim()
-    );
-    formData.append(
-      "CORREO_USR",
-      document.getElementById("modal-correo").value.trim()
-    );
-    formData.append(
-      "ACTIVO_USR",
-      document.getElementById("modal-active").checked
-    );
+    formData.append("TIPO_USR", document.getElementById("type-modal").value.trim());
+    formData.append("NOMBRE_USR", document.getElementById("modal-name").value.trim());
+    formData.append("APELLIDO_USR", document.getElementById("modal-lastname").value.trim());
+    formData.append("CORREO_USR", document.getElementById("modal-correo").value.trim());
+    formData.append("ACTIVO_USR", document.getElementById("modal-active").value); // ✅ Se envía el valor correcto
 
     const fileInput = document.getElementById("modal-file");
     if (fileInput.files.length > 0) {
       formData.append("IMG_USR", fileInput.files[0]); // Si se sube una imagen, la enviamos
     }
 
+    //console.log("🟢 Datos enviados al backend:", Object.fromEntries(formData));
+
     try {
       const response = await fetch(`/users/${formData.get("ID_USR")}`, {
         method: "PUT",
-        body: formData, // Enviar como FormData
+        body: formData,
       });
 
       if (response.ok) {
@@ -127,7 +112,6 @@ document
         });
         console.log(error);
       }
-      
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -139,3 +123,10 @@ document
       console.error("Error:", err);
     }
   });
+
+
+  function updateCheckboxState() {
+    let isChecked = $("#cb5").prop("checked");
+    $("#modal-active").val(isChecked ? "1" : "0");
+    //console.log("🔄 Estado del checkbox enviado:", $("#modal-active").val());
+}
