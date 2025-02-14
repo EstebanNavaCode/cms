@@ -37,7 +37,7 @@ export const registerUser = async (req, res) => {
   try {
     const { TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, CONTRASENA_USR } =
       req.body;
-    const imgFile = req.files?.IMG_USR; // Aquí llega el archivo
+    const imgFile = req.files?.IMG_USR;
 
     if (
       !TIPO_USR ||
@@ -78,7 +78,7 @@ export const registerUser = async (req, res) => {
         "IMG_USR",
         sql.NVarChar(300),
         imgFilename ? `/uploads/pics/${imgFilename}` : null
-      ) // Guardar la ruta completa en la BD
+      ) 
       .query(`
         INSERT INTO dbo.USR_T (TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, 
         CONTRASENA_USR, FECHA_ALTA_USR, ACTIVO_USR, IMG_USR)
@@ -126,8 +126,7 @@ export const getUsers = async (req, res) => {
 export const editUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, ACTIVO_USR } =
-      req.body;
+    const { TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, ACTIVO_USR } = req.body;
     const imgFile = req.files?.IMG_USR;
 
     if (!id || !TIPO_USR || !NOMBRE_USR || !APELLIDO_USR || !CORREO_USR) {
@@ -138,7 +137,7 @@ export const editUser = async (req, res) => {
 
     const pool = await getConnection();
 
-    // Obtener la imagen actual en la base de datos
+    // 🔍 Obtener la imagen actual en la base de datos
     const result = await pool
       .request()
       .input("ID_USR", sql.Int, id)
@@ -146,27 +145,40 @@ export const editUser = async (req, res) => {
 
     let imgFilename = result.recordset[0]?.IMG_USR || null;
 
-    // Si se sube una nueva imagen, eliminar la anterior y guardar la nueva
+    // 📷 Si se sube una nueva imagen, eliminar la anterior y guardar la nueva
     if (imgFile) {
       const uploadDir = path.join(process.cwd(), "uploads/pics");
 
-      // Eliminar la imagen anterior si existe
       if (imgFilename) {
         const oldImagePath = path.join(uploadDir, path.basename(imgFilename));
         if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath); // Eliminar archivo anterior
+          fs.unlinkSync(oldImagePath);
         }
       }
 
-      // Guardar la nueva imagen
-      imgFilename =
-        CORREO_USR.replace(/[@.]/g, "_") + path.extname(imgFile.name);
+      imgFilename = CORREO_USR.replace(/[@.]/g, "_") + path.extname(imgFile.name);
       const uploadPath = path.join(uploadDir, imgFilename);
+      
       await imgFile.mv(uploadPath);
 
-      imgFilename = `/uploads/pics/${imgFilename}`; // Guardar la ruta en la BD
+      imgFilename = `/uploads/pics/${imgFilename}`;
     }
 
+    // 🛠️ Asegurar que `ACTIVO_USR` se convierte correctamente a booleano
+    const isActive = ACTIVO_USR === "1" || ACTIVO_USR === 1 || ACTIVO_USR === true;
+    
+    /*console.log("🟢 Datos recibidos en backend:", {
+      ID_USR: id,
+      TIPO_USR,
+      NOMBRE_USR,
+      APELLIDO_USR,
+      CORREO_USR,
+      ACTIVO_USR,
+      isActive,
+      IMG_USR: imgFilename
+    });*/
+
+    // 🔄 Actualizar usuario en la BD
     await pool
       .request()
       .input("ID_USR", sql.Int, parseInt(id, 10))
@@ -174,8 +186,8 @@ export const editUser = async (req, res) => {
       .input("NOMBRE_USR", sql.NVarChar(300), NOMBRE_USR)
       .input("APELLIDO_USR", sql.NVarChar(300), APELLIDO_USR)
       .input("CORREO_USR", sql.NVarChar(300), CORREO_USR)
-      .input("ACTIVO_USR", sql.Bit, ACTIVO_USR)
-      .input("IMG_USR", sql.NVarChar(300), imgFilename) // Nueva imagen si fue subida
+      .input("ACTIVO_USR", sql.Bit, isActive) // ✅ Se usa `isActive` en lugar de `ACTIVO_USR`
+      .input("IMG_USR", sql.NVarChar(300), imgFilename)
       .query(`
         UPDATE dbo.USR_T 
         SET 
@@ -190,9 +202,7 @@ export const editUser = async (req, res) => {
 
     res.json({ message: "Usuario actualizado correctamente." });
   } catch (error) {
-    console.error("Error al actualizar usuario:", error);
-    res
-      .status(500)
-      .json({ message: "Ocurrió un error al actualizar el usuario." });
+    console.error("❌ Error al actualizar usuario:", error);
+    res.status(500).json({ message: "Ocurrió un error al actualizar el usuario." });
   }
 };
