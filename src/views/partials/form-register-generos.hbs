@@ -16,7 +16,6 @@
                 <ion-icon name="planet-outline"></ion-icon>
                 <span class="text">Nuevo Genero</span>
             </div>
-
             <div class="form-container">
                 <form id="form-register-genero" method="POST" class="form" action="/generos">
                     <p class="title2">Formulario de registro</p>
@@ -24,23 +23,23 @@
 
                     <label>
                         <input id="NOMBRE_LCAT" name="NOMBRE_LCAT" class="input" type="text" placeholder="" required>
-                        <span>Nombre</span>
+                        <span>Nombre*</span>
                     </label>
 
                     <label>
                         <textarea id="DESCRIPCION_LCAT" name="DESCRIPCION_LCAT" class="input textarea" placeholder=""
                             rows="5" required></textarea>
-                        <span>Descripción</span>
+                        <span>Descripción*</span>
                     </label>
 
                     <div class="subcategories-container-form">
                         <label>
                             <input id="subcategory-input" class="input" type="text" />
-                            <span>Subgénero</span>
+                            <span>Subgénero*</span>
                         </label>
                         <div id="subcategory-list" class="subcategory-list">
                             <!-- Aquí aparecerán las etiquetas -->
-                        </div>
+                       </div>
                         <input type="hidden" id="subcategory-values" name="subgeneros" />
                     </div>
 
@@ -113,20 +112,20 @@
 
                     <label>
                         <input id="edit-genero-name" name="NOMBRE_LCAT" class="input" type="text" required>
-                        <span>Nombre del Género</span>
+                        <span>Nombre del Género*</span>
                     </label>
 
                     <label>
                         <textarea id="edit-genero-description" name="DESCRIPCION_LCAT" class="input textarea" rows="4"
                             required></textarea>
-                        <span>Descripción</span>
+                        <span>Descripción*</span>
                     </label>
 
                     <div class="subcategories-container">
                         <label>
                             <input id="edit-subcategory-input" class="input" type="text"
                                 placeholder="Agregar nuevo subgénero">
-                            <span>Subgéneros</span>
+                            <span>Subgéneros*</span>
                         </label>
                         <div id="edit-subcategory-list" class="subcategory-list"></div>
                         <input type="hidden" id="edit-subcategory-values" name="subgeneros">
