@@ -58,7 +58,7 @@ const loadCategoriesNEWS = async () => {
       const categorySelect = document.getElementById("categoryNEWS");
 
       categorySelect.innerHTML =
-        '<option value="" disabled selected hidden>Categoría</option>';
+        '<option value="" disabled selected hidden>Categoría*</option>';
 
       categoriesNEWS.forEach((category) => {
         const option = document.createElement("option");
@@ -68,7 +68,7 @@ const loadCategoriesNEWS = async () => {
       });
 
       categorySelect.innerHTML =
-        '<option value="" disabled selected hidden>Categoría</option>';
+        '<option value="" disabled selected hidden>Categoría*</option>';
     } else {
       console.error("Error al cargar las categorías:", await response.text());
     }
