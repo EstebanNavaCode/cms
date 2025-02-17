@@ -103,7 +103,7 @@ nav .menu-items {
   height: 5px;
   width: 5px;
   border-radius: 50%;
-  background-color: var(--primary-color);
+  background-color: var(--black-light-color);
 }
 
 .menu-items li a ion-icon {
@@ -133,8 +133,23 @@ nav.close li a .link-name {
 
 .nav-links li a:hover ion-icon,
 .nav-links li a:hover .link-name {
-  color: var(--primary-color);
+  color:var(--black-light-color);
 }
+
+.nav-links li a.active {
+  color:var(--black-light-color);
+}
+
+.nav-links li a.active:before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background-color: var(--black-light-color);
+}
+
 
 .menu-items .logout-mode {
   padding-top: 10px;
