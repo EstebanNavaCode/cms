@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
         categorySelect.appendChild(option);
       });
 
-      //console.log("✅ Categorías cargadas correctamente.");
     } catch (error) {
       console.error("⚠️ Error al cargar categorías:", error);
     }
@@ -46,7 +45,6 @@ document.addEventListener("DOMContentLoaded", function () {
         subcategorySelect.appendChild(option);
       });
 
-      //console.log("✅ Subcategorías cargadas correctamente.");
     } catch (error) {
       console.error("⚠️ Error al cargar subcategorías:", error);
     }
@@ -59,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   let table = $("#productsTable").DataTable({
+    order: [[0, "desc"]], // Ordenar por la primera columna (ID) en orden descendente
     columnDefs: [
       { targets: [6], visible: true },
       { targets: [7], visible: true },
@@ -82,32 +81,30 @@ document.addEventListener("DOMContentLoaded", function () {
   $("#productsTable tbody").on("click", "tr", async function () {
     const rowData = table.row(this).data();
     if (!rowData) return;
-  
+
     $("#modal-id").val(rowData[0]);
     $("#modal-name").val(rowData[1]);
     $("#modal-autor").val(rowData[2]);
     $("#modal-editorial").val(rowData[3]);
     $("#modal-isbn").val(rowData[4]);
     $("#modal-stock").val(rowData[5]);
-  
+
     const categoryName = rowData[6];
     const subcategoryName = rowData[7];
-  
-    // 🔹 Obtener el estado del producto desde la tabla
+
     const estadoHtml = rowData[8]?.trim();
     const estado = estadoHtml.replace(/<[^>]+>/g, "").trim();
     const isActive = estado === "Disponible";
-  
-    // 🔹 Sincronizar valores de los checkboxes correctamente
+
     const hiddenCheckbox = document.getElementById("modal-active");
     const visibleCheckbox = document.getElementById("cb5");
-  
+
     hiddenCheckbox.value = isActive ? "1" : "0";
     visibleCheckbox.checked = isActive;
-  
+
     await loadCategories();
     await selectCategoryAndSubcategory(categoryName, subcategoryName);
-  
+
     let imageUrl = rowData[9] ? rowData[9].trim() : "/assets/img/default-placeholder.jpg";
     if (imageUrl.includes("<img")) {
       imageUrl = imageUrl.replace(/<img[^>]+src=['"]([^'"]+)['"][^>]*>/, "$1");
@@ -126,10 +123,9 @@ document.addEventListener("DOMContentLoaded", function () {
           $(this).attr("src", "/assets/img/default-placeholder.jpg");
         }
       });
-  
+
     $("#modal-register-product").modal("show");
   });
-  
 
   async function selectCategoryAndSubcategory(categoryName, subcategoryName) {
     try {
@@ -153,7 +149,6 @@ document.addEventListener("DOMContentLoaded", function () {
         subcategorySelect.value = subcategoryOption.value;
       }
 
-      //console.log("✅ Categoría y subcategoría seleccionadas correctamente.");
     } catch (error) {
       console.error("⚠️ Error al cargar categoría y subcategorías:", error);
     }

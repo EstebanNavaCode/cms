@@ -15,21 +15,36 @@ $(document).ready(function () {
           previous: "Anterior",
         },
       },
+      order: [[5, "desc"]], // Ordenar por fecha en orden descendente (último registro primero)
       columnDefs: [
         {
           targets: 5,
-          render: function (data) {
+          type: "date",
+          render: function (data, type, row) {
             if (!data) return "";
+
             let date = new Date(data);
+            if (isNaN(date)) {
+              console.log("⚠️ Fecha inválida detectada:", data);
+              return data;
+            }
+
             let day = date.getDate().toString().padStart(2, "0");
             let month = (date.getMonth() + 1).toString().padStart(2, "0");
             let year = date.getFullYear();
-            return `${day}/${month}/${year}`;
+            let formattedDate = `${day}/${month}/${year}`;
+
+            if (type === "sort" || type === "type") {
+              return `${year}-${month}-${day}`;
+            }
+
+            return formattedDate;
           },
         },
       ],
     });
 
+  
     $("#usersTable tbody").on("click", "tr", function () {
       let rowData = table.row(this).data();
       if (!rowData) return;
