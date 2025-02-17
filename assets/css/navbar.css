@@ -19,6 +19,11 @@
   --tran-05: all 0.5s ease;
 }
 
+
+.logo-redirection{
+  text-decoration: none;
+}
+
 body {
   transition: var(--tran-05);
 }
