@@ -11,6 +11,33 @@ export const registerCategory = async (req, res) => {
         .json({ message: "Nombre y descripción son obligatorios" });
     }
 
+    const pool = await getConnection();
+    const existingCategory = await pool
+      .request()
+      .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
+      .query(
+        `SELECT ID_CAT FROM CATEGORIA_NOT_T WHERE NOMBRE_CAT = @NOMBRE_CAT`
+      );
+
+    if (existingCategory.recordset.length > 0) {
+      return res.status(400).json({ message: "Ya existe una categoría con este nombre." });
+    }
+
+    // Si no existe, proceder con la inserción
+    const result = await pool
+      .request()
+      .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
+      .input("DESCRIPCION_CAT", sql.NVarChar(300), DESCRIPCION_CAT)
+      .input("FECHA_ALTA_CAT", sql.Date, new Date())
+      .input("ACTIVO_CAT", sql.Bit, true)
+      .query(`
+              INSERT INTO CATEGORIA_NOT_T (NOMBRE_CAT, DESCRIPCION_CAT, FECHA_ALTA_CAT, ACTIVO_CAT)
+              OUTPUT INSERTED.ID_CAT
+              VALUES (@NOMBRE_CAT, @DESCRIPCION_CAT, @FECHA_ALTA_CAT, @ACTIVO_CAT)
+          `);
+
+    const categoryId = result.recordset[0].ID_CAT;
+
     const parsedSubcategories = Array.isArray(subcategorias)
       ? subcategorias.filter(
           (etq) =>
@@ -20,28 +47,14 @@ export const registerCategory = async (req, res) => {
         )
       : [];
 
-    const pool = await getConnection();
-
-    const result = await pool
-      .request()
-      .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
-      .input("DESCRIPCION_CAT", sql.NVarChar(300), DESCRIPCION_CAT)
-      .input("FECHA_ALTA_CAT", sql.Date, new Date())
-      .input("ACTIVO_CAT", sql.Bit, true).query(`
-              INSERT INTO CATEGORIA_NOT_T (NOMBRE_CAT, DESCRIPCION_CAT, FECHA_ALTA_CAT, ACTIVO_CAT)
-              OUTPUT INSERTED.ID_CAT
-              VALUES (@NOMBRE_CAT, @DESCRIPCION_CAT, @FECHA_ALTA_CAT, @ACTIVO_CAT)
-          `);
-
-    const categoryId = result.recordset[0].ID_CAT;
-
     for (const subcategory of parsedSubcategories) {
       await pool
         .request()
         .input("ID_CAT", sql.Int, categoryId)
         .input("NOMBRE_ETQ", sql.NVarChar(300), subcategory.NOMBRE_ETQ)
         .input("FECHA_ALTA_ETQ", sql.Date, new Date())
-        .input("ACTIVO_ETQ", sql.Bit, true).query(`
+        .input("ACTIVO_ETQ", sql.Bit, true)
+        .query(`
                   INSERT INTO ETIQUETA_NOT_T (ID_CAT, NOMBRE_ETQ, FECHA_ALTA_ETQ, ACTIVO_ETQ)
                   VALUES (@ID_CAT, @NOMBRE_ETQ, @FECHA_ALTA_ETQ, @ACTIVO_ETQ)
               `);
@@ -57,6 +70,7 @@ export const registerCategory = async (req, res) => {
       .json({ message: "Error al registrar categoría y subcategorías." });
   }
 };
+
 
 export const getCategoriesAndTags = async (req, res) => {
   try {

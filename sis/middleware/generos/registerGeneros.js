@@ -62,34 +62,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const result = await response.json();
 
-      if (response.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "Registro Exitoso",
-          text: result.message,
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          window.location.reload();
-        });
-      } else {
+      if (!response.ok) {
         Swal.fire({
           icon: "error",
-          title: "Error al actualizar",
-          text: "Algo salió mal, intente de nuevo en un momento.",
-          showConfirmButton: false,
-          timer: 1500,
+          title: "Error al registrar",
+          text: result.message || "No se pudo registrar el género.",
+          showConfirmButton: true,
         });
+        return;
       }
-    } catch (error) {
+
+      Swal.fire({
+        icon: "success",
+        title: "Registro Exitoso",
+        text: result.message,
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        window.location.reload();
+      });
+
+    } catch (err) {
       Swal.fire({
         icon: "error",
         title: "Error de conexión",
         text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
-        showConfirmButton: false,
-        timer: 1500,
+        showConfirmButton: true,
       });
-      console.error("Error:", err);
+      console.error("Error en la petición:", err);
     }
   });
 });
