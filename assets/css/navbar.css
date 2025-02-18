@@ -29,7 +29,7 @@ body {
 }
 
 body.dark {
-  --toggle-color: #333;
+  --toggle-color: #fff;
   --panel-color: #242526;
   --text-color: #fff;
   --black-light-color: #ccc;
