@@ -3,36 +3,27 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("form-register-user")
     .addEventListener("submit", async function (event) {
       event.preventDefault();
-
+ 
       const formData = new FormData();
       formData.append("TIPO_USR", document.getElementById("type")?.value);
       formData.append("NOMBRE_USR", document.getElementById("name").value);
-      formData.append(
-        "APELLIDO_USR",
-        document.getElementById("lastname").value
-      );
-      formData.append(
-        "CORREO_USR",
-        document.getElementById("correo_usr").value
-      );
-      formData.append(
-        "CONTRASENA_USR",
-        document.getElementById("contrasena_usr").value
-      );
-
+      formData.append("APELLIDO_USR", document.getElementById("lastname").value);
+      formData.append("CORREO_USR", document.getElementById("correo_usr").value);
+      formData.append("CONTRASENA_USR", document.getElementById("contrasena_usr").value);
+ 
       const fileInput = document.getElementById("file"); 
       if (fileInput.files.length > 0) {
         formData.append("IMG_USR", fileInput.files[0]);
       }
-
+ 
       try {
         const response = await fetch("/users", {
           method: "POST",
           body: formData, 
         });
-
+ 
         const result = await response.json();
-
+ 
         if (response.ok) {
           Swal.fire({
             icon: "success",
@@ -44,19 +35,30 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.reload();
           });
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Algo salió mal, intente de nuevo en un momento.",
-            showConfirmButton: false,
-          timer: 1500,
-          });
+          if (result.message === "El correo ya está registrado.") {
+            Swal.fire({
+              icon: "warning",
+              title: "Correo duplicado",
+              text: "Este correo ya está registrado. Intente con otro.",
+              showConfirmButton: false,
+              timer:1500,
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Algo salió mal, intente de nuevo en un momento.",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
         }
       } catch (err) {
         console.error("Error:", err);
         Swal.fire({
           icon: "error",
           title: "Error de conexión",
+          text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
           showConfirmButton: false,
           timer: 1500,
         });
