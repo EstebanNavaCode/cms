@@ -132,3 +132,42 @@ document
     $("#modal-active").val(isChecked ? "1" : "0");
     //console.log("🔄 Estado del checkbox enviado:", $("#modal-active").val());
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const nameInputs = document.querySelectorAll("#name, #lastname, #modal-name, #modal-lastname");
+
+  const validateNameInput = (input) => {
+    const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/
+    if (!regex.test(input.value)) {
+      input.value = input.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, ""); 
+      //showError(input, "Entrada no valida");
+    } else {
+      clearError(input);
+    }
+  };
+
+  const showError = (input, message) => {
+    let errorMessage = input.nextElementSibling;
+    if (!errorMessage || !errorMessage.classList.contains("error-message")) {
+      errorMessage = document.createElement("span");
+      errorMessage.className = "error-message";
+      errorMessage.style.color = "red";
+      errorMessage.style.fontSize = "0.8em";
+      input.parentNode.insertBefore(errorMessage, input.nextSibling);
+    }
+    errorMessage.textContent = message;
+  };
+
+  const clearError = (input) => {
+    const errorMessage = input.nextElementSibling;
+    if (errorMessage && errorMessage.classList.contains("error-message")) {
+      errorMessage.remove();
+    }
+  };
+
+  nameInputs.forEach((input) => {
+    input.addEventListener("input", () => validateNameInput(input));
+  });
+});
