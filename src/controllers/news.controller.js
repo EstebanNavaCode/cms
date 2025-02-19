@@ -133,64 +133,74 @@ export const getNews = async (req, res) => {
 export const editNews = async (req, res) => {
   const { id } = req.params;
   const {
-    TITULO_NOT,
-    TEXTO_NOT,
-    FECHA_PUBLICAR_NOT,
-    CATEGORIA_NOT,
-    ETIQUETA_NOT,
+      TITULO_NOT,
+      TEXTO_NOT,
+      FECHA_PUBLICAR_NOT,
+      CATEGORIA_NOT,
+      ETIQUETA_NOT,
+      ACTIVO_NOT, 
   } = req.body;
+
+  console.log("Valor recibido de ACTIVO_NOT en el backend:", ACTIVO_NOT); 
 
   const imgFile = req.files?.IMG_NOT;
   let imgFilename = null;
 
   try {
-    const pool = await getConnection();
-    const result = await pool
-      .request()
-      .input("ID_NOT", sql.Int, id)
-      .query("SELECT IMG_NOT FROM NOT_T WHERE ID_NOT = @ID_NOT");
+      const pool = await getConnection();
+      const result = await pool
+          .request()
+          .input("ID_NOT", sql.Int, id)
+          .query("SELECT IMG_NOT FROM NOT_T WHERE ID_NOT = @ID_NOT");
 
-    let oldImagePath = result.recordset[0]?.IMG_NOT;
+      let oldImagePath = result.recordset[0]?.IMG_NOT;
 
-    if (imgFile) {
-      const uploadDir = path.join(process.cwd(), "uploads/news");
+      if (imgFile) {
+          const uploadDir = path.join(process.cwd(), "uploads/news");
 
-      if (oldImagePath) {
-        const oldPath = path.join(uploadDir, path.basename(oldImagePath));
-        if (fs.existsSync(oldPath)) {
-          fs.unlinkSync(oldPath);
-        }
+          if (oldImagePath) {
+              const oldPath = path.join(uploadDir, path.basename(oldImagePath));
+              if (fs.existsSync(oldPath)) {
+                  fs.unlinkSync(oldPath);
+              }
+          }
+
+          imgFilename = TITULO_NOT.replace(/\s+/g, "_") + path.extname(imgFile.name);
+          const uploadPath = path.join(uploadDir, imgFilename);
+          await imgFile.mv(uploadPath);
       }
 
-      imgFilename = TITULO_NOT.replace(/\s+/g, "_") + path.extname(imgFile.name);
-      const uploadPath = path.join(uploadDir, imgFilename);
-      await imgFile.mv(uploadPath);
-    }
+      
+      const activoValue = ACTIVO_NOT !== undefined && ACTIVO_NOT !== null ? parseInt(ACTIVO_NOT, 10) : 1;
 
-    await pool
-      .request()
-      .input("TITULO_NOT", sql.NVarChar(300), TITULO_NOT)
-      .input("TEXTO_NOT", sql.NVarChar(sql.MAX), TEXTO_NOT)
-      .input("FECHA_PUBLICAR_NOT", sql.Date, FECHA_PUBLICAR_NOT)
-      .input("CATEGORIA_NOT", sql.Int, CATEGORIA_NOT)
-      .input("ETIQUETA_NOT", sql.Int, ETIQUETA_NOT)
-      .input("IMG_NOT", sql.NVarChar(300), imgFilename ? `/uploads/news/${imgFilename}` : oldImagePath)
-      .input("ID_NOT", sql.Int, id)
-      .query(`
-        UPDATE NOT_T
-        SET TITULO_NOT = @TITULO_NOT,
-            TEXTO_NOT = @TEXTO_NOT,
-            FECHA_PUBLICAR_NOT = @FECHA_PUBLICAR_NOT,
-            CATEGORIA_NOT = @CATEGORIA_NOT,
-            ETIQUETA_NOT = @ETIQUETA_NOT,
-            IMG_NOT = @IMG_NOT
-        WHERE ID_NOT = @ID_NOT
-      `);
+      console.log("ACTIVO_NOT procesado en el backend:", activoValue);
 
-    res.status(200).json({ message: "Noticia actualizada exitosamente." });
+      await pool
+          .request()
+          .input("TITULO_NOT", sql.NVarChar(300), TITULO_NOT)
+          .input("TEXTO_NOT", sql.NVarChar(sql.MAX), TEXTO_NOT)
+          .input("FECHA_PUBLICAR_NOT", sql.Date, FECHA_PUBLICAR_NOT)
+          .input("CATEGORIA_NOT", sql.Int, CATEGORIA_NOT)
+          .input("ETIQUETA_NOT", sql.Int, ETIQUETA_NOT)
+          .input("ACTIVO_NOT", sql.Bit, activoValue)
+          .input("IMG_NOT", sql.NVarChar(300), imgFilename ? `/uploads/news/${imgFilename}` : oldImagePath)
+          .input("ID_NOT", sql.Int, id)
+          .query(`
+              UPDATE NOT_T
+              SET TITULO_NOT = @TITULO_NOT,
+                  TEXTO_NOT = @TEXTO_NOT,
+                  FECHA_PUBLICAR_NOT = @FECHA_PUBLICAR_NOT,
+                  CATEGORIA_NOT = @CATEGORIA_NOT,
+                  ETIQUETA_NOT = @ETIQUETA_NOT,
+                  IMG_NOT = @IMG_NOT,
+                  ACTIVO_NOT = @ACTIVO_NOT  -- ✅ Se actualiza el estado correctamente
+              WHERE ID_NOT = @ID_NOT
+          `);
+
+      res.status(200).json({ message: "Noticia actualizada exitosamente." });
   } catch (error) {
-    console.error("Error al actualizar noticia:", error);
-    res.status(500).json({ message: "Error al actualizar noticia." });
+      console.error("Error al actualizar noticia:", error);
+      res.status(500).json({ message: "Error al actualizar noticia." });
   }
 };
 
