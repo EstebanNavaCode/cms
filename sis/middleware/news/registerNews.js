@@ -161,6 +161,12 @@ document.getElementById("form-edit-news").addEventListener("submit", async funct
   }
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("isbn").setAttribute("min", today);
+  document.getElementById("edit-date").setAttribute("min", today);
+});
+
 
 
 function updateCheckboxState() {
