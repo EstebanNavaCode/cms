@@ -107,57 +107,61 @@ document.getElementById("categoryNEWS").addEventListener("change", (e) => {
   loadSubcategoriesNEWS(categoryId);
 });
 
-document
-  .getElementById("form-edit-news")
-  .addEventListener("submit", async function (event) {
-    event.preventDefault();
+document.getElementById("form-edit-news").addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    const formData = new FormData(this);
-    const fileInput = document.getElementById("edit-file");
+  const formData = new FormData(this);
+  const fileInput = document.getElementById("edit-file");
 
-    if (fileInput && fileInput.files.length > 0) {
+  if (fileInput && fileInput.files.length > 0) {
       formData.append("IMG_NOT", fileInput.files[0]);
-    }
+  }
 
-    const ID_NOT = document.getElementById("edit-id").value;
+ 
+  const isActive = document.getElementById("cb5").checked ? "1" : "0";
+  formData.append("ACTIVO_NOT", isActive);
+  console.log("ACTIVO_NOT enviado desde el frontend:", isActive);
 
-    try {
+  const ID_NOT = document.getElementById("edit-id").value;
+
+  try {
       const response = await fetch(`/news/${ID_NOT}`, {
-        method: "PUT",
-        body: formData,
+          method: "PUT",
+          body: formData,
       });
 
       if (response.ok) {
-        const result = await response.json();
-        Swal.fire({
-          icon: "success",
-          title: "Noticia actualizada",
-          text: result.message,
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          window.location.reload();
-        });
+          Swal.fire({
+              icon: "success",
+              title: "Noticia actualizada",
+              text: "El estado de la noticia se ha actualizado correctamente.",
+              showConfirmButton: false,
+              timer: 1500,
+          }).then(() => {
+              window.location.reload();
+          });
       } else {
-        Swal.fire({
+          Swal.fire({
+              icon: "error",
+              title: "Error al actualizar",
+              text: "Algo salió mal, intente de nuevo en un momento.",
+              showConfirmButton: false,
+              timer: 1500,
+          });
+      }
+  } catch (err) {
+      Swal.fire({
           icon: "error",
-          title: "Error al actualizar",
-          text: "Algo salió mal, intente de nuevo en un momento.",
+          title: "Error de conexión",
+          text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
           showConfirmButton: false,
           timer: 1500,
-        });
-      }
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error de conexión",
-        text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
-        showConfirmButton: false,
-        timer: 1500,
       });
       console.log("Error:", err);
-    }
-  });
+  }
+});
+
+
 
 function updateCheckboxState() {
   const checkbox = document.getElementById("cb5");
