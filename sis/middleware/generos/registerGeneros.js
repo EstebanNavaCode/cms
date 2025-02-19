@@ -67,7 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
           icon: "error",
           title: "Error al registrar",
           text: result.message || "No se pudo registrar el género.",
-          showConfirmButton: true,
+          showConfirmButton: false,
+          timer:1500,
         });
         return;
       }

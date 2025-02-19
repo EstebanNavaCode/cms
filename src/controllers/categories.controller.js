@@ -8,22 +8,25 @@ export const registerCategory = async (req, res) => {
     if (!NOMBRE_CAT || !DESCRIPCION_CAT) {
       return res
         .status(400)
-        .json({ message: "Nombre y descripción son obligatorios" });
+        .json({ message: "Nombre y descripción son obligatorios." });
     }
 
     const pool = await getConnection();
+
+    // 🔍 Verificar si la categoría ya existe (ignorando espacios y mayúsculas)
     const existingCategory = await pool
       .request()
-      .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
+      .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT.trim().toLowerCase())
       .query(
-        `SELECT ID_CAT FROM CATEGORIA_NOT_T WHERE NOMBRE_CAT = @NOMBRE_CAT`
+        `SELECT ID_CAT FROM CATEGORIA_NOT_T 
+         WHERE LOWER(LTRIM(RTRIM(NOMBRE_CAT))) = LOWER(LTRIM(RTRIM(@NOMBRE_CAT)))`
       );
 
     if (existingCategory.recordset.length > 0) {
       return res.status(400).json({ message: "Ya existe una categoría con este nombre." });
     }
 
-    // Si no existe, proceder con la inserción
+    // ✅ Insertar la nueva categoría
     const result = await pool
       .request()
       .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
@@ -31,43 +34,42 @@ export const registerCategory = async (req, res) => {
       .input("FECHA_ALTA_CAT", sql.Date, new Date())
       .input("ACTIVO_CAT", sql.Bit, true)
       .query(`
-              INSERT INTO CATEGORIA_NOT_T (NOMBRE_CAT, DESCRIPCION_CAT, FECHA_ALTA_CAT, ACTIVO_CAT)
-              OUTPUT INSERTED.ID_CAT
-              VALUES (@NOMBRE_CAT, @DESCRIPCION_CAT, @FECHA_ALTA_CAT, @ACTIVO_CAT)
-          `);
+        INSERT INTO CATEGORIA_NOT_T (NOMBRE_CAT, DESCRIPCION_CAT, FECHA_ALTA_CAT, ACTIVO_CAT)
+        OUTPUT INSERTED.ID_CAT
+        VALUES (@NOMBRE_CAT, @DESCRIPCION_CAT, @FECHA_ALTA_CAT, @ACTIVO_CAT)
+      `);
 
     const categoryId = result.recordset[0].ID_CAT;
 
-    const parsedSubcategories = Array.isArray(subcategorias)
-      ? subcategorias.filter(
-          (etq) =>
-            etq.NOMBRE_ETQ &&
-            typeof etq.NOMBRE_ETQ === "string" &&
-            etq.NOMBRE_ETQ.trim() !== ""
-        )
-      : [];
-
-    for (const subcategory of parsedSubcategories) {
-      await pool
-        .request()
-        .input("ID_CAT", sql.Int, categoryId)
-        .input("NOMBRE_ETQ", sql.NVarChar(300), subcategory.NOMBRE_ETQ)
-        .input("FECHA_ALTA_ETQ", sql.Date, new Date())
-        .input("ACTIVO_ETQ", sql.Bit, true)
-        .query(`
-                  INSERT INTO ETIQUETA_NOT_T (ID_CAT, NOMBRE_ETQ, FECHA_ALTA_ETQ, ACTIVO_ETQ)
-                  VALUES (@ID_CAT, @NOMBRE_ETQ, @FECHA_ALTA_ETQ, @ACTIVO_ETQ)
-              `);
+    // ✅ Insertar subcategorías asociadas
+    if (Array.isArray(subcategorias)) {
+      for (const subcategory of subcategorias) {
+        if (subcategory.NOMBRE_ETQ && typeof subcategory.NOMBRE_ETQ === "string") {
+          await pool
+            .request()
+            .input("ID_CAT", sql.Int, categoryId)
+            .input("NOMBRE_ETQ", sql.NVarChar(300), subcategory.NOMBRE_ETQ)
+            .input("FECHA_ALTA_ETQ", sql.Date, new Date())
+            .input("ACTIVO_ETQ", sql.Bit, true)
+            .query(`
+              INSERT INTO ETIQUETA_NOT_T (ID_CAT, NOMBRE_ETQ, FECHA_ALTA_ETQ, ACTIVO_ETQ)
+              VALUES (@ID_CAT, @NOMBRE_ETQ, @FECHA_ALTA_ETQ, @ACTIVO_ETQ)
+            `);
+        }
+      }
     }
 
-    res
-      .status(201)
-      .json({ message: "Categoría y subcategorías registradas con éxito." });
+    res.status(201).json({ message: "Categoría y subcategorías registradas con éxito." });
+
   } catch (error) {
-    console.error("❌ Error al registrar categoría y subcategorías:", error);
-    res
-      .status(500)
-      .json({ message: "Error al registrar categoría y subcategorías." });
+    console.error("❌ Error detallado:", error);
+
+    // Si el error es de clave duplicada
+    if (error.number === 2627 || error.number === 2601) {
+      return res.status(400).json({ message: "Ya existe una categoría con este nombre." });
+    }
+
+    res.status(500).json({ message: "Error al registrar categoría y subcategorías." });
   }
 };
 
