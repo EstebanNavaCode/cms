@@ -179,3 +179,31 @@ document.getElementById("modal-file").addEventListener("change", function (event
 
 document.getElementById("cb5").addEventListener("change", updateCheckboxState);
 
+document.addEventListener("DOMContentLoaded", function () {
+  const quantityInputs = document.querySelectorAll("#stock, #modal-stock");
+
+  quantityInputs.forEach((input) => {
+    input.addEventListener("keydown", function (event) {
+      if (
+        event.key === "e" || 
+        event.key === "E" || 
+        event.key === "-" || 
+        event.key === "+" || 
+        event.key === "."
+      ) {
+        event.preventDefault();
+      }
+    });
+    
+    input.addEventListener("input", function () {
+      this.value = this.value.replace(/[^0-9]/g, "");
+    });
+
+    input.addEventListener("paste", function (event) {
+      event.preventDefault();
+      let pasteData = (event.clipboardData || window.clipboardData).getData("text");
+      pasteData = pasteData.replace(/[^0-9]/g, ""); 
+      document.execCommand("insertText", false, pasteData);
+    });
+  });
+});
