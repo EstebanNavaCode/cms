@@ -290,3 +290,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  
+  const categoryNameInputs = document.querySelectorAll("#name, #edit-category-name");
+  
+  function enforceTextLimit(input) {
+    input.addEventListener("input", function () {
+      if (this.value.length > 30) {
+        this.value = this.value.slice(0, 30); 
+      }
+    });
+
+    input.addEventListener("keydown", function (event) {
+      if (this.value.length >= 30 && event.key !== "Backspace" && event.key !== "Delete") {
+        event.preventDefault(); 
+      }
+    });
+  }
+
+  categoryNameInputs.forEach(enforceTextLimit);
+});
