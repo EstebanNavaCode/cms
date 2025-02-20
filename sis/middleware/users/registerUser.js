@@ -171,3 +171,39 @@ document.addEventListener("DOMContentLoaded", function () {
     input.addEventListener("input", () => validateNameInput(input));
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  
+  const nameInputs = document.querySelectorAll("#name, #lastname, #modal-name, #modal-lastname");
+  
+  const emailInputs = document.querySelectorAll("#correo_usr, #modal-correo");
+
+  function enforceTextLimit(input) {
+    input.addEventListener("input", function () {
+      if (this.value.length > 30) {
+        this.value = this.value.slice(0, 30); 
+      }
+    });
+
+    input.addEventListener("keydown", function (event) {
+      if (this.value.length >= 30 && event.key !== "Backspace" && event.key !== "Delete") {
+        event.preventDefault(); 
+      }
+    });
+  }
+
+
+  function validateEmailInput(input) {
+    input.addEventListener("input", function () {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(this.value)) {
+        this.style.borderColor = "red"; 
+      } else {
+        this.style.borderColor = "green"; 
+      }
+    });
+  }
+
+  nameInputs.forEach(enforceTextLimit);
+  emailInputs.forEach(validateEmailInput);
+});

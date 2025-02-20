@@ -207,3 +207,42 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const isbnInputs = document.querySelectorAll("#isbn, #modal-isbn");
+
+  function enforceIsbnLimit(input) {
+    input.addEventListener("input", function () {
+      this.value = this.value.replace(/\D/g, ""); 
+      if (this.value.length > 13) {
+        this.value = this.value.slice(0, 13); 
+      }
+    });
+
+    input.addEventListener("keydown", function (event) {
+      if (this.value.length >= 13 && event.key !== "Backspace" && event.key !== "Delete") {
+        event.preventDefault(); 
+      }
+    });
+  }
+
+  isbnInputs.forEach(enforceIsbnLimit);
+
+  const textInputs = document.querySelectorAll("#name, #autor, #lastname, #modal-name, #modal-autor, #modal-editorial");
+
+  textInputs.forEach((input) => {
+    input.addEventListener("input", function () {
+      if (this.value.length > 30) {
+        this.value = this.value.slice(0, 30); 
+      }
+    });
+
+    input.addEventListener("keydown", function (event) {
+      if (this.value.length >= 30 && event.key !== "Backspace" && event.key !== "Delete") {
+        event.preventDefault(); 
+      }
+    });
+  });
+});
+
