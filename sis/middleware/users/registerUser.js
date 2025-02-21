@@ -15,10 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "CORREO_USR",
         document.getElementById("correo_usr").value
       );
-      formData.append(
-        "CONTRASENA_USR",
-        document.getElementById("contrasena_usr").value
-      );
+      
 
       const fileInput = document.getElementById("file");
       if (fileInput.files.length > 0) {

@@ -3,9 +3,48 @@ import fs from "fs";
 import path from "path";
 import sql from "mssql";
 
+import nodemailer from 'nodemailer';
+
+// Configuración de nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'nava.esteban.0200.17@gmail.com',
+    pass: 'gwduarmsupathrcg',
+    //gwdu arms upat hrcg 
+  },
+});
+
+async function sendPasswordEmail(to, password) {
+  const mailOptions = {
+    from: 'tu-correo@gmail.com',
+    to: to,
+    subject: 'Contraseña de acceso - Tu App',
+    text: `Hola,\n\nTu cuenta ha sido creada con éxito. Tu contraseña temporal es: ${password}\n\nPor favor, cámbiala después de iniciar sesión.\n\nSaludos,`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Correo enviado exitosamente');
+  } catch (error) {
+    console.error('Error enviando el correo:', error);
+  }
+}
+
+
 export const renderLogin = (req, res) => {
   res.render("home/home");
 };
+
+function generateRandomPassword(length = 6) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+}
+
 
 export const login = async (req, res) => {
   try {
@@ -35,17 +74,10 @@ export const login = async (req, res) => {
 
 export const registerUser = async (req, res) => {
   try {
-    const { TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, CONTRASENA_USR } =
-      req.body;
+    const { TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR } = req.body;
     const imgFile = req.files?.IMG_USR;
 
-    if (
-      !TIPO_USR ||
-      !NOMBRE_USR ||
-      !APELLIDO_USR ||
-      !CORREO_USR ||
-      !CONTRASENA_USR
-    ) {
+    if (!TIPO_USR || !NOMBRE_USR || !APELLIDO_USR || !CORREO_USR) {
       return res
         .status(400)
         .json({ message: "Todos los campos son obligatorios." });
@@ -53,7 +85,7 @@ export const registerUser = async (req, res) => {
 
     const pool = await getConnection();
 
-    // 🔍 Verificar si el correo ya existe
+    // Verificar si el correo ya existe
     const existingUser = await pool
       .request()
       .input("CORREO_USR", sql.NVarChar(300), CORREO_USR)
@@ -63,6 +95,10 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "El correo ya está registrado." });
     }
 
+    // Generar contraseña aleatoria
+    const CONTRASENA_USR = generateRandomPassword();
+
+    // Subir imagen
     let imgFilename = null;
     if (imgFile) {
       const uploadDir = path.join(process.cwd(), "uploads/pics");
@@ -76,6 +112,7 @@ export const registerUser = async (req, res) => {
       await imgFile.mv(uploadPath);
     }
 
+    // Insertar usuario en la base de datos
     await pool
       .request()
       .input("TIPO_USR", sql.Int, TIPO_USR)
@@ -95,6 +132,9 @@ export const registerUser = async (req, res) => {
         VALUES (@TIPO_USR, @NOMBRE_USR, @APELLIDO_USR, @CORREO_USR, 
         @CONTRASENA_USR, @FECHA_ALTA_USR, @ACTIVO_USR, @IMG_USR)
       `);
+
+    // Enviar contraseña por correo electrónico
+    await sendPasswordEmail(CORREO_USR, CONTRASENA_USR);
 
     res.status(201).json({ message: "Usuario registrado exitosamente." });
   } catch (error) {
