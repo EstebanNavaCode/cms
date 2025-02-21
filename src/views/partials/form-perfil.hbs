@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="/assets/css/dashboard.css">
+<link rel="stylesheet" href="/assets/css/users.css">
+
+<section class="dashboard">
+
+    <div class="dash-content">
+        <div class="overview">
+            <div class="title">
+                <ion-icon name="settings-outline"></ion-icon>
+                <span class="text">Mi perfil</span>
+
+            </div>
+
+            <div class="form-container">
+
+                <form id="form-update-profile" method="POST" class="form" action="/users/updateProfile">
+                    <input type="hidden" id="user-id" name="ID_USR">
+
+                    <label>
+                        <input id="name" name="NOMBRE_USR" class="input" type="text" required>
+                        <span>Nombres*</span>
+                    </label>
+
+                    <label>
+                        <input id="lastname" name="APELLIDO_USR" class="input" type="text" required>
+                        <span>Apellidos*</span>
+                    </label>
+
+                    <label>
+                        <input id="correo_usr" name="CORREO_USR" class="input" type="email" required>
+                        <span>Correo Electrónico*</span>
+                    </label>
+
+                    <label>
+                        <input id="contrasena_usr" name="CONTRASENA_USR" class="input" type="password" required>
+                        <span>Contraseña</span>
+                    </label>
+
+                    <label class="custum-file-upload">
+                        <ion-icon name="cloud-upload-outline"></ion-icon>
+                        <div class="text">Subir nueva imagen</div>
+                        <input id="file" type="file" name="IMG_USR" accept="image/*" onchange="previewImage(event)">
+                    </label>
+
+                    <button class="submit" type="submit">Guardar Cambios</button>
+                </form>
+
+
+                <div class="image-preview">
+                    <i id="icon-placeholder" class="uil uil-image-search placeholder-icon"></i>
+                    <img id="preview" src="" alt="Vista previa de la imagen">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script src="/sis/middleware/users/registerUser.js"></script>
+<script src="/assets/js/imgPreview.js"></script>

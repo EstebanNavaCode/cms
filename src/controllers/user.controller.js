@@ -32,20 +32,6 @@ async function sendPasswordEmail(to, password) {
 }
 
 
-export const renderLogin = (req, res) => {
-  res.render("home/home");
-};
-
-function generateRandomPassword(length = 6) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let password = '';
-  for (let i = 0; i < length; i++) {
-    password += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return password;
-}
-
-
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -59,18 +45,55 @@ export const login = async (req, res) => {
       );
 
     if (result.recordset.length > 0) {
-      res.json({ success: true });
+      const user = result.recordset[0];
+
+      // Verificar si req.session está definido
+      if (!req.session) {
+        console.error("❌ Sesión no inicializada");
+        return res.status(500).json({ message: "Error de sesión" });
+      }
+
+      // Guardar datos en la sesión
+      req.session.user = {
+        id: user.ID_USR,
+        name: user.NOMBRE_USR,
+        lastname: user.APELLIDO_USR,
+        email: user.CORREO_USR,
+        type: user.TIPO_USR,
+        image: user.IMG_USR,
+      };
+
+      // Respuesta con datos del usuario
+      res.json({
+        success: true,
+        user: {
+          id: user.ID_USR,
+          name: user.NOMBRE_USR,
+          lastname: user.APELLIDO_USR,
+          email: user.CORREO_USR,
+          type: user.TIPO_USR,
+          image: user.IMG_USR,
+        },
+      });
     } else {
-      res
-        .status(401)
-        .json({ success: false, message: "Usuario o contraseña incorrectos" });
+      res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos" });
     }
   } catch (err) {
-    res.status(500).render("home/home", {
-      error: "Error al ingresar al sistema. Inténtalo de nuevo.",
-    });
+    console.error("❌ Error en el inicio de sesión:", err);
+    res.status(500).json({ message: "Error interno al iniciar sesión." });
   }
 };
+
+
+
+function generateRandomPassword(length = 6) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+}
 
 export const registerUser = async (req, res) => {
   try {
@@ -258,5 +281,69 @@ export const editUser = async (req, res) => {
     res
       .status(500)
       .json({ message: "Ocurrió un error al actualizar el usuario." });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const { NOMBRE_USR, APELLIDO_USR, CORREO_USR, CONTRASENA_USR } = req.body;
+    const imgFile = req.files?.IMG_USR;
+
+    if (!NOMBRE_USR || !APELLIDO_USR || !CORREO_USR) {
+      return res.status(400).json({
+        message: "Todos los campos son obligatorios.",
+      });
+    }
+
+    const pool = await getConnection();
+
+    let imgFilename = req.session.user.image;
+
+    if (imgFile) {
+      const uploadDir = path.join(process.cwd(), "uploads/pics");
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      imgFilename =
+        CORREO_USR.replace(/[@.]/g, "_") + path.extname(imgFile.name);
+      const uploadPath = path.join(uploadDir, imgFilename);
+      await imgFile.mv(uploadPath);
+      imgFilename = `/uploads/pics/${imgFilename}`;
+    }
+
+    await pool
+      .request()
+      .input("ID_USR", sql.Int, userId)
+      .input("NOMBRE_USR", sql.NVarChar(300), NOMBRE_USR)
+      .input("APELLIDO_USR", sql.NVarChar(300), APELLIDO_USR)
+      .input("CORREO_USR", sql.NVarChar(300), CORREO_USR)
+      .input("CONTRASENA_USR", sql.NVarChar(300), CONTRASENA_USR)
+      .input("IMG_USR", sql.NVarChar(300), imgFilename)
+      .query(`
+        UPDATE USR_T
+        SET 
+          NOMBRE_USR = @NOMBRE_USR,
+          APELLIDO_USR = @APELLIDO_USR,
+          CORREO_USR = @CORREO_USR,
+          CONTRASENA_USR = @CONTRASENA_USR,
+          IMG_USR = @IMG_USR
+        WHERE ID_USR = @ID_USR
+      `);
+
+    
+    req.session.user = {
+      ...req.session.user,
+      name: NOMBRE_USR,
+      lastname: APELLIDO_USR,
+      email: CORREO_USR,
+      image: imgFilename,
+    };
+
+    res.json({ message: "Perfil actualizado correctamente." });
+  } catch (error) {
+    console.error("❌ Error al actualizar el perfil:", error);
+    res.status(500).json({ message: "Ocurrió un error al actualizar el perfil." });
   }
 };

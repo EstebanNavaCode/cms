@@ -231,3 +231,137 @@ document.addEventListener("DOMContentLoaded", function () {
   nameInputs.forEach(enforceTextLimit);
   emailInputs.forEach(validateEmailInput);
 });
+
+document.getElementById("form-update-profile").addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const formData = new FormData(this);
+
+  try {
+    const response = await fetch("/users/updateProfile", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      // Actualizar sessionStorage con los nuevos datos
+      const updatedUser = {
+        id: formData.get("ID_USR"),
+        name: formData.get("NOMBRE_USR"),
+        lastname: formData.get("APELLIDO_USR"),
+        email: formData.get("CORREO_USR"),
+        image: result.user.image, // Asegúrate de que el backend envíe la imagen actualizada
+      };
+
+      sessionStorage.setItem("user", JSON.stringify(updatedUser));
+
+      Swal.fire({
+        icon: "success",
+        title: "Perfil actualizado",
+        text: result.message,
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        window.location.reload();
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: result.message,
+      });
+    }
+  } catch (err) {
+    console.error("❌ Error de conexión:", err);
+    Swal.fire({
+      icon: "error",
+      title: "Error de conexión",
+      text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+    });
+  }
+});
+
+document.getElementById("form-login").addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    const response = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      // Guardar datos en sessionStorage
+      sessionStorage.setItem("user", JSON.stringify(result.user));
+
+      Swal.fire({
+        icon: "success",
+        title: "Inicio de sesión exitoso",
+        text: "¡Bienvenido!",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        window.location.href = "/dashboard"; 
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error de inicio de sesión",
+        text: result.message,
+      });
+    }
+  } catch (err) {
+    console.error("❌ Error de conexión:", err);
+    Swal.fire({
+      icon: "error",
+      title: "Error de conexión",
+      text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+    });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+  if (user) {
+    // Rellenar los campos del formulario
+    document.getElementById("user-id").value = user.id;
+    document.getElementById("name").value = user.name;
+    document.getElementById("lastname").value = user.lastname;
+    document.getElementById("correo_usr").value = user.email;
+
+    // Mostrar la imagen si existe
+    const imagePreview = document.getElementById("preview");
+    if (user.image && user.image !== "NULL") {
+      imagePreview.src = user.image;
+      imagePreview.style.display = "block";
+    } else {
+      imagePreview.src = "/assets/img/default-placeholder.jpg";
+      imagePreview.style.display = "block";
+    }
+  } else {
+    // Si no hay datos en sessionStorage, redirigir al login
+    window.location.href = "/login";
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const user = JSON.parse(sessionStorage.getItem("user"));
+
+  if (!user) {
+    window.location.href = "/login";
+  }
+});
+
+
+

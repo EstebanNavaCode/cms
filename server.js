@@ -5,11 +5,19 @@ import { dirname } from "path";
 import path from "path";
 import favicon from "serve-favicon";
 import fileUpload from "express-fileupload";
+import session from "express-session"; 
 
 import router from "./sis/routes/routes.js";
 import config from "./sis/config/config.js";
 
 const app = express();
+app.use(session({
+  //p9$Lx!2Qr8#d3eZ!4n%TgX7*V0w@Jf1zLg3^N
+  secret: "p9$Lx!2Qr8#d3eZ!4n%TgX7*V0w@Jf1zLg3^N",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -25,6 +33,8 @@ app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "src", "views"));
 
 // Middleware for parsing JSON and form data
+app.use(session({ secret: 'mi_secreto', resave: false, saveUninitialized: true }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload());
@@ -60,6 +70,10 @@ app.get("/", (req, res) => {
 
 app.get("/dashboard", (req, res) => {
   res.render("dashboard/dashboard");
+});
+
+app.get("/perfil", (req, res) => {
+  res.render("perfil/perfil");
 });
 
 app.get("/users", (req, res) => {

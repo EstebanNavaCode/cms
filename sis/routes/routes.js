@@ -4,6 +4,7 @@ import {
   registerUser,
   getUsers,
   editUser,
+  updateProfile,
 } from "../../src/controllers/user.controller.js";
 
 import {
@@ -44,6 +45,8 @@ router.post("/", login);
 router.post("/users", registerUser);
 router.get("/users", getUsers);
 router.put("/users/:id", editUser);
+router.put("/perfil",updateProfile);
+
 
 //products routes
 router.post("/products", registerProduct);
