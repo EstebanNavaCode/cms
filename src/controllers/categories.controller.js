@@ -23,7 +23,9 @@ export const registerCategory = async (req, res) => {
       );
 
     if (existingCategory.recordset.length > 0) {
-      return res.status(400).json({ message: "Ya existe una categoría con este nombre." });
+      return res
+        .status(400)
+        .json({ message: "Ya existe una categoría con este nombre." });
     }
 
     // ✅ Insertar la nueva categoría
@@ -32,8 +34,7 @@ export const registerCategory = async (req, res) => {
       .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
       .input("DESCRIPCION_CAT", sql.NVarChar(300), DESCRIPCION_CAT)
       .input("FECHA_ALTA_CAT", sql.Date, new Date())
-      .input("ACTIVO_CAT", sql.Bit, true)
-      .query(`
+      .input("ACTIVO_CAT", sql.Bit, true).query(`
         INSERT INTO CATEGORIA_NOT_T (NOMBRE_CAT, DESCRIPCION_CAT, FECHA_ALTA_CAT, ACTIVO_CAT)
         OUTPUT INSERTED.ID_CAT
         VALUES (@NOMBRE_CAT, @DESCRIPCION_CAT, @FECHA_ALTA_CAT, @ACTIVO_CAT)
@@ -44,14 +45,16 @@ export const registerCategory = async (req, res) => {
     // ✅ Insertar subcategorías asociadas
     if (Array.isArray(subcategorias)) {
       for (const subcategory of subcategorias) {
-        if (subcategory.NOMBRE_ETQ && typeof subcategory.NOMBRE_ETQ === "string") {
+        if (
+          subcategory.NOMBRE_ETQ &&
+          typeof subcategory.NOMBRE_ETQ === "string"
+        ) {
           await pool
             .request()
             .input("ID_CAT", sql.Int, categoryId)
             .input("NOMBRE_ETQ", sql.NVarChar(300), subcategory.NOMBRE_ETQ)
             .input("FECHA_ALTA_ETQ", sql.Date, new Date())
-            .input("ACTIVO_ETQ", sql.Bit, true)
-            .query(`
+            .input("ACTIVO_ETQ", sql.Bit, true).query(`
               INSERT INTO ETIQUETA_NOT_T (ID_CAT, NOMBRE_ETQ, FECHA_ALTA_ETQ, ACTIVO_ETQ)
               VALUES (@ID_CAT, @NOMBRE_ETQ, @FECHA_ALTA_ETQ, @ACTIVO_ETQ)
             `);
@@ -59,20 +62,24 @@ export const registerCategory = async (req, res) => {
       }
     }
 
-    res.status(201).json({ message: "Categoría y subcategorías registradas con éxito." });
-
+    res
+      .status(201)
+      .json({ message: "Categoría y subcategorías registradas con éxito." });
   } catch (error) {
     console.error("❌ Error detallado:", error);
 
     // Si el error es de clave duplicada
     if (error.number === 2627 || error.number === 2601) {
-      return res.status(400).json({ message: "Ya existe una categoría con este nombre." });
+      return res
+        .status(400)
+        .json({ message: "Ya existe una categoría con este nombre." });
     }
 
-    res.status(500).json({ message: "Error al registrar categoría y subcategorías." });
+    res
+      .status(500)
+      .json({ message: "Error al registrar categoría y subcategorías." });
   }
 };
-
 
 export const getCategoriesAndTags = async (req, res) => {
   try {

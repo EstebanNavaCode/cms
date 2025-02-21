@@ -22,7 +22,8 @@ export const registerNews = async (req, res) => {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
 
-      imgFilename = TITULO_NOT.replace(/\s+/g, "_") + path.extname(imgFile.name);
+      imgFilename =
+        TITULO_NOT.replace(/\s+/g, "_") + path.extname(imgFile.name);
       const uploadPath = path.join(uploadDir, imgFilename);
       await imgFile.mv(uploadPath);
     }
@@ -31,7 +32,8 @@ export const registerNews = async (req, res) => {
     const FECHA_ALTA_NOT = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
     // 🔹 Si `ACTIVO_NOT` no se envía, asignamos `1` (Activo) por defecto
-    const ACTIVO_NOT = req.body.ACTIVO_NOT !== undefined ? req.body.ACTIVO_NOT : 1;
+    const ACTIVO_NOT =
+      req.body.ACTIVO_NOT !== undefined ? req.body.ACTIVO_NOT : 1;
 
     const pool = await getConnection();
     await pool
@@ -41,7 +43,11 @@ export const registerNews = async (req, res) => {
       .input("TITULO_NOT", sql.NVarChar(300), TITULO_NOT)
       .input("TEXTO_NOT", sql.NVarChar(sql.MAX), TEXTO_NOT)
       .input("FECHA_PUBLICAR_NOT", sql.Date, FECHA_PUBLICAR_NOT)
-      .input("IMG_NOT", sql.NVarChar(300), imgFilename ? `/uploads/news/${imgFilename}` : null)
+      .input(
+        "IMG_NOT",
+        sql.NVarChar(300),
+        imgFilename ? `/uploads/news/${imgFilename}` : null
+      )
       .input("FECHA_ALTA_NOT", sql.Date, FECHA_ALTA_NOT) // 🔹 Se envía `FECHA_ALTA_NOT`
       .input("ACTIVO_NOT", sql.Bit, ACTIVO_NOT) // 🔹 Se agrega `ACTIVO_NOT` con un valor por defecto
       .query(`
@@ -55,7 +61,6 @@ export const registerNews = async (req, res) => {
     res.status(500).json({ message: "Error al registrar la noticia." });
   }
 };
-
 
 export const getCategoriesNEWS = async (req, res) => {
   try {
@@ -100,8 +105,8 @@ export const getSubcategoriesNEWS = async (req, res) => {
 
 export const getNews = async (req, res) => {
   try {
-      const pool = await getConnection();
-      const result = await pool.request().query(`
+    const pool = await getConnection();
+    const result = await pool.request().query(`
           SELECT 
               N.ID_NOT,
               N.TITULO_NOT,
@@ -121,71 +126,77 @@ export const getNews = async (req, res) => {
           LEFT JOIN ETIQUETA_NOT_T E ON N.ETIQUETA_NOT = E.ID_ETQ
       `);
 
-      //console.log("Noticias cargadas desde la BD:", result.recordset);
+    //console.log("Noticias cargadas desde la BD:", result.recordset);
 
-      res.render("news/news", { news: result.recordset });
+    res.render("news/news", { news: result.recordset });
   } catch (error) {
-      console.error("Error al obtener noticias:", error);
-      res.status(500).json({ message: "Error al obtener la lista de noticias." });
+    console.error("Error al obtener noticias:", error);
+    res.status(500).json({ message: "Error al obtener la lista de noticias." });
   }
 };
 
 export const editNews = async (req, res) => {
   const { id } = req.params;
   const {
-      TITULO_NOT,
-      TEXTO_NOT,
-      FECHA_PUBLICAR_NOT,
-      CATEGORIA_NOT,
-      ETIQUETA_NOT,
-      ACTIVO_NOT, 
+    TITULO_NOT,
+    TEXTO_NOT,
+    FECHA_PUBLICAR_NOT,
+    CATEGORIA_NOT,
+    ETIQUETA_NOT,
+    ACTIVO_NOT,
   } = req.body;
 
-  console.log("Valor recibido de ACTIVO_NOT en el backend:", ACTIVO_NOT); 
+  console.log("Valor recibido de ACTIVO_NOT en el backend:", ACTIVO_NOT);
 
   const imgFile = req.files?.IMG_NOT;
   let imgFilename = null;
 
   try {
-      const pool = await getConnection();
-      const result = await pool
-          .request()
-          .input("ID_NOT", sql.Int, id)
-          .query("SELECT IMG_NOT FROM NOT_T WHERE ID_NOT = @ID_NOT");
+    const pool = await getConnection();
+    const result = await pool
+      .request()
+      .input("ID_NOT", sql.Int, id)
+      .query("SELECT IMG_NOT FROM NOT_T WHERE ID_NOT = @ID_NOT");
 
-      let oldImagePath = result.recordset[0]?.IMG_NOT;
+    let oldImagePath = result.recordset[0]?.IMG_NOT;
 
-      if (imgFile) {
-          const uploadDir = path.join(process.cwd(), "uploads/news");
+    if (imgFile) {
+      const uploadDir = path.join(process.cwd(), "uploads/news");
 
-          if (oldImagePath) {
-              const oldPath = path.join(uploadDir, path.basename(oldImagePath));
-              if (fs.existsSync(oldPath)) {
-                  fs.unlinkSync(oldPath);
-              }
-          }
-
-          imgFilename = TITULO_NOT.replace(/\s+/g, "_") + path.extname(imgFile.name);
-          const uploadPath = path.join(uploadDir, imgFilename);
-          await imgFile.mv(uploadPath);
+      if (oldImagePath) {
+        const oldPath = path.join(uploadDir, path.basename(oldImagePath));
+        if (fs.existsSync(oldPath)) {
+          fs.unlinkSync(oldPath);
+        }
       }
 
-      
-      const activoValue = ACTIVO_NOT !== undefined && ACTIVO_NOT !== null ? parseInt(ACTIVO_NOT, 10) : 1;
+      imgFilename =
+        TITULO_NOT.replace(/\s+/g, "_") + path.extname(imgFile.name);
+      const uploadPath = path.join(uploadDir, imgFilename);
+      await imgFile.mv(uploadPath);
+    }
 
-      console.log("ACTIVO_NOT procesado en el backend:", activoValue);
+    const activoValue =
+      ACTIVO_NOT !== undefined && ACTIVO_NOT !== null
+        ? parseInt(ACTIVO_NOT, 10)
+        : 1;
 
-      await pool
-          .request()
-          .input("TITULO_NOT", sql.NVarChar(300), TITULO_NOT)
-          .input("TEXTO_NOT", sql.NVarChar(sql.MAX), TEXTO_NOT)
-          .input("FECHA_PUBLICAR_NOT", sql.Date, FECHA_PUBLICAR_NOT)
-          .input("CATEGORIA_NOT", sql.Int, CATEGORIA_NOT)
-          .input("ETIQUETA_NOT", sql.Int, ETIQUETA_NOT)
-          .input("ACTIVO_NOT", sql.Bit, activoValue)
-          .input("IMG_NOT", sql.NVarChar(300), imgFilename ? `/uploads/news/${imgFilename}` : oldImagePath)
-          .input("ID_NOT", sql.Int, id)
-          .query(`
+    console.log("ACTIVO_NOT procesado en el backend:", activoValue);
+
+    await pool
+      .request()
+      .input("TITULO_NOT", sql.NVarChar(300), TITULO_NOT)
+      .input("TEXTO_NOT", sql.NVarChar(sql.MAX), TEXTO_NOT)
+      .input("FECHA_PUBLICAR_NOT", sql.Date, FECHA_PUBLICAR_NOT)
+      .input("CATEGORIA_NOT", sql.Int, CATEGORIA_NOT)
+      .input("ETIQUETA_NOT", sql.Int, ETIQUETA_NOT)
+      .input("ACTIVO_NOT", sql.Bit, activoValue)
+      .input(
+        "IMG_NOT",
+        sql.NVarChar(300),
+        imgFilename ? `/uploads/news/${imgFilename}` : oldImagePath
+      )
+      .input("ID_NOT", sql.Int, id).query(`
               UPDATE NOT_T
               SET TITULO_NOT = @TITULO_NOT,
                   TEXTO_NOT = @TEXTO_NOT,
@@ -197,10 +208,9 @@ export const editNews = async (req, res) => {
               WHERE ID_NOT = @ID_NOT
           `);
 
-      res.status(200).json({ message: "Noticia actualizada exitosamente." });
+    res.status(200).json({ message: "Noticia actualizada exitosamente." });
   } catch (error) {
-      console.error("Error al actualizar noticia:", error);
-      res.status(500).json({ message: "Error al actualizar noticia." });
+    console.error("Error al actualizar noticia:", error);
+    res.status(500).json({ message: "Error al actualizar noticia." });
   }
 };
-

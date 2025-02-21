@@ -68,69 +68,76 @@ $(document).ready(function () {
         type: "date",
         render: function (data, type, row) {
           if (!data) return "";
-      
+
           const date = new Date(data);
-          if (isNaN(date)) return data; 
+          if (isNaN(date)) return data;
 
           const year = date.getFullYear();
           const month = String(date.getMonth() + 1).padStart(2, "0");
           const day = String(date.getDate()).padStart(2, "0");
-      
+
           if (type === "sort" || type === "type") {
             return `${year}-${month}-${day}`;
           }
-      
+
           return `${day}/${month}/${year}`;
         },
-      }
-      
+      },
     ],
   });
 
   $("#newsTable tbody").on("click", "tr", async function () {
     try {
-        const rowData = newsTable.row(this).data();
-        const newsId = $(this).data("id");
-        const categoryId = $(this).data("category-id");
-        const labelId = $(this).data("label-id");
-        const isActiveRaw = $(this).data("active");
+      const rowData = newsTable.row(this).data();
+      const newsId = $(this).data("id");
+      const categoryId = $(this).data("category-id");
+      const labelId = $(this).data("label-id");
+      const isActiveRaw = $(this).data("active");
 
-        const isActive = isActiveRaw == 1 || isActiveRaw === true || isActiveRaw === "true";
-       // console.log("Estado actual en la tabla:", isActive); 
+      const isActive =
+        isActiveRaw == 1 || isActiveRaw === true || isActiveRaw === "true";
+      // console.log("Estado actual en la tabla:", isActive);
 
-        if (!newsId || isNaN(newsId)) {
-            console.error("ID de la noticia no es válido:", newsId);
-            alert("No se pudo cargar la noticia debido a un error en los datos.");
-            return;
-        }
+      if (!newsId || isNaN(newsId)) {
+        console.error("ID de la noticia no es válido:", newsId);
+        alert("No se pudo cargar la noticia debido a un error en los datos.");
+        return;
+      }
 
-        const cleanTitle = typeof rowData[1] === "string" ? rowData[1].trim().substring(0, 300) : "";
-        const cleanText = typeof rowData[2] === "string" ? rowData[2].trim().substring(0, 1000) : "";
-        const imagePath = $(this).data("image") || "/uploads/news/default-placeholder.jpg";
+      const cleanTitle =
+        typeof rowData[1] === "string"
+          ? rowData[1].trim().substring(0, 300)
+          : "";
+      const cleanText =
+        typeof rowData[2] === "string"
+          ? rowData[2].trim().substring(0, 1000)
+          : "";
+      const imagePath =
+        $(this).data("image") || "/uploads/news/default-placeholder.jpg";
 
-        //console.log("Imagen recibida en modal:", imagePath);
+      //console.log("Imagen recibida en modal:", imagePath);
 
-        $("#edit-id").val(newsId);
-        $("#edit-title").val(cleanTitle);
-        $("#edit-text").val(cleanText);
-        $("#edit-date").val(new Date(rowData[3]).toISOString().split("T")[0]);
+      $("#edit-id").val(newsId);
+      $("#edit-title").val(cleanTitle);
+      $("#edit-text").val(cleanText);
+      $("#edit-date").val(new Date(rowData[3]).toISOString().split("T")[0]);
 
-        $("#modal-register-news .image-preview img").attr("src", imagePath).show();
+      $("#modal-register-news .image-preview img")
+        .attr("src", imagePath)
+        .show();
 
-        $("#cb5").prop("checked", isActive);
-        $("#modal-active").val(isActive ? 1 : 0);
-        console.log("Estado cargado en modal:", isActive ? 1 : 0); 
+      $("#cb5").prop("checked", isActive);
+      $("#modal-active").val(isActive ? 1 : 0);
+      console.log("Estado cargado en modal:", isActive ? 1 : 0);
 
-        await loadCategoriesAndLabels(categoryId, labelId);
+      await loadCategoriesAndLabels(categoryId, labelId);
 
-        $("#modal-register-news").css("min-height", "500px").modal("show");
+      $("#modal-register-news").css("min-height", "500px").modal("show");
     } catch (error) {
-        console.error("Error al abrir el modal:", error);
-        alert("Ocurrió un error al abrir la noticia. Intenta nuevamente.");
+      console.error("Error al abrir el modal:", error);
+      alert("Ocurrió un error al abrir la noticia. Intenta nuevamente.");
     }
-});
-
-
+  });
 
   async function loadCategoriesAndLabels(categoryId, labelId) {
     try {

@@ -31,13 +31,23 @@ app.use(fileUpload());
 
 // Static files
 app.use("/assets", express.static(path.join(__dirname, "assets")));
-app.use("/sis/middleware", express.static(path.join(__dirname, "sis/middleware")));
+app.use(
+  "/sis/middleware",
+  express.static(path.join(__dirname, "sis/middleware"))
+);
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
-app.use("/uploads/pics", express.static(path.join(process.cwd(), "uploads/pics")));
-app.use("/uploads/products", express.static(path.join(process.cwd(), "uploads/products")));
-app.use("/uploads/news", express.static(path.join(process.cwd(), "uploads/news")));
-
-
+app.use(
+  "/uploads/pics",
+  express.static(path.join(process.cwd(), "uploads/pics"))
+);
+app.use(
+  "/uploads/products",
+  express.static(path.join(process.cwd(), "uploads/products"))
+);
+app.use(
+  "/uploads/news",
+  express.static(path.join(process.cwd(), "uploads/news"))
+);
 
 app.use(favicon(path.join(__dirname, "assets", "img", "favicon.ico")));
 

@@ -25,11 +25,9 @@ export const registerProduct = async (req, res) => {
       !ISBN_LIB ||
       !STOCK_LIB
     ) {
-      return res
-        .status(400)
-        .json({
-          message: "Todos los campos obligatorios deben ser proporcionados.",
-        });
+      return res.status(400).json({
+        message: "Todos los campos obligatorios deben ser proporcionados.",
+      });
     }
 
     let imgFilename = null;
@@ -142,7 +140,7 @@ export const getProducts = async (req, res) => {
 export const editProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const {
       NOMBRE_LIB,
       AUTOR_LIB,
@@ -225,7 +223,8 @@ export const editProduct = async (req, res) => {
     res.json({ message: "Producto actualizado correctamente." });
   } catch (error) {
     console.error("⚠️ Error al actualizar producto:", error);
-    res.status(500).json({ message: "Ocurrió un error al actualizar el producto." });
+    res
+      .status(500)
+      .json({ message: "Ocurrió un error al actualizar el producto." });
   }
 };
-

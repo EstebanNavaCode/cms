@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
           title: "Error al registrar",
           text: result.message || "No se pudo registrar el género.",
           showConfirmButton: false,
-          timer:1500,
+          timer: 1500,
         });
         return;
       }
@@ -82,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }).then(() => {
         window.location.reload();
       });
-
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -96,19 +95,24 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-
-  const genreNameInputs = document.querySelectorAll("#NOMBRE_LCAT, #edit-genero-name");
+  const genreNameInputs = document.querySelectorAll(
+    "#NOMBRE_LCAT, #edit-genero-name"
+  );
 
   function enforceTextLimit(input) {
     input.addEventListener("input", function () {
       if (this.value.length > 30) {
-        this.value = this.value.slice(0, 30); 
+        this.value = this.value.slice(0, 30);
       }
     });
 
     input.addEventListener("keydown", function (event) {
-      if (this.value.length >= 30 && event.key !== "Backspace" && event.key !== "Delete") {
-        event.preventDefault(); 
+      if (
+        this.value.length >= 30 &&
+        event.key !== "Backspace" &&
+        event.key !== "Delete"
+      ) {
+        event.preventDefault();
       }
     });
   }

@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   const handleAddEtiqueta = (
     inputField,
     listContainer,
@@ -98,74 +97,79 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.getElementById("form-register-category").addEventListener("submit", async function (event) {
-    event.preventDefault();
-  
-    const nombre = document.getElementById("name").value.trim();
-    const descripcion = document.getElementById("descripcion").value.trim();
-    let subcategorias = []; 
-  
-    document.querySelectorAll("#subcategory-list .subcategory-tag span").forEach(tag => {
-      subcategorias.push({ ID_ETQ: null, NOMBRE_ETQ: tag.innerText.trim() });
-    });
-  
-    if (!nombre || !descripcion) {
-      Swal.fire({
-        icon: "error",
-        title: "Complete todos los campos",
-        text: "Rellene los campos faltantes e intente de nuevo.",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      return;
-    }
-  
-    try {
-      const response = await fetch("/categorias", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          NOMBRE_CAT: nombre,
-          DESCRIPCION_CAT: descripcion,
-          subcategorias,
-        }),
-      });
-  
-      const result = await response.json();
-  
-      if (response.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "Categoría registrada",
-          text: result.message,
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          window.location.reload();
+  document
+    .getElementById("form-register-category")
+    .addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const nombre = document.getElementById("name").value.trim();
+      const descripcion = document.getElementById("descripcion").value.trim();
+      let subcategorias = [];
+
+      document
+        .querySelectorAll("#subcategory-list .subcategory-tag span")
+        .forEach((tag) => {
+          subcategorias.push({
+            ID_ETQ: null,
+            NOMBRE_ETQ: tag.innerText.trim(),
+          });
         });
-      } else {
-        // 📢 Ahora mostramos el mensaje del backend en la alerta
+
+      if (!nombre || !descripcion) {
         Swal.fire({
           icon: "error",
-          title: "Error al registrar",
-          text: result.message || "Algo salió mal, intente de nuevo.",
+          title: "Complete todos los campos",
+          text: "Rellene los campos faltantes e intente de nuevo.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return;
+      }
+
+      try {
+        const response = await fetch("/categorias", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            NOMBRE_CAT: nombre,
+            DESCRIPCION_CAT: descripcion,
+            subcategorias,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "Categoría registrada",
+            text: result.message,
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            window.location.reload();
+          });
+        } else {
+          // 📢 Ahora mostramos el mensaje del backend en la alerta
+          Swal.fire({
+            icon: "error",
+            title: "Error al registrar",
+            text: result.message || "Algo salió mal, intente de nuevo.",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "Error de conexión",
+          text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
           showConfirmButton: false,
           timer: 2000,
         });
+        console.error("Error:", err);
       }
-  
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error de conexión",
-        text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
-        showConfirmButton: false,
-        timer: 2000,
-      });
-      console.error("Error:", err);
-    }
-  });
-  
+    });
 
   /*** 🟢 MANEJO DE EDICIÓN DE CATEGORÍAS ***/
 
@@ -292,19 +296,24 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  
-  const categoryNameInputs = document.querySelectorAll("#name, #edit-category-name");
-  
+  const categoryNameInputs = document.querySelectorAll(
+    "#name, #edit-category-name"
+  );
+
   function enforceTextLimit(input) {
     input.addEventListener("input", function () {
       if (this.value.length > 30) {
-        this.value = this.value.slice(0, 30); 
+        this.value = this.value.slice(0, 30);
       }
     });
 
     input.addEventListener("keydown", function (event) {
-      if (this.value.length >= 30 && event.key !== "Backspace" && event.key !== "Delete") {
-        event.preventDefault(); 
+      if (
+        this.value.length >= 30 &&
+        event.key !== "Backspace" &&
+        event.key !== "Delete"
+      ) {
+        event.preventDefault();
       }
     });
   }

@@ -3,27 +3,36 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("form-register-user")
     .addEventListener("submit", async function (event) {
       event.preventDefault();
- 
+
       const formData = new FormData();
       formData.append("TIPO_USR", document.getElementById("type")?.value);
       formData.append("NOMBRE_USR", document.getElementById("name").value);
-      formData.append("APELLIDO_USR", document.getElementById("lastname").value);
-      formData.append("CORREO_USR", document.getElementById("correo_usr").value);
-      formData.append("CONTRASENA_USR", document.getElementById("contrasena_usr").value);
- 
-      const fileInput = document.getElementById("file"); 
+      formData.append(
+        "APELLIDO_USR",
+        document.getElementById("lastname").value
+      );
+      formData.append(
+        "CORREO_USR",
+        document.getElementById("correo_usr").value
+      );
+      formData.append(
+        "CONTRASENA_USR",
+        document.getElementById("contrasena_usr").value
+      );
+
+      const fileInput = document.getElementById("file");
       if (fileInput.files.length > 0) {
         formData.append("IMG_USR", fileInput.files[0]);
       }
- 
+
       try {
         const response = await fetch("/users", {
           method: "POST",
-          body: formData, 
+          body: formData,
         });
- 
+
         const result = await response.json();
- 
+
         if (response.ok) {
           Swal.fire({
             icon: "success",
@@ -41,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
               title: "Correo duplicado",
               text: "Este correo ya está registrado. Intente con otro.",
               showConfirmButton: false,
-              timer:1500,
+              timer: 1500,
             });
           } else {
             Swal.fire({
@@ -73,11 +82,26 @@ document
 
     const formData = new FormData();
     formData.append("ID_USR", document.getElementById("modal-id").value.trim());
-    formData.append("TIPO_USR", document.getElementById("type-modal").value.trim());
-    formData.append("NOMBRE_USR", document.getElementById("modal-name").value.trim());
-    formData.append("APELLIDO_USR", document.getElementById("modal-lastname").value.trim());
-    formData.append("CORREO_USR", document.getElementById("modal-correo").value.trim());
-    formData.append("ACTIVO_USR", document.getElementById("modal-active").value); // ✅ Se envía el valor correcto
+    formData.append(
+      "TIPO_USR",
+      document.getElementById("type-modal").value.trim()
+    );
+    formData.append(
+      "NOMBRE_USR",
+      document.getElementById("modal-name").value.trim()
+    );
+    formData.append(
+      "APELLIDO_USR",
+      document.getElementById("modal-lastname").value.trim()
+    );
+    formData.append(
+      "CORREO_USR",
+      document.getElementById("modal-correo").value.trim()
+    );
+    formData.append(
+      "ACTIVO_USR",
+      document.getElementById("modal-active").value
+    ); // ✅ Se envía el valor correcto
 
     const fileInput = document.getElementById("modal-file");
     if (fileInput.files.length > 0) {
@@ -126,22 +150,21 @@ document
     }
   });
 
-
-  function updateCheckboxState() {
-    let isChecked = $("#cb5").prop("checked");
-    $("#modal-active").val(isChecked ? "1" : "0");
-    //console.log("🔄 Estado del checkbox enviado:", $("#modal-active").val());
+function updateCheckboxState() {
+  let isChecked = $("#cb5").prop("checked");
+  $("#modal-active").val(isChecked ? "1" : "0");
+  //console.log("🔄 Estado del checkbox enviado:", $("#modal-active").val());
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
-
-  const nameInputs = document.querySelectorAll("#name, #lastname, #modal-name, #modal-lastname");
+  const nameInputs = document.querySelectorAll(
+    "#name, #lastname, #modal-name, #modal-lastname"
+  );
 
   const validateNameInput = (input) => {
-    const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/
+    const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
     if (!regex.test(input.value)) {
-      input.value = input.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, ""); 
+      input.value = input.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
       //showError(input, "Entrada no valida");
     } else {
       clearError(input);
@@ -173,33 +196,37 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  
-  const nameInputs = document.querySelectorAll("#name, #lastname, #modal-name, #modal-lastname");
-  
+  const nameInputs = document.querySelectorAll(
+    "#name, #lastname, #modal-name, #modal-lastname"
+  );
+
   const emailInputs = document.querySelectorAll("#correo_usr, #modal-correo");
 
   function enforceTextLimit(input) {
     input.addEventListener("input", function () {
       if (this.value.length > 30) {
-        this.value = this.value.slice(0, 30); 
+        this.value = this.value.slice(0, 30);
       }
     });
 
     input.addEventListener("keydown", function (event) {
-      if (this.value.length >= 30 && event.key !== "Backspace" && event.key !== "Delete") {
-        event.preventDefault(); 
+      if (
+        this.value.length >= 30 &&
+        event.key !== "Backspace" &&
+        event.key !== "Delete"
+      ) {
+        event.preventDefault();
       }
     });
   }
-
 
   function validateEmailInput(input) {
     input.addEventListener("input", function () {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(this.value)) {
-        this.style.borderColor = "red"; 
+        this.style.borderColor = "red";
       } else {
-        this.style.borderColor = "green"; 
+        this.style.borderColor = "green";
       }
     });
   }

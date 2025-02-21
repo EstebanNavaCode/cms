@@ -6,14 +6,19 @@ export const registerGenero = async (req, res) => {
     const { NOMBRE_LCAT, DESCRIPCION_LCAT, subgeneros } = req.body;
 
     if (!NOMBRE_LCAT || !DESCRIPCION_LCAT) {
-      return res.status(400).json({ message: "Nombre y descripción son obligatorios" });
+      return res
+        .status(400)
+        .json({ message: "Nombre y descripción son obligatorios" });
     }
 
     let subgenerosArray = [];
     try {
-      subgenerosArray = typeof subgeneros === "string" ? JSON.parse(subgeneros) : subgeneros;
+      subgenerosArray =
+        typeof subgeneros === "string" ? JSON.parse(subgeneros) : subgeneros;
     } catch (error) {
-      return res.status(400).json({ message: "Formato de subgéneros inválido." });
+      return res
+        .status(400)
+        .json({ message: "Formato de subgéneros inválido." });
     }
 
     const pool = await getConnection();
@@ -22,10 +27,14 @@ export const registerGenero = async (req, res) => {
     const existingGenero = await pool
       .request()
       .input("NOMBRE_LCAT", sql.NVarChar(300), NOMBRE_LCAT)
-      .query(`SELECT ID_LCAT FROM CATEGORIA_LIB_T WHERE NOMBRE_LCAT = @NOMBRE_LCAT`);
+      .query(
+        `SELECT ID_LCAT FROM CATEGORIA_LIB_T WHERE NOMBRE_LCAT = @NOMBRE_LCAT`
+      );
 
     if (existingGenero.recordset.length > 0) {
-      return res.status(400).json({ message: "Ya existe un género con este nombre." });
+      return res
+        .status(400)
+        .json({ message: "Ya existe un género con este nombre." });
     }
 
     // 🔹 Insertar el nuevo género
@@ -34,8 +43,7 @@ export const registerGenero = async (req, res) => {
       .input("NOMBRE_LCAT", sql.NVarChar(300), NOMBRE_LCAT)
       .input("DESCRIPCION_LCAT", sql.NVarChar(300), DESCRIPCION_LCAT)
       .input("FECHA_ALTA_LCAT", sql.Date, new Date())
-      .input("ACTIVO_LCAT", sql.Bit, true)
-      .query(`
+      .input("ACTIVO_LCAT", sql.Bit, true).query(`
         INSERT INTO CATEGORIA_LIB_T (NOMBRE_LCAT, DESCRIPCION_LCAT, FECHA_ALTA_LCAT, ACTIVO_LCAT)
         OUTPUT INSERTED.ID_LCAT
         VALUES (@NOMBRE_LCAT, @DESCRIPCION_LCAT, @FECHA_ALTA_LCAT, @ACTIVO_LCAT)
@@ -50,8 +58,7 @@ export const registerGenero = async (req, res) => {
         .input("ID_LCAT", sql.Int, generoId)
         .input("NOMBRE_SBC", sql.NVarChar(300), subgenero)
         .input("FECHA_ALTA_SBC", sql.Date, new Date())
-        .input("ACTIVO_SBC", sql.Bit, true)
-        .query(`
+        .input("ACTIVO_SBC", sql.Bit, true).query(`
             INSERT INTO SUBCATEGORIA_LCAT_T (ID_LCAT, NOMBRE_SBC, FECHA_ALTA_SBC, ACTIVO_SBC)
             VALUES (@ID_LCAT, @NOMBRE_SBC, @FECHA_ALTA_SBC, @ACTIVO_SBC)
         `);
@@ -61,13 +68,13 @@ export const registerGenero = async (req, res) => {
       message: "Género y subgéneros registrados con éxito.",
       redirect: "/generos",
     });
-
   } catch (error) {
     console.error("❌ Error al registrar género y subgéneros:", error);
-    res.status(500).json({ message: "Error al registrar género y subgéneros." });
+    res
+      .status(500)
+      .json({ message: "Error al registrar género y subgéneros." });
   }
 };
-
 
 export const getGenerosAndSubgeneros = async (req, res) => {
   try {

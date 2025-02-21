@@ -35,8 +35,7 @@ $(document).ready(function () {
 
           return `${day}/${month}/${year}`;
         },
-      }
-
+      },
     ],
   });
 

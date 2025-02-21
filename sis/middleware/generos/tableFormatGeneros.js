@@ -21,23 +21,23 @@ $(document).ready(function () {
         type: "date",
         render: function (data, type, row) {
           if (!data) return "";
-      
+
           const date = new Date(data);
           if (isNaN(date)) return data; // Si la fecha es inválida, retorna el valor original
-      
+
           const year = date.getFullYear();
           const month = String(date.getMonth() + 1).padStart(2, "0");
           const day = String(date.getDate()).padStart(2, "0");
-      
+
           // Para ordenar, retornar en formato YYYY-MM-DD
           if (type === "sort" || type === "type") {
             return `${year}-${month}-${day}`;
           }
-      
+
           // Para mostrar en formato DD/MM/YYYY
           return `${day}/${month}/${year}`;
         },
-      }
+      },
     ],
   });
 
