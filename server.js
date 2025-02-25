@@ -62,6 +62,10 @@ app.get("/dashboard", (req, res) => {
   res.render("dashboard/dashboard");
 });
 
+app.get("/perfil", (req, res) => {
+  res.render("perfil/perfil");
+});
+
 app.get("/users", (req, res) => {
   res.render("users/users");
 });
