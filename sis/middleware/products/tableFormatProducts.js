@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
         option.textContent = category.NOMBRE_LCAT;
         categorySelect.appendChild(option);
       });
-
     } catch (error) {
       console.error("⚠️ Error al cargar categorías:", error);
     }
@@ -44,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
         option.textContent = subcategory.NOMBRE_SBC;
         subcategorySelect.appendChild(option);
       });
-
     } catch (error) {
       console.error("⚠️ Error al cargar subcategorías:", error);
     }
@@ -105,7 +103,9 @@ document.addEventListener("DOMContentLoaded", function () {
     await loadCategories();
     await selectCategoryAndSubcategory(categoryName, subcategoryName);
 
-    let imageUrl = rowData[9] ? rowData[9].trim() : "/assets/img/default-placeholder.jpg";
+    let imageUrl = rowData[9]
+      ? rowData[9].trim()
+      : "/assets/img/default-placeholder.jpg";
     if (imageUrl.includes("<img")) {
       imageUrl = imageUrl.replace(/<img[^>]+src=['"]([^'"]+)['"][^>]*>/, "$1");
     }
@@ -148,10 +148,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (subcategoryOption) {
         subcategorySelect.value = subcategoryOption.value;
       }
-
     } catch (error) {
       console.error("⚠️ Error al cargar categoría y subcategorías:", error);
     }
   }
-
 });

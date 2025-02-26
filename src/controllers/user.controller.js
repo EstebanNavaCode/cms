@@ -3,48 +3,47 @@ import fs from "fs";
 import path from "path";
 import sql from "mssql";
 
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 // Configuración de nodemailer
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
-    user: 'nava.esteban.0200.17@gmail.com',
-    pass: 'gwduarmsupathrcg',
-    //gwdu arms upat hrcg 
+    user: "nava.esteban.0200.17@gmail.com",
+    pass: "gwduarmsupathrcg",
+    //gwdu arms upat hrcg
   },
 });
 
 async function sendPasswordEmail(to, password) {
   const mailOptions = {
-    from: 'tu-correo@gmail.com',
+    from: "tu-correo@gmail.com",
     to: to,
-    subject: 'Contraseña de acceso - Tu App',
-    text: `Hola,\n\nTu cuenta ha sido creada con éxito. Tu contraseña temporal es: ${password}\n\nPor favor, cámbiala después de iniciar sesión.\n\nSaludos,`
+    subject: "Contraseña de acceso - Tu App",
+    text: `Hola,\n\nTu cuenta ha sido creada con éxito. Tu contraseña temporal es: ${password}\n\nPor favor, cámbiala después de iniciar sesión.\n\nSaludos,`,
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log('Correo enviado exitosamente');
+    console.log("Correo enviado exitosamente");
   } catch (error) {
-    console.error('Error enviando el correo:', error);
+    console.error("Error enviando el correo:", error);
   }
 }
-
 
 export const renderLogin = (req, res) => {
   res.render("home/home");
 };
 
 function generateRandomPassword(length = 6) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let password = '';
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let password = "";
   for (let i = 0; i < length; i++) {
     password += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return password;
 }
-
 
 export const login = async (req, res) => {
   try {
@@ -104,7 +103,6 @@ export const login = async (req, res) => {
     });
   }
 };
-
 
 export const registerUser = async (req, res) => {
   try {
@@ -212,7 +210,14 @@ export const editUser = async (req, res) => {
     //console.log("📩 Recibiendo solicitud para actualizar usuario...");
 
     const { id } = req.params;
-    const { TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, ACTIVO_USR, CONTRASENA_USR } = req.body;
+    const {
+      TIPO_USR,
+      NOMBRE_USR,
+      APELLIDO_USR,
+      CORREO_USR,
+      ACTIVO_USR,
+      CONTRASENA_USR,
+    } = req.body;
     const imgFile = req.files?.IMG_USR;
 
     //console.log("📌 Datos recibidos:", { id, TIPO_USR, NOMBRE_USR, APELLIDO_USR, CORREO_USR, ACTIVO_USR, CONTRASENA_USR });
@@ -249,7 +254,8 @@ export const editUser = async (req, res) => {
         }
       }
 
-      imgFilename = CORREO_USR.replace(/[@.]/g, "_") + path.extname(imgFile.name);
+      imgFilename =
+        CORREO_USR.replace(/[@.]/g, "_") + path.extname(imgFile.name);
       const uploadPath = path.join(uploadDir, imgFilename);
 
       await imgFile.mv(uploadPath);
@@ -259,7 +265,8 @@ export const editUser = async (req, res) => {
     }
 
     // 🛠️ Convertir `ACTIVO_USR` a booleano
-    const isActive = ACTIVO_USR === "1" || ACTIVO_USR === 1 || ACTIVO_USR === true;
+    const isActive =
+      ACTIVO_USR === "1" || ACTIVO_USR === 1 || ACTIVO_USR === true;
     //console.log("🟢 Estado de usuario (ACTIVO_USR):", isActive);
 
     // 📝 Construcción de la consulta SQL dinámicamente
@@ -314,10 +321,10 @@ export const editUser = async (req, res) => {
 
     //console.log("✅ Usuario actualizado correctamente.");
     res.json({ message: "Usuario actualizado correctamente." });
-
   } catch (error) {
     console.error("❌ Error al actualizar usuario:", error);
-    res.status(500).json({ message: "Ocurrió un error al actualizar el usuario." });
+    res
+      .status(500)
+      .json({ message: "Ocurrió un error al actualizar el usuario." });
   }
 };
-

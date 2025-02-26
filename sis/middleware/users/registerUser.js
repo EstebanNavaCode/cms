@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
         "CORREO_USR",
         document.getElementById("correo_usr").value
       );
-      
 
       const fileInput = document.getElementById("file");
       if (fileInput.files.length > 0) {
@@ -231,4 +230,3 @@ document.addEventListener("DOMContentLoaded", function () {
   nameInputs.forEach(enforceTextLimit);
   emailInputs.forEach(validateEmailInput);
 });
-

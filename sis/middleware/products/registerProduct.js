@@ -36,14 +36,14 @@ document
           timer: 1500,
         }).then(() => {
           window.location.reload();
-        });;
+        });
       } else {
         Swal.fire({
           icon: "error",
           title: "Error",
           text: "Algo salió mal, intente de nuevo en un momento.",
           showConfirmButton: false,
-        timer: 1500,
+          timer: 1500,
         });
       }
     } catch (err) {
@@ -110,7 +110,7 @@ document
   .getElementById("form-update-product")
   .addEventListener("submit", function (event) {
     event.preventDefault();
-    
+
     // 🔹 Asegurar que el estado del checkbox se refleje antes de enviar
     updateCheckboxState();
 
@@ -121,61 +121,64 @@ document
       method: "PUT",
       body: formData,
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Error en la solicitud: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(() => {
-      Swal.fire({
-        icon: "success",
-        title: "Producto actualizado",
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        $("#modal-register-product").modal("hide"); 
-        location.reload();
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Producto actualizado",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          $("#modal-register-product").modal("hide");
+          location.reload();
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error al actualizar",
+          text: error.message || "Ocurrió un error al actualizar el producto.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       });
-    })
-    .catch(error => {
-      Swal.fire({
-        icon: "error",
-        title: "Error al actualizar",
-        text: error.message || "Ocurrió un error al actualizar el producto.",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    });
   });
 
+function updateCheckboxState() {
+  const visibleCheckbox = document.getElementById("cb5");
+  const hiddenCheckbox = document.getElementById("modal-active");
 
-  function updateCheckboxState() {
-    const visibleCheckbox = document.getElementById("cb5");
-    const hiddenCheckbox = document.getElementById("modal-active");
-  
-    hiddenCheckbox.value = visibleCheckbox.checked ? "1" : "0"; 
-    hiddenCheckbox.checked = visibleCheckbox.checked;
-  }
-  
-  // 🔹 Asegurar que el estado del checkbox se carga correctamente al abrir el modal
-  document.getElementById("modal-register-product").addEventListener("show.bs.modal", () => {
+  hiddenCheckbox.value = visibleCheckbox.checked ? "1" : "0";
+  hiddenCheckbox.checked = visibleCheckbox.checked;
+}
+
+// 🔹 Asegurar que el estado del checkbox se carga correctamente al abrir el modal
+document
+  .getElementById("modal-register-product")
+  .addEventListener("show.bs.modal", () => {
     const hiddenCheckbox = document.getElementById("modal-active");
     const visibleCheckbox = document.getElementById("cb5");
-  
+
     visibleCheckbox.checked = hiddenCheckbox.value === "1";
   });
-  
-document.getElementById("modal-file").addEventListener("change", function (event) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      document.getElementById("preview-product").src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-});
+
+document
+  .getElementById("modal-file")
+  .addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("preview-product").src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 
 document.getElementById("cb5").addEventListener("change", updateCheckboxState);
 
@@ -185,64 +188,74 @@ document.addEventListener("DOMContentLoaded", function () {
   quantityInputs.forEach((input) => {
     input.addEventListener("keydown", function (event) {
       if (
-        event.key === "e" || 
-        event.key === "E" || 
-        event.key === "-" || 
-        event.key === "+" || 
+        event.key === "e" ||
+        event.key === "E" ||
+        event.key === "-" ||
+        event.key === "+" ||
         event.key === "."
       ) {
         event.preventDefault();
       }
     });
-    
+
     input.addEventListener("input", function () {
       this.value = this.value.replace(/[^0-9]/g, "");
     });
 
     input.addEventListener("paste", function (event) {
       event.preventDefault();
-      let pasteData = (event.clipboardData || window.clipboardData).getData("text");
-      pasteData = pasteData.replace(/[^0-9]/g, ""); 
+      let pasteData = (event.clipboardData || window.clipboardData).getData(
+        "text"
+      );
+      pasteData = pasteData.replace(/[^0-9]/g, "");
       document.execCommand("insertText", false, pasteData);
     });
   });
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-
   const isbnInputs = document.querySelectorAll("#isbn, #modal-isbn");
 
   function enforceIsbnLimit(input) {
     input.addEventListener("input", function () {
-      this.value = this.value.replace(/\D/g, ""); 
+      this.value = this.value.replace(/\D/g, "");
       if (this.value.length > 13) {
-        this.value = this.value.slice(0, 13); 
+        this.value = this.value.slice(0, 13);
       }
     });
 
     input.addEventListener("keydown", function (event) {
-      if (this.value.length >= 13 && event.key !== "Backspace" && event.key !== "Delete") {
-        event.preventDefault(); 
+      if (
+        this.value.length >= 13 &&
+        event.key !== "Backspace" &&
+        event.key !== "Delete"
+      ) {
+        event.preventDefault();
       }
     });
   }
 
   isbnInputs.forEach(enforceIsbnLimit);
 
-  const textInputs = document.querySelectorAll("#name, #autor, #lastname, #modal-name, #modal-autor, #modal-editorial");
+  const textInputs = document.querySelectorAll(
+    "#name, #autor, #lastname, #modal-name, #modal-autor, #modal-editorial"
+  );
 
   textInputs.forEach((input) => {
     input.addEventListener("input", function () {
       if (this.value.length > 30) {
-        this.value = this.value.slice(0, 30); 
+        this.value = this.value.slice(0, 30);
       }
     });
 
     input.addEventListener("keydown", function (event) {
-      if (this.value.length >= 30 && event.key !== "Backspace" && event.key !== "Delete") {
-        event.preventDefault(); 
+      if (
+        this.value.length >= 30 &&
+        event.key !== "Backspace" &&
+        event.key !== "Delete"
+      ) {
+        event.preventDefault();
       }
     });
   });
 });
-

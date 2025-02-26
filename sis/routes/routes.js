@@ -39,7 +39,7 @@ import {
 const router = Router();
 
 router.post("/", login);
-router.put("/perfil/:id",editUser);
+router.put("/perfil/:id", editUser);
 
 //users routes
 router.post("/users", registerUser);

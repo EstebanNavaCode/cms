@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
 document.addEventListener("DOMContentLoaded", function () {
   const user = JSON.parse(sessionStorage.getItem("user"));
   //console.log("Datos de sessionStorage:", user);
@@ -80,106 +79,106 @@ document.addEventListener("DOMContentLoaded", function () {
     //console.log("No hay usuario en sesión.");
   }
 
-  document.getElementById("save-changes-btn").addEventListener("click", async function (event) {
-    event.preventDefault();
+  document
+    .getElementById("save-changes-btn")
+    .addEventListener("click", async function (event) {
+      event.preventDefault();
 
-    const user = JSON.parse(sessionStorage.getItem("user"));
+      const user = JSON.parse(sessionStorage.getItem("user"));
 
-    if (!user) {
+      if (!user) {
         Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No hay usuario autenticado.",
-            confirmButtonColor: "#ffd700",
+          icon: "error",
+          title: "Error",
+          text: "No hay usuario autenticado.",
+          confirmButtonColor: "#ffd700",
         });
         return;
-    }
+      }
 
-    // 🟢 Obtener datos del formulario
-    const updatedUser = {
+      // 🟢 Obtener datos del formulario
+      const updatedUser = {
         ID_USR: user.id || "",
         TIPO_USR: user.tipo || "",
         NOMBRE_USR: document.getElementById("name").value.trim(),
         APELLIDO_USR: document.getElementById("lastname").value.trim(),
         CORREO_USR: document.getElementById("correo_usr").value.trim(),
-        CONTRASENA_USR: document.getElementById("CONTRASENA_USR").value.trim() || "", // Asegurar que la contraseña se obtiene
-    };
+        CONTRASENA_USR:
+          document.getElementById("CONTRASENA_USR").value.trim() || "", // Asegurar que la contraseña se obtiene
+      };
 
-    //console.log("📩 Datos que se enviarán al backend:", updatedUser);
+      //console.log("📩 Datos que se enviarán al backend:", updatedUser);
 
-    const formData = new FormData();
-    formData.append("ID_USR", updatedUser.ID_USR);
-    formData.append("TIPO_USR", updatedUser.TIPO_USR);
-    formData.append("NOMBRE_USR", updatedUser.NOMBRE_USR);
-    formData.append("APELLIDO_USR", updatedUser.APELLIDO_USR);
-    formData.append("CORREO_USR", updatedUser.CORREO_USR);
+      const formData = new FormData();
+      formData.append("ID_USR", updatedUser.ID_USR);
+      formData.append("TIPO_USR", updatedUser.TIPO_USR);
+      formData.append("NOMBRE_USR", updatedUser.NOMBRE_USR);
+      formData.append("APELLIDO_USR", updatedUser.APELLIDO_USR);
+      formData.append("CORREO_USR", updatedUser.CORREO_USR);
 
-    // 🔥 Agregar contraseña solo si no está vacía
-    if (updatedUser.CONTRASENA_USR !== "") {
+      // 🔥 Agregar contraseña solo si no está vacía
+      if (updatedUser.CONTRASENA_USR !== "") {
         //console.log("🔑 Se enviará una nueva contraseña.");
         formData.append("CONTRASENA_USR", updatedUser.CONTRASENA_USR);
-    } else {
+      } else {
         //console.log("🚫 No se enviará una nueva contraseña.");
-    }
+      }
 
-    // 📸 Agregar imagen si el usuario subió una nueva
-    const fileInput = document.getElementById("file");
-    if (fileInput.files.length > 0) {
+      // 📸 Agregar imagen si el usuario subió una nueva
+      const fileInput = document.getElementById("file");
+      if (fileInput.files.length > 0) {
         formData.append("IMG_USR", fileInput.files[0]);
-    }
+      }
 
-    for (let [key, value] of formData.entries()) {
+      for (let [key, value] of formData.entries()) {
         //console.log(`${key}: ${value}`);
-    }
+      }
 
-    try {
+      try {
         const response = await fetch(`/perfil/${user.id}`, {
-            method: "PUT",
-            body: formData,
+          method: "PUT",
+          body: formData,
         });
 
         const result = await response.json();
 
         if (response.ok) {
-            Swal.fire({
-                icon: "success",
-                title: "Perfil actualizado",
-                text: "Tu perfil se ha actualizado correctamente.",
-                confirmButtonColor: "#ffd700",
-                timer: 1500,
-            }).then(() => {
-                user.nombre = updatedUser.NOMBRE_USR;
-                user.apellido = updatedUser.APELLIDO_USR;
-                user.correo = updatedUser.CORREO_USR;
+          Swal.fire({
+            icon: "success",
+            title: "Perfil actualizado",
+            text: "Tu perfil se ha actualizado correctamente.",
+            confirmButtonColor: "#ffd700",
+            timer: 1500,
+          }).then(() => {
+            user.nombre = updatedUser.NOMBRE_USR;
+            user.apellido = updatedUser.APELLIDO_USR;
+            user.correo = updatedUser.CORREO_USR;
 
-                if (result.imagen) {
-                    user.imagen = result.imagen;
-                }
+            if (result.imagen) {
+              user.imagen = result.imagen;
+            }
 
-                sessionStorage.setItem("user", JSON.stringify(user));
-                document.getElementById("preview").src = user.imagen + "?t=" + new Date().getTime();
-                document.getElementById("icon-placeholder").style.display = "none";
-            });
+            sessionStorage.setItem("user", JSON.stringify(user));
+            document.getElementById("preview").src =
+              user.imagen + "?t=" + new Date().getTime();
+            document.getElementById("icon-placeholder").style.display = "none";
+          });
         } else {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: result.message || "Hubo un problema al actualizar el perfil.",
-                confirmButtonColor: "#ffd700",
-            });
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: result.message || "Hubo un problema al actualizar el perfil.",
+            confirmButtonColor: "#ffd700",
+          });
         }
-    } catch (error) {
+      } catch (error) {
         console.error("❌ Error en la solicitud:", error);
         Swal.fire({
-            icon: "error",
-            title: "Error de conexión",
-            text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
-            confirmButtonColor: "#ffd700",
+          icon: "error",
+          title: "Error de conexión",
+          text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+          confirmButtonColor: "#ffd700",
         });
-    }
+      }
+    });
 });
-
-
-});
-
-
