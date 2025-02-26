@@ -231,3 +231,4 @@ document.addEventListener("DOMContentLoaded", function () {
   nameInputs.forEach(enforceTextLimit);
   emailInputs.forEach(validateEmailInput);
 });
+
