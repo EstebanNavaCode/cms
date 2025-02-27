@@ -37,16 +37,20 @@
                         <span>Descripción*</span>
                     </label>
 
-                    <div class="subcategories-container-form">
-                        <label>
-                            <input id="subcategory-input" class="input" type="text" />
-                            <span>Etiquetas</span>
-                        </label>
+                     <div class="subcategories-container-form">
+                        <div class="flex">
+                            <label>
+                                <input id="subcategory-input" class="input" type="text" />
+                                <span>Etiquetas</span>
+                            </label>
+                            <button type="button" id="add-subcategory-btn" class="btn btn-success">
+                                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                            </button>
+                        </div>
                         <div id="subcategory-list" class="subcategory-list">
                             <!-- Aquí aparecerán las etiquetas -->
                         </div>
-                        <!-- Input oculto para las subcategorías -->
-                        <input type="hidden" id="subcategory-values" name="subcategorias" />
+                        <input type="hidden" id="subcategory-values" name="subgeneros" />
                     </div>
 
 
@@ -129,15 +133,18 @@
                         </label>
 
                         <div class="subcategories-container">
+                        <div class="flex">
                             <label>
-                                <input id="edit-subcategory-input" class="input" type="text"
-                                    placeholder="Agregar nueva etiqueta">
-                                <span>Etiquetas</span>
+                                <input id="edit-subcategory-input" class="input" type="text" />
+                                <span>Subgénero*</span>
                             </label>
-                            <div id="edit-subcategory-list" class="subcategory-list">
-                                <!-- Etiquetas dinámicas -->
-                            </div>
+                            <button type="button" id="add-edit-subcategory-btn" class="btn btn-success">
+                                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                            </button>
                         </div>
+                        <div id="edit-subcategory-list" class="subcategory-list"></div>
+                        <input type="hidden" id="edit-subcategory-values" name="subgeneros">
+                    </div>
 
                         <div class="flex">
                             <div class="checkbox-wrapper-10">

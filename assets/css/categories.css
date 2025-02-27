@@ -652,7 +652,7 @@ label.custum-file-upload {
 }
 
 .subcategories-container-form input.input {
-  width: 690px;
+  width: 620px;
   box-sizing: border-box;
 }
 
@@ -683,4 +683,42 @@ label.custum-file-upload {
   color: #fff;
   cursor: pointer;
   font-size: 12px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.input-group input {
+  flex: 1;
+  padding-right: 45px;
+}
+
+.input-group button,
+.flex button#add-subcategory-btn {
+  width: 45px !important;
+  /* Ajusta el ancho */
+  height: 45px !important;
+  /* Ajusta la altura */
+  font-size: 22px !important;
+  /* Ajusta el tamaño del icono */
+  background-color: #028a0f !important;
+  border: none !important;
+  color: white !important;
+  padding: 5px !important;
+  border-radius: 50% !important;
+  /* Hace que el botón sea redondo */
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: 0.3s ease !important;
+}
+
+.input-group button:hover,
+.flex button#add-subcategory-btn:hover {
+  background-color: #02660c !important;
 }
