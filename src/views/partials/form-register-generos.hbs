@@ -33,15 +33,21 @@
                     </label>
 
                     <div class="subcategories-container-form">
-                        <label>
-                            <input id="subcategory-input" class="input" type="text" />
-                            <span>Subgénero*</span>
-                        </label>
+                        <div class="flex">
+                            <label>
+                                <input id="subcategory-input" class="input" type="text" />
+                                <span>Subgénero*</span>
+                            </label>
+                            <button type="button" id="add-subcategory-btn" class="btn btn-success">
+                                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                            </button>
+                        </div>
                         <div id="subcategory-list" class="subcategory-list">
                             <!-- Aquí aparecerán las etiquetas -->
                         </div>
                         <input type="hidden" id="subcategory-values" name="subgeneros" />
                     </div>
+
 
                     <button class="submit" type="submit">Registrar género</button>
                 </form>
@@ -122,11 +128,15 @@
                     </label>
 
                     <div class="subcategories-container">
-                        <label>
-                            <input id="edit-subcategory-input" class="input" type="text"
-                                placeholder="Agregar nuevo subgénero">
-                            <span>Subgéneros*</span>
-                        </label>
+                        <div class="flex">
+                            <label>
+                                <input id="edit-subcategory-input" class="input" type="text" />
+                                <span>Subgénero*</span>
+                            </label>
+                            <button type="button" id="add-edit-subcategory-btn" class="btn btn-success">
+                                <ion-icon name="checkmark-circle-outline"></ion-icon>
+                            </button>
+                        </div>
                         <div id="edit-subcategory-list" class="subcategory-list"></div>
                         <input type="hidden" id="edit-subcategory-values" name="subgeneros">
                     </div>
