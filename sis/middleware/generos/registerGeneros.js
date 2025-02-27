@@ -3,118 +3,126 @@ document.addEventListener("DOMContentLoaded", () => {
   const subcategoryInput = document.getElementById("subcategory-input");
   const subcategoryList = document.getElementById("subcategory-list");
   const subcategoryValues = document.getElementById("subcategory-values");
+  const addSubcategoryBtn = document.getElementById("add-subcategory-btn");
+
   let subgeneros = [];
 
+  // Renderiza la lista de subgéneros en la interfaz
   const renderSubgeneros = () => {
-    subcategoryList.innerHTML = "";
-    subgeneros.forEach((subgenero, index) => {
-      const tag = document.createElement("div");
-      tag.className = "subcategory-tag";
-      tag.innerHTML = `
-                <span>${subgenero}</span>
-                <button type="button" class="remove-tag" data-index="${index}">&times;</button>
-            `;
-      subcategoryList.appendChild(tag);
+      subcategoryList.innerHTML = "";
+      subgeneros.forEach((subgenero, index) => {
+          const tag = document.createElement("div");
+          tag.className = "subcategory-tag";
+          tag.innerHTML = `
+              <span>${subgenero}</span>
+              <button type="button" class="remove-tag" data-index="${index}">&times;</button>
+          `;
+          subcategoryList.appendChild(tag);
 
-      tag.querySelector(".remove-tag").addEventListener("click", () => {
-        removeSubgenero(index);
+          // Evento para eliminar subgéneros
+          tag.querySelector(".remove-tag").addEventListener("click", () => {
+              removeSubgenero(index);
+          });
       });
-    });
 
-    subcategoryValues.value = JSON.stringify(subgeneros);
+      // Actualiza el campo oculto con la lista de subgéneros
+      subcategoryValues.value = JSON.stringify(subgeneros);
   };
 
+  // Agrega un nuevo subgénero
   const addSubgenero = () => {
-    const name = subcategoryInput.value.trim();
-    if (name && !subgeneros.includes(name)) {
-      subgeneros.push(name);
-      renderSubgeneros();
-    }
-    subcategoryInput.value = "";
+      const name = subcategoryInput.value.trim();
+      if (name && !subgeneros.includes(name)) {
+          subgeneros.push(name);
+          renderSubgeneros();
+      }
+      subcategoryInput.value = "";
   };
 
+  // Elimina un subgénero de la lista
   const removeSubgenero = (index) => {
-    subgeneros.splice(index, 1);
-    renderSubgeneros();
+      subgeneros.splice(index, 1);
+      renderSubgeneros();
   };
 
+  // Evento para agregar subgénero con Enter
   subcategoryInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      addSubgenero();
-    }
+      if (event.key === "Enter") {
+          event.preventDefault();
+          addSubgenero();
+      }
   });
 
+  // Evento para agregar subgénero con el botón checkmark
+  addSubcategoryBtn.addEventListener("click", () => {
+      addSubgenero();
+  });
+
+  // Evento para enviar el formulario
   form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+      event.preventDefault();
+      subcategoryValues.value = JSON.stringify(subgeneros);
 
-    subcategoryValues.value = JSON.stringify(subgeneros);
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
 
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+      try {
+          const response = await fetch("/generos", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+          });
 
-    try {
-      const response = await fetch("/generos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+          const result = await response.json();
 
-      const result = await response.json();
+          if (!response.ok) {
+              Swal.fire({
+                  icon: "error",
+                  title: "Error al registrar",
+                  text: result.message || "No se pudo registrar el género.",
+                  showConfirmButton: false,
+                  timer: 1500,
+              });
+              return;
+          }
 
-      if (!response.ok) {
-        Swal.fire({
-          icon: "error",
-          title: "Error al registrar",
-          text: result.message || "No se pudo registrar el género.",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        return;
+          Swal.fire({
+              icon: "success",
+              title: "Registro Exitoso",
+              text: result.message,
+              showConfirmButton: false,
+              timer: 1500,
+          }).then(() => {
+              window.location.reload();
+          });
+      } catch (err) {
+          Swal.fire({
+              icon: "error",
+              title: "Error de conexión",
+              text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+              showConfirmButton: true,
+          });
+          console.error("Error en la petición:", err);
       }
-
-      Swal.fire({
-        icon: "success",
-        title: "Registro Exitoso",
-        text: result.message,
-        showConfirmButton: false,
-        timer: 1500,
-      }).then(() => {
-        window.location.reload();
-      });
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error de conexión",
-        text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
-        showConfirmButton: true,
-      });
-      console.error("Error en la petición:", err);
-    }
   });
 });
 
+// Limitar la cantidad de caracteres en los campos de nombre del género
 document.addEventListener("DOMContentLoaded", function () {
-  const genreNameInputs = document.querySelectorAll(
-    "#NOMBRE_LCAT, #edit-genero-name"
-  );
+  const genreNameInputs = document.querySelectorAll("#NOMBRE_LCAT, #edit-genero-name");
 
   function enforceTextLimit(input) {
-    input.addEventListener("input", function () {
-      if (this.value.length > 30) {
-        this.value = this.value.slice(0, 30);
-      }
-    });
+      input.addEventListener("input", function () {
+          if (this.value.length > 30) {
+              this.value = this.value.slice(0, 30);
+          }
+      });
 
-    input.addEventListener("keydown", function (event) {
-      if (
-        this.value.length >= 30 &&
-        event.key !== "Backspace" &&
-        event.key !== "Delete"
-      ) {
-        event.preventDefault();
-      }
-    });
+      input.addEventListener("keydown", function (event) {
+          if (this.value.length >= 30 && event.key !== "Backspace" && event.key !== "Delete") {
+              event.preventDefault();
+          }
+      });
   }
 
   genreNameInputs.forEach(enforceTextLimit);
