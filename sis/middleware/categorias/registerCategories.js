@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const tag = document.createElement("div");
       tag.className = "subcategory-tag";
-      tag.innerHTML = `
+      tag.innerHTML = ` 
                 <span data-id="${etq.ID_ETQ}">${etq.NOMBRE_ETQ}</span>
                 <button type="button" class="remove-tag" data-id="${etq.ID_ETQ}">&times;</button>
             `;
@@ -95,6 +95,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       subcategoryInput.value = "";
     }
+  });
+
+  // Funcionalidad para el botón Checkmark
+  const addSubcategoryBtn = document.getElementById("add-subcategory-btn");
+  addSubcategoryBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    handleAddEtiqueta(
+      subcategoryInput,
+      subcategoryList,
+      subcategorias,
+      { value: null }  // No estamos editando ninguna etiqueta
+    );
   });
 
   document
@@ -193,6 +205,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Funcionalidad para el botón Checkmark en la edición de categorías
+  const addEditSubcategoryBtn = document.getElementById("add-edit-subcategory-btn");
+  addEditSubcategoryBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    handleAddEtiqueta(
+      editSubcategoryInput,
+      editSubcategoryList,
+      etiquetas,
+      etiquetaEditando
+    );
+  });
+
   document
     .getElementById("form-edit-category")
     .addEventListener("submit", async function (event) {
@@ -204,14 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .getElementById("edit-category-description")
         .value.trim();
       const activo = document.getElementById("cb5").checked ? 1 : 0;
-
-      /*console.log("📤 Enviando actualización:", {
-        id,
-        nombre,
-        descripcion,
-        activo,
-        etiquetas,
-      });*/
 
       try {
         const response = await fetch(`/categorias/${id}`, {
