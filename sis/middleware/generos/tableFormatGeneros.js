@@ -41,211 +41,149 @@ $(document).ready(function () {
     ],
   });
 
-  $(document).ready(function () {
-    const genresTable = $("#genresTable").DataTable();
+  // Evento al hacer clic en una fila de la tabla para cargar el género en el modal
+  $("#genresTable tbody").on("click", "tr", async function () {
+    const genreId = $(this).data("id");
 
-    $("#genresTable tbody").on("click", "tr", async function () {
-      const genreId = $(this).data("id");
+    try {
+      const response = await fetch(`/generos/${genreId}`);
+      if (response.ok) {
+        const genreData = await response.json();
 
-      try {
-        const response = await fetch(`/generos/${genreId}`);
-        if (response.ok) {
-          const genreData = await response.json();
+        // Rellenar los datos en el modal
+        $("#edit-genero-id").val(genreData.ID_LCAT);
+        $("#edit-genero-name").val(genreData.NOMBRE_LCAT);
+        $("#edit-genero-description").val(genreData.DESCRIPCION_LCAT);
+        $("#edit-genero-active").prop("checked", genreData.ACTIVO_LCAT);
 
-          $("#edit-genero-id").val(genreData.ID_LCAT);
-          $("#edit-genero-name").val(genreData.NOMBRE_LCAT);
-          $("#edit-genero-description").val(genreData.DESCRIPCION_LCAT);
-          $("#edit-genero-active").prop("checked", genreData.ACTIVO_LCAT);
+        // Llenar los subgéneros en el modal
+        let subgeneros = genreData.subgeneros.map((sub) => sub.NOMBRE_SBC);
+        renderSubgeneros(subgeneros);
 
-          const subcategoryList = $("#edit-subcategory-list");
-          subcategoryList.html("");
-          genreData.subgeneros.forEach((sub) => {
-            subcategoryList.append(
-              `<div class="subcategory-tag">${sub.NOMBRE_SBC} <button class="remove-tag">&times;</button></div>`
-            );
-          });
+        $("#modal-edit-genero").modal("show");
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al cargar los datos",
+        text: "Algo salió mal, intente de nuevo en un momento.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log(error);
+    }
+  });
 
-          $("#modal-edit-genero").modal("show");
-        }
-      } catch (error) {
+  let subgeneros = [];
+  let subgeneroEditando = null;
+
+  const renderSubgeneros = (data) => {
+    const editSubcategoryList = $("#edit-subcategory-list");
+    editSubcategoryList.empty();
+    subgeneros = data;
+    subgeneros.forEach((subgenero, index) => {
+      const tag = $(`<div class="subcategory-tag">
+            <span>${subgenero}</span>
+            <button type="button" class="remove-tag" data-index="${index}">&times;</button>
+        </div>`);
+
+      tag.find("span").on("click", function () {
+        subgeneroEditando = index;
+        $("#edit-subcategory-input").val(subgeneros[index]).focus();
+      });
+
+      tag.find(".remove-tag").on("click", function () {
+        subgeneros.splice(index, 1);
+        renderSubgeneros(subgeneros);
+      });
+
+      editSubcategoryList.append(tag);
+    });
+
+    // Actualiza el campo oculto con la lista de subgéneros
+    $("#edit-subcategory-values").val(JSON.stringify(subgeneros));
+  };
+
+  // Evento de "Enter" en el input de subgénero
+  $("#edit-subcategory-input").on("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      const name = $("#edit-subcategory-input").val().trim();
+      if (!name) return;
+
+      if (subgeneroEditando !== null) {
+        subgeneros[subgeneroEditando] = name;
+        subgeneroEditando = null;
+      } else {
+        subgeneros.push(name);
+      }
+
+      $("#edit-subcategory-input").val("");
+      renderSubgeneros(subgeneros);
+    }
+  });
+
+  // Evento al hacer clic en el botón checkmark en el modal
+  $("#add-edit-subcategory-btn").on("click", function () {
+    const name = $("#edit-subcategory-input").val().trim();
+    if (!name) return;
+
+    if (subgeneroEditando !== null) {
+      subgeneros[subgeneroEditando] = name;
+      subgeneroEditando = null;
+    } else {
+      subgeneros.push(name);
+    }
+
+    $("#edit-subcategory-input").val("");
+    renderSubgeneros(subgeneros);
+  });
+
+  // Enviar el formulario de edición
+  $("#form-edit-genero").submit(async function (event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    let data = Object.fromEntries(formData.entries());
+
+    data.subgeneros = JSON.stringify(subgeneros);
+    data.ACTIVO_LCAT = $("#edit-genero-active").prop("checked") ? 1 : 0;
+
+    try {
+      const response = await fetch(`/generos/${data.ID_LCAT}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Género actualizado",
+          text: result.message,
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
+          window.location.reload();
+        });
+      } else {
         Swal.fire({
           icon: "error",
-          title: "Error al cargar los datos",
+          title: "Error al actualizar",
           text: "Algo salió mal, intente de nuevo en un momento.",
           showConfirmButton: false,
           timer: 1500,
         });
-        console.log(error);
       }
-    });
-
-    $("#form-edit-genero").submit(async function (event) {
-      event.preventDefault();
-      const formData = new FormData(this);
-      let data = Object.fromEntries(formData.entries());
-
-      data.subgeneros =
-        subgeneros.length > 0 ? JSON.stringify(subgeneros) : "[]";
-
-      //console.log("📤 Enviando solicitud PUT:", data);
-
-      try {
-        const response = await fetch(`/generos/${data.ID_LCAT}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-          Swal.fire({
-            icon: "success",
-            title: "Genero actualizado",
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
-            window.location.reload();
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error al actualizar",
-            text: "Algo salió mal, intente de nuevo en un momento.",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error de conexión",
-          text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        console.error("Error:", err);
-      }
-    });
-  });
-  $(document).ready(function () {
-    const genresTable = $("#genresTable").DataTable();
-
-    $("#genresTable tbody").on("click", "tr", async function () {
-      const genreId = $(this).data("id");
-
-      try {
-        const response = await fetch(`/generos/${genreId}`);
-        if (response.ok) {
-          const genreData = await response.json();
-
-          $("#edit-genero-id").val(genreData.ID_LCAT);
-          $("#edit-genero-name").val(genreData.NOMBRE_LCAT);
-          $("#edit-genero-description").val(genreData.DESCRIPCION_LCAT);
-          $("#edit-genero-active").prop("checked", genreData.ACTIVO_LCAT);
-
-          let subgeneros = genreData.subgeneros.map((sub) => sub.NOMBRE_SBC);
-          renderSubgeneros(subgeneros);
-
-          $("#modal-edit-genero").modal("show");
-        }
-      } catch (error) {
-        console.error("❌ Error al cargar datos:", error);
-      }
-    });
-
-    const editSubcategoryInput = $("#edit-subcategory-input");
-    const editSubcategoryList = $("#edit-subcategory-list");
-    let subgeneros = [];
-    let subgeneroEditando = null;
-
-    const renderSubgeneros = (data) => {
-      editSubcategoryList.empty();
-      subgeneros = data;
-      subgeneros.forEach((subgenero, index) => {
-        const tag = $(`<div class="subcategory-tag">
-                <span>${subgenero}</span>
-                <button type="button" class="remove-tag" data-index="${index}">&times;</button>
-            </div>`);
-
-        tag.find("span").on("click", function () {
-          subgeneroEditando = index;
-          editSubcategoryInput.val(subgeneros[index]).focus();
-        });
-
-        tag.find(".remove-tag").on("click", function () {
-          subgeneros.splice(index, 1);
-          renderSubgeneros(subgeneros);
-        });
-
-        editSubcategoryList.append(tag);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error de conexión",
+        text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
+        showConfirmButton: false,
+        timer: 1500,
       });
-    };
-
-    editSubcategoryInput.on("keydown", function (event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        const name = editSubcategoryInput.val().trim();
-        if (!name) return;
-
-        if (subgeneroEditando !== null) {
-          subgeneros[subgeneroEditando] = name;
-          subgeneroEditando = null;
-        } else {
-          subgeneros.push(name);
-        }
-
-        editSubcategoryInput.val("");
-        renderSubgeneros(subgeneros);
-      }
-    });
-
-    $("#form-edit-genero").submit(async function (event) {
-      event.preventDefault();
-      const formData = new FormData(this);
-      let data = Object.fromEntries(formData.entries());
-
-      data.subgeneros = JSON.stringify(subgeneros);
-      data.ACTIVO_LCAT = $("#edit-genero-active").prop("checked") ? 1 : 0;
-
-      //console.log("📤 Enviando solicitud PUT:", data);
-
-      try {
-        const response = await fetch(`/generos/${data.ID_LCAT}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-          Swal.fire({
-            icon: "success",
-            title: "Genero actualizado",
-            text: result.message,
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
-            window.location.reload();
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error al actualizar",
-            text: "Algo salió mal, intente de nuevo en un momento.",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error de conexión",
-          text: "No se pudo conectar al servidor. Inténtalo de nuevo.",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        console.error("Error:", err);
-      }
-    });
+      console.error("Error:", error);
+    }
   });
 });
