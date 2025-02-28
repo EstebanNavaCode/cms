@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Cargar categorías al inicializar
   fetch("/categoriesNEWS")
     .then((response) => response.json())
     .then((categories) => {

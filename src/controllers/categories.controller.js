@@ -13,7 +13,6 @@ export const registerCategory = async (req, res) => {
 
     const pool = await getConnection();
 
-    // 🔍 Verificar si la categoría ya existe (ignorando espacios y mayúsculas)
     const existingCategory = await pool
       .request()
       .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT.trim().toLowerCase())
@@ -28,7 +27,6 @@ export const registerCategory = async (req, res) => {
         .json({ message: "Ya existe una categoría con este nombre." });
     }
 
-    // ✅ Insertar la nueva categoría
     const result = await pool
       .request()
       .input("NOMBRE_CAT", sql.NVarChar(300), NOMBRE_CAT)
@@ -42,7 +40,6 @@ export const registerCategory = async (req, res) => {
 
     const categoryId = result.recordset[0].ID_CAT;
 
-    // ✅ Insertar subcategorías asociadas
     if (Array.isArray(subcategorias)) {
       for (const subcategory of subcategorias) {
         if (
@@ -68,7 +65,6 @@ export const registerCategory = async (req, res) => {
   } catch (error) {
     console.error("❌ Error detallado:", error);
 
-    // Si el error es de clave duplicada
     if (error.number === 2627 || error.number === 2601) {
       return res
         .status(400)
@@ -186,9 +182,8 @@ export const editCategoryAndTags = async (req, res) => {
 
     const pool = await getConnection();
 
-    // Actualizar la categoría
     // console.log("✏️ Actualizando categoría...");
-    // ✅ Actualizar el estado de la categoría en la base de datos
+
     await pool
       .request()
       .input("ID_CAT", sql.Int, id)
@@ -204,7 +199,6 @@ export const editCategoryAndTags = async (req, res) => {
 
     // console.log("✅ Categoría actualizada.");
 
-    // Obtener etiquetas actuales
     const etiquetasActuales = await pool
       .request()
       .input("ID_CAT", sql.Int, id)
@@ -216,7 +210,6 @@ export const editCategoryAndTags = async (req, res) => {
 
     const etiquetasDB = etiquetasActuales.recordset;
 
-    // Identificar etiquetas nuevas, eliminadas y modificadas
     const etiquetasNuevas = etiquetas.filter((etq) => etq.ID_ETQ === null);
     const etiquetasEliminadas = etiquetasDB.filter(
       (e) => !etiquetas.some((etq) => etq.ID_ETQ === e.ID_ETQ)
@@ -233,7 +226,6 @@ export const editCategoryAndTags = async (req, res) => {
     // console.log("❌ Etiquetas a eliminar:", etiquetasEliminadas);
     // console.log("✏️ Etiquetas a editar:", etiquetasEditadas);
 
-    // **Eliminar etiquetas**
     for (const etq of etiquetasEliminadas) {
       // console.log(`🛑 Eliminando etiqueta ID_ETQ: ${etq.ID_ETQ}`);
       await pool
@@ -242,7 +234,6 @@ export const editCategoryAndTags = async (req, res) => {
         .query("DELETE FROM ETIQUETA_NOT_T WHERE ID_ETQ = @ID_ETQ");
     }
 
-    // **Editar etiquetas**
     for (const etq of etiquetasEditadas) {
       // console.log(`✏️ Editando etiqueta ID_ETQ: ${etq.ID_ETQ}, Nuevo Nombre: ${etq.NOMBRE_ETQ}`);
       await pool
@@ -254,7 +245,6 @@ export const editCategoryAndTags = async (req, res) => {
         );
     }
 
-    // **Agregar nuevas etiquetas**
     for (const etq of etiquetasNuevas) {
       // console.log(`🟢 Agregando etiqueta: ${etq.NOMBRE_ETQ}`);
       await pool

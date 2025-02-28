@@ -97,16 +97,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Funcionalidad para el botón Checkmark
   const addSubcategoryBtn = document.getElementById("add-subcategory-btn");
   addSubcategoryBtn.addEventListener("click", (event) => {
     event.preventDefault();
-    handleAddEtiqueta(
-      subcategoryInput,
-      subcategoryList,
-      subcategorias,
-      { value: null }  // No estamos editando ninguna etiqueta
-    );
+    handleAddEtiqueta(subcategoryInput, subcategoryList, subcategorias, {
+      value: null,
+    });
   });
 
   document
@@ -162,7 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.reload();
           });
         } else {
-          // 📢 Ahora mostramos el mensaje del backend en la alerta
           Swal.fire({
             icon: "error",
             title: "Error al registrar",
@@ -182,8 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Error:", err);
       }
     });
-
-  /*** 🟢 MANEJO DE EDICIÓN DE CATEGORÍAS ***/
 
   const editSubcategoryInput = document.getElementById(
     "edit-subcategory-input"
@@ -205,8 +198,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Funcionalidad para el botón Checkmark en la edición de categorías
-  const addEditSubcategoryBtn = document.getElementById("add-edit-subcategory-btn");
+  const addEditSubcategoryBtn = document.getElementById(
+    "add-edit-subcategory-btn"
+  );
   addEditSubcategoryBtn.addEventListener("click", (event) => {
     event.preventDefault();
     handleAddEtiqueta(

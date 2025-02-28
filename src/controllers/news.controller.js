@@ -28,10 +28,8 @@ export const registerNews = async (req, res) => {
       await imgFile.mv(uploadPath);
     }
 
-    // 🔹 Asignar un valor por defecto para `FECHA_ALTA_NOT`
-    const FECHA_ALTA_NOT = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    const FECHA_ALTA_NOT = new Date().toISOString().split("T")[0];
 
-    // 🔹 Si `ACTIVO_NOT` no se envía, asignamos `1` (Activo) por defecto
     const ACTIVO_NOT =
       req.body.ACTIVO_NOT !== undefined ? req.body.ACTIVO_NOT : 1;
 
@@ -48,9 +46,8 @@ export const registerNews = async (req, res) => {
         sql.NVarChar(300),
         imgFilename ? `/uploads/news/${imgFilename}` : null
       )
-      .input("FECHA_ALTA_NOT", sql.Date, FECHA_ALTA_NOT) // 🔹 Se envía `FECHA_ALTA_NOT`
-      .input("ACTIVO_NOT", sql.Bit, ACTIVO_NOT) // 🔹 Se agrega `ACTIVO_NOT` con un valor por defecto
-      .query(`
+      .input("FECHA_ALTA_NOT", sql.Date, FECHA_ALTA_NOT)
+      .input("ACTIVO_NOT", sql.Bit, ACTIVO_NOT).query(`
         INSERT INTO dbo.NOT_T (CATEGORIA_NOT, ETIQUETA_NOT, TITULO_NOT, TEXTO_NOT, FECHA_PUBLICAR_NOT, IMG_NOT, FECHA_ALTA_NOT, ACTIVO_NOT)
         VALUES (@CATEGORIA_NOT, @ETIQUETA_NOT, @TITULO_NOT, @TEXTO_NOT, @FECHA_PUBLICAR_NOT, @IMG_NOT, @FECHA_ALTA_NOT, @ACTIVO_NOT)
       `);

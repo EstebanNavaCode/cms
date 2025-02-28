@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   let table = $("#productsTable").DataTable({
-    order: [[0, "desc"]], // Ordenar por la primera columna (ID) en orden descendente
+    order: [[0, "desc"]],
     columnDefs: [
       { targets: [6], visible: true },
       { targets: [7], visible: true },

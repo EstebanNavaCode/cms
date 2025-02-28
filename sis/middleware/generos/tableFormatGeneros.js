@@ -17,31 +17,28 @@ $(document).ready(function () {
     order: [[3, "desc"]],
     columnDefs: [
       {
-        targets: 3, // Índice de la columna de fecha
+        targets: 3,
         type: "date",
         render: function (data, type, row) {
           if (!data) return "";
 
           const date = new Date(data);
-          if (isNaN(date)) return data; // Si la fecha es inválida, retorna el valor original
+          if (isNaN(date)) return data;
 
           const year = date.getFullYear();
           const month = String(date.getMonth() + 1).padStart(2, "0");
           const day = String(date.getDate()).padStart(2, "0");
 
-          // Para ordenar, retornar en formato YYYY-MM-DD
           if (type === "sort" || type === "type") {
             return `${year}-${month}-${day}`;
           }
 
-          // Para mostrar en formato DD/MM/YYYY
           return `${day}/${month}/${year}`;
         },
       },
     ],
   });
 
-  // Evento al hacer clic en una fila de la tabla para cargar el género en el modal
   $("#genresTable tbody").on("click", "tr", async function () {
     const genreId = $(this).data("id");
 
@@ -50,13 +47,11 @@ $(document).ready(function () {
       if (response.ok) {
         const genreData = await response.json();
 
-        // Rellenar los datos en el modal
         $("#edit-genero-id").val(genreData.ID_LCAT);
         $("#edit-genero-name").val(genreData.NOMBRE_LCAT);
         $("#edit-genero-description").val(genreData.DESCRIPCION_LCAT);
         $("#edit-genero-active").prop("checked", genreData.ACTIVO_LCAT);
 
-        // Llenar los subgéneros en el modal
         let subgeneros = genreData.subgeneros.map((sub) => sub.NOMBRE_SBC);
         renderSubgeneros(subgeneros);
 
@@ -100,11 +95,9 @@ $(document).ready(function () {
       editSubcategoryList.append(tag);
     });
 
-    // Actualiza el campo oculto con la lista de subgéneros
     $("#edit-subcategory-values").val(JSON.stringify(subgeneros));
   };
 
-  // Evento de "Enter" en el input de subgénero
   $("#edit-subcategory-input").on("keydown", function (event) {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -123,7 +116,6 @@ $(document).ready(function () {
     }
   });
 
-  // Evento al hacer clic en el botón checkmark en el modal
   $("#add-edit-subcategory-btn").on("click", function () {
     const name = $("#edit-subcategory-input").val().trim();
     if (!name) return;
@@ -139,7 +131,6 @@ $(document).ready(function () {
     renderSubgeneros(subgeneros);
   });
 
-  // Enviar el formulario de edición
   $("#form-edit-genero").submit(async function (event) {
     event.preventDefault();
     const formData = new FormData(this);

@@ -96,7 +96,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // 🟢 Obtener datos del formulario
       const updatedUser = {
         ID_USR: user.id || "",
         TIPO_USR: user.tipo || "",
@@ -104,10 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
         APELLIDO_USR: document.getElementById("lastname").value.trim(),
         CORREO_USR: document.getElementById("correo_usr").value.trim(),
         CONTRASENA_USR:
-          document.getElementById("CONTRASENA_USR").value.trim() || "", // Asegurar que la contraseña se obtiene
+          document.getElementById("CONTRASENA_USR").value.trim() || "",
       };
-
-      //console.log("📩 Datos que se enviarán al backend:", updatedUser);
 
       const formData = new FormData();
       formData.append("ID_USR", updatedUser.ID_USR);
@@ -116,7 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
       formData.append("APELLIDO_USR", updatedUser.APELLIDO_USR);
       formData.append("CORREO_USR", updatedUser.CORREO_USR);
 
-      // 🔥 Agregar contraseña solo si no está vacía
       if (updatedUser.CONTRASENA_USR !== "") {
         //console.log("🔑 Se enviará una nueva contraseña.");
         formData.append("CONTRASENA_USR", updatedUser.CONTRASENA_USR);
@@ -124,7 +120,6 @@ document.addEventListener("DOMContentLoaded", function () {
         //console.log("🚫 No se enviará una nueva contraseña.");
       }
 
-      // 📸 Agregar imagen si el usuario subió una nueva
       const fileInput = document.getElementById("file");
       if (fileInput.files.length > 0) {
         formData.append("IMG_USR", fileInput.files[0]);

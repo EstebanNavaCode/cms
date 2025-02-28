@@ -50,7 +50,6 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     const pool = await getConnection();
 
-    // Verificar si el usuario existe con la contraseña
     const result = await pool
       .request()
       .input("email", sql.VarChar, email)
@@ -62,7 +61,6 @@ export const login = async (req, res) => {
     if (result.recordset.length > 0) {
       const userId = result.recordset[0].ID_USR;
 
-      // Segunda consulta para obtener los datos del usuario
       const userData = await pool
         .request()
         .input("email", sql.VarChar, email)
@@ -73,7 +71,6 @@ export const login = async (req, res) => {
       if (userData.recordset.length > 0) {
         const user = userData.recordset[0];
 
-        // Responder con los datos del usuario
         res.json({
           success: true,
           user: {
@@ -117,7 +114,6 @@ export const registerUser = async (req, res) => {
 
     const pool = await getConnection();
 
-    // Verificar si el correo ya existe
     const existingUser = await pool
       .request()
       .input("CORREO_USR", sql.NVarChar(300), CORREO_USR)
@@ -127,10 +123,8 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "El correo ya está registrado." });
     }
 
-    // Generar contraseña aleatoria
     const CONTRASENA_USR = generateRandomPassword();
 
-    // Subir imagen
     let imgFilename = null;
     if (imgFile) {
       const uploadDir = path.join(process.cwd(), "uploads/pics");
@@ -144,7 +138,6 @@ export const registerUser = async (req, res) => {
       await imgFile.mv(uploadPath);
     }
 
-    // Insertar usuario en la base de datos
     await pool
       .request()
       .input("TIPO_USR", sql.Int, TIPO_USR)
@@ -165,7 +158,6 @@ export const registerUser = async (req, res) => {
         @CONTRASENA_USR, @FECHA_ALTA_USR, @ACTIVO_USR, @IMG_USR)
       `);
 
-    // Enviar contraseña por correo electrónico
     await sendPasswordEmail(CORREO_USR, CONTRASENA_USR);
 
     res.status(201).json({ message: "Usuario registrado exitosamente." });
@@ -231,7 +223,6 @@ export const editUser = async (req, res) => {
 
     const pool = await getConnection();
 
-    // 🔍 Obtener la imagen actual
     const result = await pool
       .request()
       .input("ID_USR", sql.Int, id)
@@ -241,7 +232,6 @@ export const editUser = async (req, res) => {
 
     //console.log("📸 Imagen actual en BD:", imgFilename);
 
-    // 📷 Procesar nueva imagen si se sube
     if (imgFile) {
       //console.log("🖼️ Nueva imagen...");
       const uploadDir = path.join(process.cwd(), "uploads/pics");
@@ -264,12 +254,10 @@ export const editUser = async (req, res) => {
       imgFilename = `/uploads/pics/${imgFilename}`;
     }
 
-    // 🛠️ Convertir `ACTIVO_USR` a booleano
     const isActive =
       ACTIVO_USR === "1" || ACTIVO_USR === 1 || ACTIVO_USR === true;
     //console.log("🟢 Estado de usuario (ACTIVO_USR):", isActive);
 
-    // 📝 Construcción de la consulta SQL dinámicamente
     let query = `
       UPDATE dbo.USR_T 
       SET 
@@ -290,7 +278,6 @@ export const editUser = async (req, res) => {
 
     query += ` WHERE ID_USR = @ID_USR`;
 
-    // 📌 Crear la consulta con parámetros
     const request = pool
       .request()
       .input("ID_USR", sql.Int, parseInt(id, 10))

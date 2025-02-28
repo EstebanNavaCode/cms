@@ -39,12 +39,12 @@ import {
 const router = Router();
 
 router.post("/", login);
-router.put("/perfil/:id", editUser);
 
 //users routes
 router.post("/users", registerUser);
 router.get("/users", getUsers);
 router.put("/users/:id", editUser);
+router.put("/perfil/:id", editUser);
 
 //products routes
 router.post("/products", registerProduct);

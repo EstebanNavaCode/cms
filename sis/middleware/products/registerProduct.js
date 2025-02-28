@@ -15,15 +15,15 @@ document
     formData.append("EDITORIAL_LIB", document.getElementById("lastname").value);
     formData.append("STOCK_LIB", document.getElementById("stock").value);
 
-    const fileInput = document.getElementById("file"); // Capturar la imagen
+    const fileInput = document.getElementById("file");
     if (fileInput.files.length > 0) {
-      formData.append("IMG_LIB", fileInput.files[0]); // Adjuntar la imagen al formulario
+      formData.append("IMG_LIB", fileInput.files[0]);
     }
 
     try {
       const response = await fetch("/products", {
         method: "POST",
-        body: formData, // Enviar como FormData
+        body: formData,
       });
 
       if (response.ok) {
@@ -111,7 +111,6 @@ document
   .addEventListener("submit", function (event) {
     event.preventDefault();
 
-    // 🔹 Asegurar que el estado del checkbox se refleje antes de enviar
     updateCheckboxState();
 
     const productId = document.getElementById("modal-id").value;
@@ -157,7 +156,6 @@ function updateCheckboxState() {
   hiddenCheckbox.checked = visibleCheckbox.checked;
 }
 
-// 🔹 Asegurar que el estado del checkbox se carga correctamente al abrir el modal
 document
   .getElementById("modal-register-product")
   .addEventListener("show.bs.modal", () => {

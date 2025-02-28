@@ -97,14 +97,12 @@ document
     formData.append(
       "ACTIVO_USR",
       document.getElementById("modal-active").value
-    ); // ✅ Se envía el valor correcto
+    );
 
     const fileInput = document.getElementById("modal-file");
     if (fileInput.files.length > 0) {
-      formData.append("IMG_USR", fileInput.files[0]); // Si se sube una imagen, la enviamos
+      formData.append("IMG_USR", fileInput.files[0]);
     }
-
-    //console.log("🟢 Datos enviados al backend:", Object.fromEntries(formData));
 
     try {
       const response = await fetch(`/users/${formData.get("ID_USR")}`, {

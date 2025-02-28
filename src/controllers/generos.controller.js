@@ -23,7 +23,6 @@ export const registerGenero = async (req, res) => {
 
     const pool = await getConnection();
 
-    // 🔹 Verificar si ya existe el género con el mismo nombre
     const existingGenero = await pool
       .request()
       .input("NOMBRE_LCAT", sql.NVarChar(300), NOMBRE_LCAT)
@@ -37,7 +36,6 @@ export const registerGenero = async (req, res) => {
         .json({ message: "Ya existe un género con este nombre." });
     }
 
-    // 🔹 Insertar el nuevo género
     const result = await pool
       .request()
       .input("NOMBRE_LCAT", sql.NVarChar(300), NOMBRE_LCAT)
@@ -51,7 +49,6 @@ export const registerGenero = async (req, res) => {
 
     const generoId = result.recordset[0].ID_LCAT;
 
-    // 🔹 Insertar subgéneros
     for (const subgenero of subgenerosArray) {
       await pool
         .request()

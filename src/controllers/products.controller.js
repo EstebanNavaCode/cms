@@ -149,7 +149,7 @@ export const editProduct = async (req, res) => {
       STOCK_LIB,
       CATEGORIA_LIB,
       SUBCATEGORIA_LIB,
-      ACTIVO_LIB, // Este valor puede venir vacío si el usuario no lo cambia
+      ACTIVO_LIB,
     } = req.body;
     const imgFile = req.files?.IMG_LIB;
 
@@ -159,7 +159,6 @@ export const editProduct = async (req, res) => {
 
     const pool = await getConnection();
 
-    // 🔹 Obtener el estado actual del producto antes de actualizar
     const result = await pool
       .request()
       .input("ID_LIB", sql.Int, id)
@@ -169,7 +168,6 @@ export const editProduct = async (req, res) => {
       return res.status(404).json({ message: "Producto no encontrado." });
     }
 
-    // 🔹 Si no se envía el valor de ACTIVO_LIB, se mantiene el estado original
     let estadoProducto = result.recordset[0].ACTIVO_LIB;
     if (ACTIVO_LIB !== undefined) {
       estadoProducto = ACTIVO_LIB === "1" ? 1 : 0;
@@ -204,7 +202,7 @@ export const editProduct = async (req, res) => {
       .input("STOCK_LIB", sql.Int, STOCK_LIB)
       .input("CATEGORIA_LIB", sql.Int, CATEGORIA_LIB)
       .input("SUBCATEGORIA_LIB", sql.Int, SUBCATEGORIA_LIB)
-      .input("ACTIVO_LIB", sql.Bit, estadoProducto) // ✅ Ahora se conserva correctamente
+      .input("ACTIVO_LIB", sql.Bit, estadoProducto)
       .input("IMG_LIB", sql.NVarChar(300), imgFilename).query(`
               UPDATE LIB_T_
               SET 
