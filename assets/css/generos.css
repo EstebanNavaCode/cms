@@ -647,7 +647,7 @@ label.custum-file-upload {
 }
 
 .subcategories-container input.input {
-  width: 777px;
+  width: 700px;
   box-sizing: border-box;
 }
 
@@ -721,4 +721,20 @@ label.custum-file-upload {
 .input-group button:hover,
 .flex button#add-subcategory-btn:hover {
   background-color: #02660c !important;
+}
+
+.subcategories-container .flex button#add-edit-subcategory-btn {
+  width: 45px !important;
+  height: 45px !important;
+  font-size: 22px !important;
+  background-color: #028a0f !important;
+  border: none !important;
+  color: white !important;
+  padding: 5px !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: 0.3s ease !important;
 }
