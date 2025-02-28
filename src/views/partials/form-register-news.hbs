@@ -58,7 +58,7 @@
 
                         <label class="custum-file-upload">
                             <ion-icon name="cloud-upload-outline"></ion-icon>
-                            <div class="text">Click aquí para subir una imagen</div>
+                            <div class="text">Imagen de la noticia</div>
                             <input type="file" id="file" accept="image/*" onchange="previewImage(event)">
                         </label>
                     </div>
@@ -81,10 +81,10 @@
                     <th>ID</th>
                     <th>Título</th>
                     <th>Descripcion</th>
-                    <th>Fecha de Publicación</th>
+                    <th>Fecha de publicación</th>
                     <th>Categoría</th>
                     <th>Etiqueta</th>
-                    <th>Estado</th>
+                    <th>Estatus</th>
                 </tr>
             </thead>
             <tbody>
@@ -99,9 +99,9 @@
                     <td>{{ETIQUETA}}</td>
                     <td>
                         {{#if ACTIVO_NOT}}
-                        <span style="color:green;">Activo</span>
+                        <span style="color:green;">Público</span>
                         {{else}}
-                        <span style="color:red;">Inactivo</span>
+                        <span style="color:red;">Privado</span>
                         {{/if}}
                     </td>
                 </tr>
