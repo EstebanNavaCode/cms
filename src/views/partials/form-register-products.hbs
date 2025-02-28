@@ -21,14 +21,14 @@
             <div class="form-container">
 
                 <form id="form-register-product" method="POST" class="form" action="/products">
-                    <p class="title2">Formulario de registro</p>
+                    <p class="title2">Alta de artículos</p>
                     <p class="message"></p>
 
                     <div class="flex">
 
                         <label>
                             <input id="name" name="NOMBRE_LIB" class="input" type="text" placeholder="" required>
-                            <span>Titulo*</span>
+                            <span>Título*</span>
                         </label>
 
                         <label>
@@ -71,7 +71,7 @@
 
                         <label class="custum-file-upload">
                             <ion-icon name="cloud-upload-outline"></ion-icon>
-                            <div class="text">Click aquí para subir una imagen</div>
+                            <div class="text">Imagen del producto</div>
                             <input type="file" id="file" accept="image/*" onchange="previewImage(event)">
                         </label>
 
@@ -99,7 +99,7 @@
                 <th>Stock</th>
                 <th>Categoría</th>
                 <th>Subcategoría</th>
-                <th>Estado</th>
+                <th>Estatus</th>
                 <th>Imagen</th>
             </tr>
         </thead>
@@ -116,9 +116,9 @@
                 <td>{{SUBCATEGORIA}}</td>
                 <td>
                     {{#if ACTIVO_LIB}}
-                    <span style="color:green;">Disponible</span>
+                    <span style="color:green;">Público</span>
                     {{else}}
-                    <span style="color:red;">No Disponible</span>
+                    <span style="color:red;">Privado</span>
                     {{/if}}
                 </td>
                 <td>
@@ -158,7 +158,7 @@
                             <label>
                                 <input id="modal-name" name="NOMBRE_LIB" class="input" type="text" placeholder=""
                                     required>
-                                <span>Titulo*</span>
+                                <span>Título*</span>
                             </label>
 
                             <label>
@@ -202,7 +202,7 @@
 
                             <label class="custum-file-upload">
                                 <ion-icon name="cloud-upload-outline"></ion-icon>
-                                <div class="text">Click aquí para subir una imagen</div>
+                                <div class="text">Imagen del producto</div>
                                 <input type="file" id="modal-file" name="IMG_LIB" accept="image/*">
                             </label>
                         </div>
