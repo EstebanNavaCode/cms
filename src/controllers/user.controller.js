@@ -19,7 +19,7 @@ async function sendPasswordEmail(to, password) {
   const mailOptions = {
     from: "tu-correo@gmail.com",
     to: to,
-    subject: "Contraseña de acceso - Tu App",
+    subject: "Contraseña de acceso - CMS",
     text: `Hola,\n\nTu cuenta ha sido creada con éxito. Tu contraseña temporal es: ${password}\n\nPor favor, cámbiala después de iniciar sesión.\n\nSaludos,`,
   };
 
