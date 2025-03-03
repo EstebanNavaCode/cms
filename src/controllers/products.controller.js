@@ -122,7 +122,7 @@ export const getProducts = async (req, res) => {
           LIB_T_.ACTIVO_LIB,
           CATEGORIA_LIB_T.NOMBRE_LCAT AS CATEGORIA,
           SUBCATEGORIA_LCAT_T.NOMBRE_SBC AS SUBCATEGORIA,
-          LIB_T_.IMG_LIB  -- 🔹 Asegúrate de incluir la imagen aquí
+          LIB_T_.IMG_LIB  
       FROM LIB_T_
       LEFT JOIN CATEGORIA_LIB_T ON LIB_T_.CATEGORIA_LIB = CATEGORIA_LIB_T.ID_LCAT
       LEFT JOIN SUBCATEGORIA_LCAT_T ON LIB_T_.SUBCATEGORIA_LIB = SUBCATEGORIA_LCAT_T.ID_SBC;

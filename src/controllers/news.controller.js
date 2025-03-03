@@ -201,7 +201,7 @@ export const editNews = async (req, res) => {
                   CATEGORIA_NOT = @CATEGORIA_NOT,
                   ETIQUETA_NOT = @ETIQUETA_NOT,
                   IMG_NOT = @IMG_NOT,
-                  ACTIVO_NOT = @ACTIVO_NOT  -- ✅ Se actualiza el estado correctamente
+                  ACTIVO_NOT = @ACTIVO_NOT  
               WHERE ID_NOT = @ID_NOT
           `);
 

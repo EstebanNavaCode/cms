@@ -186,7 +186,7 @@ export const getUsers = async (req, res) => {
         END AS TIPO_USR,
         CONVERT(VARCHAR, FECHA_ALTA_USR, 23) AS FECHA_ALTA_USR,
         ACTIVO_USR,
-        IMG_USR  -- Asegúrate de traer el campo IMG_USR
+        IMG_USR 
       FROM USR_T;
     `);
 
